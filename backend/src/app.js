@@ -166,7 +166,9 @@ if (portfolioDir && fs.existsSync(portfolioDir)) {
     express.static(portfolioDir, {
       setHeaders: (res, filePath) => {
         if (filePath.endsWith('.js') || filePath.endsWith('.html') || filePath.endsWith('.css')) {
-          res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+          res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+          res.setHeader('Pragma', 'no-cache');
+          res.setHeader('Expires', '0');
         }
       },
     })

@@ -29,8 +29,8 @@ import {
   formatDateTime,
   formatTimeShort,
   escapeHtml,
-} from './api.js';
-import { createRealtimeClient } from './realtime-client.js';
+} from './api.js?v=20261116_v4_live';
+import { createRealtimeClient } from './realtime-client.js?v=20261116_v4_live';
 
 /* ==========================================================================
    CONSTANTS & 3NF SCHEMA METADATA

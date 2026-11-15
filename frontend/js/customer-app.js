@@ -20,8 +20,8 @@ import {
   formatDateTime,
   escapeHtml,
   ApiError,
-} from './api.js?v=20261109_csgo_v1';
-import { createRealtimeClient } from './realtime-client.js?v=20261107_v7';
+} from './api.js?v=20261116_v4_live';
+import { createRealtimeClient } from './realtime-client.js?v=20261116_v4_live';
 
 /* ==========================================================================
    CONSTANTS & STATUS METADATA (PURE CUSTOMER FRIENDLY)
