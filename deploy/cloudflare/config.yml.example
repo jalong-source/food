@@ -1,0 +1,116 @@
+# ==============================================================================
+# Cloudflare Tunnel Configuration — Multi-Service Routing Template
+# Domains: jalong.io.vn & Subdomains
+# Usage:
+#   1. Copy this file to deploy/cloudflare/config.yml (or run setup-cloudflare-tunnel.ps1)
+#   2. Replace <TUNNEL_UUID> with your actual Tunnel ID from `cloudflared tunnel list`
+#   3. Validate ingress rules:
+#        cloudflared tunnel --config deploy/cloudflare/config.yml ingress validate
+#   4. Start the tunnel:
+#        cloudflared tunnel --config deploy/cloudflare/config.yml run jalongfood-app
+# ==============================================================================
+
+tunnel: <TUNNEL_UUID>
+credentials-file: C:\Users\<WINDOWS_USER>\.cloudflared\<TUNNEL_UUID>.json
+
+# Global origin settings optimized for Server-Sent Events (SSE), WebSockets & KeepAlive
+originRequest:
+  connectTimeout: 30s
+  tcpKeepAlive: 30s
+  keepAliveConnections: 1024
+  keepAliveTimeout: 3600s
+  # Keep HTTP/1.1 chunked transfer encoding enabled for SSE & WebSocket Upgrades
+  disableChunkedEncoding: false
+  noTLSVerify: false
+
+ingress:
+  # ============================================================================
+  # NHÓM 1: DỰ ÁN DATABASE & HỌC TẬP (Port 3000)
+  # ============================================================================
+  # 1.1 Apex Domain - Storefront, Admin, Split-Screen Demo & REST/SSE/WS APIs
+  - hostname: jalong.io.vn
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  # 1.2 Subdomain Database Console
+  - hostname: db.jalong.io.vn
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: db.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  # 1.3 Subdomain Học tập / Tài liệu
+  - hostname: study.jalong.io.vn
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: study.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  # 1.4 Subdomains tương thích phụ trợ
+  - hostname: www.jalong.io.vn
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: www.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  - hostname: project.jalong.io.vn
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: project.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  - hostname: food.jalong.io.vn
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: food.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  - hostname: inspector.jalong.io.vn
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: inspector.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  # ============================================================================
+  # NHÓM 2: DỰ ÁN GAME H5 - TAM QUỐC MÈO CHIBI H5 (Port 81)
+  # ============================================================================
+  - hostname: game.jalong.io.vn
+    service: http://localhost:81
+    originRequest:
+      httpHostHeader: game.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  # ============================================================================
+  # NHÓM 3: WEB GAME NÔNG TRẠI VUI VẺ MULTIPLAYER -> PORT 5000 (NODE.JS + REACT)
+  # ============================================================================
+  - hostname: gamenongtrai.jalong.io.vn
+    service: http://127.0.0.1:5000
+    originRequest:
+      httpHostHeader: gamenongtrai.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  # ============================================================================
+  # NHÓM 4: ĐỒ ÁN DSA - TỪ ĐIỂN ANH VIỆT CÂY AVL -> PORT 5055 (PYTHON WEB DEMO)
+  # ============================================================================
+  - hostname: tudien.jalong.io.vn
+    service: http://127.0.0.1:5055
+    originRequest:
+      httpHostHeader: tudien.jalong.io.vn
+      disableChunkedEncoding: false
+      keepAliveTimeout: 3600s
+
+  # ============================================================================
+  # NHÓM 5: Mandatory Catch-All Rule (Cloudflare Tunnel requirement)
+  # ============================================================================
+  - service: http_status:404

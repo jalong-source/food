@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DB Live Inspector (Giảng viên) — JalongFood • jalong.io.vn</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+  <!-- Emergency DB Outage Banner -->
+  <div id="inspOfflineBanner" class="hidden db-offline-banner text-white px-4 py-2.5 shadow-lg sticky top-0 z-50">
+    <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+      <div class="flex items-center gap-2.5 font-bold">
+        <i data-lucide="shield-alert" class="w-5 h-5 shrink-0"></i>
+        <span id="inspOfflineReason">
+          POSTGRESQL ĐANG OFFLINE — Mọi truy vấn API đang bị chặn hoặc lỗi kết nối! Trang Khách hàng cũng đã chuyển sang cảnh báo Đỏ.
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btnBannerRestore" class="px-3 py-1 rounded-lg bg-white text-red-700 font-extrabold text-xs hover:bg-red-50 transition shadow">
+          Khôi phục Kết nối Ngay
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Dashboard Header -->
+  <header class="glass-dark border-b border-slate-800 sticky top-0 z-40">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Left Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <i data-lucide="database-zap" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">DB Live Inspector</h1>
+            <span class="text-xs font-bold text-indigo-300 bg-indigo-500/15 border border-indigo-500/30 px-2 py-0.5 rounded-full">
+              Dành cho Giảng viên
+            </span>
+            <span class="text-xs text-orange-400 font-semibold hidden sm:inline">• JaLong CyberFood (jalong.io.vn)</span>
+          </div>
+          <p class="text-[11px] text-slate-400">
+            Kiểm định Thiết kế CSDL Chuẩn 3NF • Connection Pool Động • Stored Procedures • Audit Triggers • LISTEN/NOTIFY
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Quick Actions & Status -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Server Info Pill -->
+        <div id="serverMetaBadge" class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 font-mono-code">
+          <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span id="serverMetaText">PostgreSQL • jalong_food_db</span>
+        </div>
+
+        <!-- Quick Refresh All -->
+        <button id="btnRefreshAll" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Đồng bộ lại</span>
+        </button>
+
+        <!-- Split Screen Mode -->
+        <a href="/demo-split.html" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 text-xs font-semibold transition">
+          <i data-lucide="columns-2" class="w-3.5 h-3.5"></i>
+          <span>Chia đôi Màn hình</span>
+        </a>
+
+        <!-- Open Customer App -->
+        <a href="/" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-600 hover:to-rose-700 text-white text-xs font-bold shadow-md shadow-orange-500/20 transition">
+          <i data-lucide="utensils" class="w-3.5 h-3.5"></i>
+          <span>Mở Trang Khách hàng</span>
+          <i data-lucide="external-link" class="w-3 h-3"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Main Content -->
+  <main class="max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
+
+    <!-- ==================================================================
+         PANEL 1: DB CONNECTION CONTROL, POOL METRICS & CHAOS TESTING LAB
+         ================================================================== -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3.5">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2 py-0.5 text-[11px] font-mono-code font-bold rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">PANEL 1</span>
+          <h2 class="text-base font-extrabold text-white">Kiểm soát Kết nối PostgreSQL, Connection Pool Động & Chaos Testing</h2>
+        </div>
+        <span id="lastCheckedTimestamp" class="text-[11px] font-mono-code text-slate-400">Cập nhật: --:--:--</span>
+      </div>
+
+      <!-- 4 Live Telemetry Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <!-- Card 1: PostgreSQL State -->
+        <div class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-4 flex items-start justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400">Trạng thái PostgreSQL</p>
+            <div class="flex items-center gap-2 mt-2">
+              <span id="metricDbDot" class="w-3 h-3 rounded-full bg-emerald-500 pulse-online"></span>
+              <span id="metricDbState" class="text-xl font-extrabold text-emerald-400 tracking-tight">ONLINE</span>
+            </div>
+            <p id="metricDbSubtext" class="text-[11px] font-mono-code text-slate-400 mt-1.5 truncate max-w-[220px]">
+              Đang kết nối ổn định
+            </p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <i data-lucide="server" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- Card 2: Query Latency -->
+        <div class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-4 flex items-start justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400">Độ trễ Truy vấn (`SELECT 1`)</p>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span id="metricLatencyValue" class="text-2xl font-extrabold font-mono-code text-sky-400">-- ms</span>
+              <span id="metricArtificialDelayBadge" class="text-[11px] font-mono-code px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
+                +0ms giả lập
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1.5">Đo trực tiếp qua `process.hrtime`</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+            <i data-lucide="gauge" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- Card 3: Connection Pool (Total, Idle, Waiting, Max) -->
+        <div class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-xs font-semibold text-slate-400">Connection Pool (`pg.Pool`)</p>
+            <span id="metricPoolRatio" class="text-xs font-mono-code font-bold text-indigo-400">0 / 10</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5 text-center my-2">
+            <div class="bg-slate-900 rounded-lg py-1.5 border border-slate-800">
+              <div id="poolTotalVal" class="text-sm font-extrabold font-mono-code text-white">0</div>
+              <div class="text-[10px] text-slate-400">Total</div>
+            </div>
+            <div class="bg-slate-900 rounded-lg py-1.5 border border-slate-800">
+              <div id="poolIdleVal" class="text-sm font-extrabold font-mono-code text-emerald-400">0</div>
+              <div class="text-[10px] text-slate-400">Idle</div>
+            </div>
+            <div class="bg-slate-900 rounded-lg py-1.5 border border-slate-800">
+              <div id="poolWaitingVal" class="text-sm font-extrabold font-mono-code text-amber-400">0</div>
+              <div class="text-[10px] text-slate-400">Waiting</div>
+            </div>
+            <div class="bg-slate-900 rounded-lg py-1.5 border border-slate-800">
+              <div id="poolMaxVal" class="text-sm font-extrabold font-mono-code text-indigo-400">10</div>
+              <div class="text-[10px] text-slate-400">Max</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Realtime Channels (SSE / WS / PG LISTEN) -->
+        <div class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-xs font-semibold text-slate-400">Kênh Real-time & Trigger</p>
+            <span id="metricActiveClientTransport" class="text-[10px] font-mono-code uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              Client: SSE
+            </span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center my-2">
+            <div class="bg-slate-900 rounded-lg py-1.5 border border-slate-800">
+              <div id="rtSseCount" class="text-sm font-extrabold font-mono-code text-sky-400">0</div>
+              <div class="text-[10px] text-slate-400">SSE Clients</div>
+            </div>
+            <div class="bg-slate-900 rounded-lg py-1.5 border border-slate-800">
+              <div id="rtWsCount" class="text-sm font-extrabold font-mono-code text-purple-400">0</div>
+              <div class="text-[10px] text-slate-400">WS Clients</div>
+            </div>
+            <div class="bg-slate-900 rounded-lg py-1.5 border border-slate-800">
+              <div id="rtPgListenState" class="text-xs font-extrabold font-mono-code text-emerald-400 leading-5">ON</div>
+              <div class="text-[10px] text-slate-400">PG LISTEN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Connection String + Chaos Testing Controls -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+        <!-- Left 7 Cols: Dynamic Connection String Switcher -->
+        <div class="xl:col-span-7 bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <i data-lucide="plug-zap" class="w-4 h-4 text-indigo-400"></i>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-200">Connection String Động (Hot-Swap Pool Runtime)</h3>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="connSourceBadge" class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                Mặc định (.env)
+              </span>
+              <button id="btnFillInvalidConn" type="button" class="text-[11px] text-amber-400 hover:text-amber-300 underline font-medium" title="Điền nhanh một chuỗi kết nối sai để Giảng viên test bắt lỗi kết nối">
+                Điền mẫu chuỗi kết nối sai để Test
+              </button>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-slate-400 flex flex-wrap items-center gap-1.5">
+            <span>Đang dùng:</span>
+            <code id="activeMaskedConnStr" class="font-mono-code text-indigo-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 break-all">
+              postgresql://jalong_admin:******@localhost:5432/jalong_food_db
+            </code>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input
+              id="connStringInput"
+              type="text"
+              placeholder="postgresql://user:pass@host:5432/dbname"
+              class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs font-mono-code text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button id="btnApplyConnString" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold whitespace-nowrap transition flex items-center justify-center gap-1.5">
+              <i data-lucide="arrow-right-left" class="w-3.5 h-3.5"></i>
+              <span>Đổi Connection String</span>
+            </button>
+            <button id="btnResetConnString" type="button" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold whitespace-nowrap transition flex items-center justify-center gap-1.5">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>Khôi phục Mặc định</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Chaos Engineering Controls for Lecturer -->
+        <div class="xl:col-span-5 bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="flame-kindling" class="w-4 h-4 text-rose-400"></i>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-200">Chaos Testing cho Giảng viên</h3>
+            </div>
+            <!-- Transport Switcher Button -->
+            <button id="btnToggleTransport" type="button" class="px-2.5 py-1 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 text-[11px] font-bold flex items-center gap-1.5 transition">
+              <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+              <span id="btnToggleTransportLabel">Chuyển kênh: SSE ⇄ WS</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5">
+            <!-- Toggle DB Disconnect Simulation -->
+            <button
+              id="btnToggleDbOutage"
+              type="button"
+              class="w-full py-2.5 px-3 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/40 text-rose-300 text-xs font-bold flex items-center justify-center gap-2 transition"
+            >
+              <i data-lucide="power-off" class="w-4 h-4"></i>
+              <span id="btnToggleDbOutageLabel">Ngắt kết nối DB (Mô phỏng sự cố)</span>
+            </button>
+
+            <!-- Latency Simulation Preset Group -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-2 flex flex-col justify-center">
+              <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1.5 px-1">
+                <span>Giả lập độ trễ mạng:</span>
+                <strong id="simDelayLabel" class="font-mono-code text-amber-400">0ms</strong>
+              </div>
+              <div class="grid grid-cols-3 gap-1">
+                <button type="button" data-delay="0" class="delay-preset-btn py-1 rounded-lg text-[11px] font-mono-code font-bold bg-indigo-600 text-white transition">0ms</button>
+                <button type="button" data-delay="500" class="delay-preset-btn py-1 rounded-lg text-[11px] font-mono-code font-semibold bg-slate-800 text-slate-300 hover:text-white transition">500ms</button>
+                <button type="button" data-delay="1500" class="delay-preset-btn py-1 rounded-lg text-[11px] font-mono-code font-semibold bg-slate-800 text-slate-300 hover:text-white transition">1500ms</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         PANEL 2: VISUAL MENU CRUD (`foods`) & 3NF FOREIGN KEY RESTRICT TEST
+         ================================================================== -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2 py-0.5 text-[11px] font-mono-code font-bold rounded bg-orange-500/20 text-orange-300 border border-orange-500/30">PANEL 2</span>
+          <div>
+            <h2 class="text-base font-extrabold text-white">Quản trị Thực đơn Trực quan — CRUD Bảng <code class="font-mono-code text-orange-400">foods</code> & Test Khóa Ngoại 3NF</h2>
+            <p class="text-xs text-slate-400">
+              Mọi thay đổi Thêm / Sửa / Ngừng bán sẽ đồng bộ tức thì sang Trang Khách hàng. Bấm <b>"Xóa cứng (Test FK)"</b> trên món đã đặt để kiểm chứng <code class="font-mono-code text-amber-300">SQLSTATE 23503 (ON DELETE RESTRICT)</code>!
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <input
+            id="inspFoodSearch"
+            type="text"
+            placeholder="Lọc nhanh tên món..."
+            class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 w-44 sm:w-52"
+          />
+          <select id="inspFoodCategoryFilter" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <option value="">Tất cả danh mục</option>
+          </select>
+          <button id="btnOpenAddFood" type="button" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-600 hover:to-rose-700 text-white text-xs font-bold shadow-md flex items-center gap-1.5 transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>+ Thêm Món Ăn</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Foods Live Table -->
+      <div class="overflow-x-auto dark-scrollbar rounded-xl border border-slate-800 bg-slate-950/60">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase text-[11px] tracking-wider">
+              <th class="py-3 px-3 font-bold">ID</th>
+              <th class="py-3 px-3 font-bold">Món ăn</th>
+              <th class="py-3 px-3 font-bold">Danh mục (FK)</th>
+              <th class="py-3 px-3 font-bold text-right">Giá bán</th>
+              <th class="py-3 px-3 font-bold text-center">Tồn kho (`stock_quantity`)</th>
+              <th class="py-3 px-3 font-bold text-center">Trạng thái</th>
+              <th class="py-3 px-3 font-bold text-right">Thao tác CRUD & Kiểm chứng 3NF</th>
+            </tr>
+          </thead>
+          <tbody id="inspFoodsTableBody" class="divide-y divide-slate-800/80">
+            <tr>
+              <td colspan="7" class="py-8 text-center text-slate-500">Đang tải danh sách món ăn từ PostgreSQL...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         PANEL 3: ORDER DISPATCH & TRIGGER `trg_order_status_audit` LAB
+         ================================================================== -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2 py-0.5 text-[11px] font-mono-code font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">PANEL 3</span>
+          <div>
+            <h2 class="text-base font-extrabold text-white">
+              Điều phối Đơn hàng & Kiểm chứng Trigger <code class="font-mono-code text-purple-400">trg_order_status_audit</code> + <code class="font-mono-code text-rose-400">ON DELETE CASCADE</code>
+            </h2>
+            <p class="text-xs text-slate-400">
+              Bấm chuyển trạng thái 1 chạm để thấy bảng <code class="font-mono-code text-slate-200">order_status_history</code> tự sinh bản ghi kiểm toán và thanh tiến trình Khách hàng nhảy bước ngay lập tức!
+            </p>
+          </div>
+        </div>
+
+        <!-- Actor (FK users.id) & Audit Note Input + Status Filter -->
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- 1 Admin duy nhất duyệt đơn ngầm định (Trần Quản Trị ID=2) -->
+          <input type="hidden" id="dispatchActorSelect" value="2" />
+          <input
+            id="dispatchNoteInput"
+            type="text"
+            placeholder="Ghi chú duyệt đơn (tùy chọn)..."
+            class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 w-52 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <select id="inspOrderStatusFilter" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="">Tất cả trạng thái</option>
+            <option value="Pending">Pending (Chờ xác nhận)</option>
+            <option value="Preparing">Preparing (Đang nấu)</option>
+            <option value="Delivering">Delivering (Đang giao)</option>
+            <option value="Completed">Completed (Hoàn tất)</option>
+            <option value="Cancelled">Cancelled (Đã hủy)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 2-Column Split: Orders Dispatch List (Left 7) + Live Trigger History Table (Right 5) -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 7 Cols: Live Orders Dispatch -->
+        <div class="xl:col-span-7 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-300 uppercase tracking-wider">Danh sách Đơn hàng Live (`orders`)</span>
+            <span id="inspOrdersCountBadge" class="font-mono-code text-slate-400">0 đơn hàng</span>
+          </div>
+
+          <div id="inspOrdersList" class="space-y-3 max-h-[540px] overflow-y-auto dark-scrollbar pr-1">
+            <div class="py-10 text-center text-xs text-slate-500">Đang tải danh sách đơn hàng...</div>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Live Trigger Audit Table (`order_status_history`) -->
+        <div class="xl:col-span-5 bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i>
+                <span>Bảng `order_status_history` (Sinh tự động bởi Trigger)</span>
+              </h3>
+              <p id="auditFilterLabel" class="text-[11px] text-slate-400 mt-0.5">
+                Đang hiển thị lịch sử kiểm toán mới nhất toàn hệ thống
+              </p>
+            </div>
+            <button id="btnShowAllAudit" type="button" class="hidden text-[11px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+              Xem tất cả đơn
+            </button>
+          </div>
+
+          <div class="overflow-x-auto dark-scrollbar flex-1 max-h-[480px] mt-3">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                  <th class="py-2 px-2">ID</th>
+                  <th class="py-2 px-2">Đơn</th>
+                  <th class="py-2 px-2">Chuyển trạng thái</th>
+                  <th class="py-2 px-2">Người đổi & Ghi chú</th>
+                  <th class="py-2 px-2 text-right">Thời gian</th>
+                </tr>
+              </thead>
+              <tbody id="inspAuditHistoryBody" class="divide-y divide-slate-800/70">
+                <tr>
+                  <td colspan="5" class="py-8 text-center text-slate-500">Đang tải dữ liệu kiểm toán Trigger...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         PANEL 4: LIVE 6-TABLE 3NF EXPLORER + SQL & PG_NOTIFY TERMINAL
+         ================================================================== -->
+    <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <!-- Sub-panel 4A: 6-Table 3NF + View Explorer (7 Cols) -->
+      <div class="xl:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 text-[11px] font-mono-code font-bold rounded bg-sky-500/20 text-sky-300 border border-sky-500/30">PANEL 4A</span>
+            <h2 class="text-sm sm:text-base font-extrabold text-white">Trình Soi 6 Bảng Chuẩn 3NF & View Trực tiếp</h2>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <select id="explorerRowLimit" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-xs font-mono-code text-slate-300">
+              <option value="20">20 dòng</option>
+              <option value="50" selected>50 dòng</option>
+              <option value="100">100 dòng</option>
+            </select>
+            <button id="btnRefreshExplorer" type="button" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-1 transition">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Tải lại bảng</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabs for 6 Tables + 1 Summary View -->
+        <div id="tableTabsContainer" class="flex flex-wrap gap-1.5">
+          <!-- Populated dynamically with live row counts -->
+        </div>
+
+        <!-- Selected Table 3NF Relationship Note -->
+        <div id="tableSchemaNote" class="bg-slate-950/90 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-300 flex flex-wrap items-center justify-between gap-2">
+          <span id="tableSchemaDesc" class="font-mono-code text-[11px] text-sky-300">Bảng chuẩn 3NF</span>
+          <span id="tableRowSummary" class="text-[11px] text-slate-400">0 bản ghi</span>
+        </div>
+
+        <!-- Raw Data Table -->
+        <div class="overflow-auto dark-scrollbar rounded-xl border border-slate-800 bg-slate-950 flex-1 max-h-[430px]">
+          <table class="w-full text-left border-collapse text-xs font-mono-code">
+            <thead id="explorerTableHead" class="bg-slate-900 text-slate-300 sticky top-0 z-10 border-b border-slate-800">
+            </thead>
+            <tbody id="explorerTableBody" class="divide-y divide-slate-800/70 text-slate-200">
+              <tr>
+                <td class="p-6 text-center text-slate-500">Đang nạp dữ liệu bảng...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sub-panel 4B: Live SQL & Trigger Stream Terminal (5 Cols) -->
+      <div class="xl:col-span-5 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 text-[11px] font-mono-code font-bold rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">PANEL 4B</span>
+            <h2 class="text-sm sm:text-base font-extrabold text-white">Live SQL & Trigger Stream Console</h2>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <select id="consoleFilterSelect" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-[11px] font-mono-code text-slate-300">
+              <option value="all">Tất cả Stream</option>
+              <option value="sql">SQL Queries</option>
+              <option value="trigger">PG Triggers (NOTIFY)</option>
+              <option value="error">Lỗi SQL / FK / SP</option>
+            </select>
+            <button id="btnPauseConsole" type="button" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-slate-300 transition">
+              Tạm dừng
+            </button>
+            <button id="btnClearConsole" type="button" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-rose-300 transition">
+              Xóa
+            </button>
+          </div>
+        </div>
+
+        <!-- Terminal Window Header Dots -->
+        <div class="sql-terminal rounded-xl border border-slate-800 flex-1 flex flex-col overflow-hidden min-h-[460px] max-h-[530px]">
+          <div class="bg-slate-950 border-b border-slate-800/90 px-3.5 py-2 flex items-center justify-between text-[11px] text-slate-400">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span class="ml-2 font-mono-code text-slate-300">psql-live-telemetry://jalong_food_db</span>
+            </div>
+            <span id="consoleCounterBadge" class="font-mono-code text-[10px] text-emerald-400">0 logs</span>
+          </div>
+
+          <div id="sqlConsoleOutput" class="p-3 space-y-2 overflow-y-auto dark-scrollbar flex-1">
+            <!-- Live SQL queries, pg_notify triggers, and SSE/WS events stream here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================================================================
+       MODAL 1: CREATE / EDIT FOOD (`foods` CRUD)
+       ================================================================== -->
+  <div id="foodModalBackdrop" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="modal-pop bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+        <h3 id="foodModalTitle" class="text-base font-extrabold text-white flex items-center gap-2">
+          <i data-lucide="utensils" class="w-4 h-4 text-orange-400"></i>
+          <span>Thêm Món Ăn Mới vào Bảng `foods`</span>
+        </h3>
+        <button id="btnCloseFoodModal" type="button" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="foodCrudForm" class="p-5 space-y-3.5 text-xs">
+        <input type="hidden" id="foodFormId" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Tên món ăn <span class="text-rose-400">*</span></label>
+            <input id="foodFormName" type="text" required placeholder="VD: Bún Bò Huế Đặc Biệt" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Danh mục (`category_id`) <span class="text-rose-400">*</span></label>
+            <select id="foodFormCategory" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Giá bán (VNĐ) <span class="text-rose-400">*</span></label>
+            <input id="foodFormPrice" type="number" min="1000" step="1000" required value="45000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 font-mono-code text-orange-300 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Tồn kho (`stock_quantity`)</label>
+            <input id="foodFormStock" type="number" min="0" step="1" required value="25" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 font-mono-code text-emerald-300 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Trạng thái mở bán</label>
+            <select id="foodFormAvailable" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+              <option value="true">Đang bán (Available)</option>
+              <option value="false">Tạm ngưng (Inactive)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-bold text-slate-300">URL Hình ảnh món ăn</label>
+            <button id="btnSampleFoodImg" type="button" class="text-[11px] text-orange-400 hover:underline">Dùng ảnh mẫu đẹp</button>
+          </div>
+          <input id="foodFormImage" type="url" placeholder="https://images.unsplash.com/..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 font-mono-code focus:outline-none focus:ring-2 focus:ring-orange-500" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Mô tả chi tiết</label>
+          <textarea id="foodFormDesc" rows="2" placeholder="Mô tả nguyên liệu, hương vị..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+          <button id="btnCancelFoodModal" type="button" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold">
+            Hủy
+          </button>
+          <button id="btnSubmitFoodModal" type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-600 hover:to-rose-700 text-white font-bold shadow-md">
+            Lưu vào PostgreSQL
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+       MODAL 2: 3NF FOREIGN KEY VIOLATION (`SQLSTATE 23503`) EXPLAINER DIALOG
+       ================================================================== -->
+  <div id="fkErrorModalBackdrop" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="modal-pop bg-slate-900 border-2 border-amber-500/60 rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl">
+      <div class="bg-amber-500/15 border-b border-amber-500/30 px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-extrabold text-amber-300">
+              PostgreSQL Đã Chặn Xóa Cứng — Bảo Toàn Toàn Vẹn Tham Chiếu 3NF!
+            </h3>
+            <p class="text-[11px] font-mono-code text-amber-200/80">
+              SQLSTATE 23503 • foreign_key_violation • ON DELETE RESTRICT
+            </p>
+          </div>
+        </div>
+        <button id="btnCloseFkModal" type="button" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs leading-relaxed text-slate-300">
+        <p>
+          Món ăn <strong id="fkModalFoodName" class="text-white">---</strong> đã phát sinh giao dịch trong bảng chi tiết đơn hàng
+          <code class="font-mono-code text-sky-300 bg-slate-950 px-1.5 py-0.5 rounded">order_items</code>.
+        </p>
+
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 font-mono-code text-[11px] space-y-1.5">
+          <div class="text-rose-400 font-bold" id="fkModalRawError">ERROR [23503]: update or delete on table "foods" violates foreign key constraint...</div>
+          <div class="text-slate-400" id="fkModalDetail">Detail: Key (id)=(...) is still referenced from table "order_items".</div>
+        </div>
+
+        <div class="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-3.5 space-y-1">
+          <div class="font-bold text-indigo-300">Ý nghĩa Thiết kế CSDL Chuẩn 3NF:</div>
+          <p class="text-slate-300">
+            Ràng buộc <code class="font-mono-code text-amber-300">FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE RESTRICT</code> ngăn chặn mất mát dữ liệu lịch sử hóa đơn kế toán. Giải pháp chuẩn trong thực tế là dùng <b>Ngừng bán (Soft Delete: `is_available = FALSE`)</b>.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-2 pt-2">
+          <button id="btnFkCloseOnly" type="button" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold">
+            Đã hiểu (Đóng)
+          </button>
+          <button id="btnFkConvertSoftDelete" type="button" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold flex items-center gap-1.5 shadow">
+            <i data-lucide="archive" class="w-4 h-4"></i>
+            <span>Chuyển sang Ngừng bán (Soft Delete) ngay</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Stack -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <script type="module" src="/js/inspector-app.js?v=20261107_v8"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+services:
+  # ============================================================================
+  # 1. PostgreSQL 16 Database (3NF Schema + Triggers + Stored Procs + Seed Data)
+  # ============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: jalong_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: jalong_admin
+      POSTGRES_PASSWORD: jalong_secret_2026
+      POSTGRES_DB: jalong_food_db
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+      TZ: Asia/Ho_Chi_Minh
+      PGTZ: Asia/Ho_Chi_Minh
+    ports:
+      - "5432:5432"
+    volumes:
+      - jalong_pgdata:/var/lib/postgresql/data
+      - ./database/01_schema_ddl.sql:/docker-entrypoint-initdb.d/01_schema_ddl.sql:ro
+      - ./database/02_triggers_and_procs.sql:/docker-entrypoint-initdb.d/02_triggers_and_procs.sql:ro
+      - ./database/03_seed_data.sql:/docker-entrypoint-initdb.d/03_seed_data.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jalong_admin -d jalong_food_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    networks:
+      - jalong_net
+
+  # ============================================================================
+  # 2. JaLong Food Web Application (Express API + PG LISTEN/NOTIFY SSE + UI)
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: jalong_webapp
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://jalong_admin:jalong_secret_2026@postgres:5432/jalong_food_db
+      DB_POOL_MAX: 10
+      FRONTEND_DIR: /app/frontend
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - ./frontend:/app/frontend:ro
+      - ./backend/src:/app/backend/src:ro
+    networks:
+      - jalong_net
+
+  # ============================================================================
+  # 3. Cloudflare Tunnel Connector (Optional Profile: "cloudflare")
+  #    Enable with: docker compose --profile cloudflare up -d
+  #    Note: In Cloudflare Zero Trust Dashboard -> Public Hostname, point the
+  #    service URL to http://jalong_webapp:3000 when using this container.
+  # ============================================================================
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: jalong_cloudflared
+    restart: unless-stopped
+    profiles: ["cloudflare"]
+    depends_on:
+      app:
+        condition: service_healthy
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:-}
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    networks:
+      - jalong_net
+
+volumes:
+  jalong_pgdata:
+    name: jalong_pgdata
+
+networks:
+  jalong_net:
+    name: jalong_net
+    driver: bridge

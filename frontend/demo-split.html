@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chế độ Trình chiếu Đôi — JalongFood & DB Live Inspector | jalong.io.vn</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden flex flex-col select-none">
+
+  <!-- Top Presentation Control Bar -->
+  <header class="h-14 bg-slate-900 border-b border-slate-800 px-4 flex items-center justify-between gap-3 shrink-0 z-30">
+    <!-- Left: Branding & Presentation Mode Title -->
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-600 flex items-center justify-center shadow-lg shadow-orange-500/20 shrink-0">
+        <i data-lucide="columns-2" class="w-5 h-5 text-white"></i>
+      </div>
+      <div class="truncate">
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold tracking-tight text-white text-sm sm:text-base">JaLong CyberFood</span>
+          <span class="text-xs text-orange-400 font-semibold hidden sm:inline">• jalong.io.vn</span>
+          <span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            Báo cáo Đồ án Thiết kế CSDL
+          </span>
+        </div>
+        <p class="text-[11px] text-slate-400 truncate hidden md:block">
+          Trình chiếu Đồng bộ Thời gian thực 2 Chiều: Khách hàng Cyberpunk (Trái) ⇄ Giảng viên DB Live Inspector (Phải)
+        </p>
+      </div>
+    </div>
+
+    <!-- Center: Live Sync Monitor Badge -->
+    <div class="hidden xl:flex items-center gap-2.5 bg-slate-950/90 border border-slate-800 rounded-xl px-3 py-1.5">
+      <span id="splitDbDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-online"></span>
+      <span id="splitDbLabel" class="text-xs font-semibold text-emerald-400">PostgreSQL ONLINE</span>
+      <span class="text-slate-700">|</span>
+      <span id="splitEventTicker" class="text-xs font-mono-code text-slate-300 max-w-[260px] truncate">
+        Sẵn sàng đồng bộ SSE / WebSocket...
+      </span>
+      <span id="splitEventCount" class="px-1.5 py-0.5 text-[10px] font-mono-code rounded bg-slate-800 text-amber-300">
+        0 events
+      </span>
+    </div>
+
+    <!-- Right: Ratio Controls, Demo Guide & Navigation -->
+    <div class="flex items-center gap-2 shrink-0">
+      <!-- Ratio Presets -->
+      <div class="hidden lg:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5 text-xs">
+        <button data-ratio="50" class="ratio-btn px-2.5 py-1 rounded-md font-medium bg-indigo-600 text-white transition">
+          50 : 50
+        </button>
+        <button data-ratio="42" class="ratio-btn px-2.5 py-1 rounded-md font-medium text-slate-400 hover:text-white transition" title="Mở rộng khung DB Inspector cho Giảng viên">
+          42 : 58 (Ưu tiên DB)
+        </button>
+        <button data-ratio="58" class="ratio-btn px-2.5 py-1 rounded-md font-medium text-slate-400 hover:text-white transition" title="Mở rộng khung Khách hàng">
+          58 : 42
+        </button>
+      </div>
+
+      <!-- Demo Script Guide Toggle -->
+      <button id="btnToggleGuide" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-semibold transition">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <span>Kịch bản Demo 5 Bước</span>
+      </button>
+
+      <!-- Reload Both Frames -->
+      <button id="btnReloadBoth" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition" title="Làm mới cả 2 khung hình">
+        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Individual Fullscreen Links -->
+      <a href="/" target="_blank" class="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 transition">
+        <i data-lucide="utensils" class="w-3.5 h-3.5 text-orange-400"></i>
+        <span>Khách</span>
+        <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+      </a>
+      <a href="/inspector.html" target="_blank" class="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white transition">
+        <i data-lucide="database" class="w-3.5 h-3.5"></i>
+        <span>Inspector</span>
+        <i data-lucide="external-link" class="w-3 h-3 text-indigo-200"></i>
+      </a>
+    </div>
+  </header>
+
+  <!-- Emergency Offline Sync Banner (Appears automatically if Lecturer disconnects DB) -->
+  <div id="splitOfflineBanner" class="hidden db-offline-banner text-white px-4 py-1.5 text-xs font-semibold flex items-center justify-center gap-2 shadow-lg z-20">
+    <i data-lucide="triangle-alert" class="w-4 h-4 shrink-0"></i>
+    <span>CẢNH BÁO MẤT KẾT NỐI POSTGRESQL — Đang phát tín hiệu sự cố tức thời tới toàn bộ phiên Khách hàng & Giảng viên!</span>
+  </div>
+
+  <!-- Collapsible Presentation Guide Drawer -->
+  <div id="demoGuidePanel" class="hidden bg-slate-900/95 border-b border-indigo-500/30 px-5 py-3.5 z-20">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 w-full text-xs">
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
+          <div class="font-bold text-orange-400 mb-1">1. Đặt đơn (`sp_create_order`)</div>
+          <p class="text-slate-400 leading-relaxed">Chọn món bên <b>Khung Trái</b> & Đặt hàng → Khung Phải nhận đơn tức thì & trừ `stock_quantity` an toàn Transaction.</p>
+        </div>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
+          <div class="font-bold text-emerald-400 mb-1">2. Kiểm chứng Trigger Audit</div>
+          <p class="text-slate-400 leading-relaxed">Bấm duyệt đơn bên <b>Khung Phải</b> → Trigger `trg_order_status_audit` tự ghi lịch sử & thanh tiến trình bên Trái nhảy bước!</p>
+        </div>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
+          <div class="font-bold text-sky-400 mb-1">3. CRUD Thực đơn Live</div>
+          <p class="text-slate-400 leading-relaxed">Thêm/Sửa giá hoặc ngừng bán món bên <b>Khung Phải</b> → Thực đơn Khách hàng cập nhật ngay không cần F5.</p>
+        </div>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
+          <div class="font-bold text-amber-400 mb-1">4. Test Khóa ngoại 3NF</div>
+          <p class="text-slate-400 leading-relaxed">Bấm <b>"Xóa cứng (Test FK)"</b> món đã đặt → PostgreSQL chặn xóa với mã `23503` (`ON DELETE RESTRICT`).</p>
+        </div>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
+          <div class="font-bold text-rose-400 mb-1">5. Chaos & Connection String</div>
+          <p class="text-slate-400 leading-relaxed">Ngắt kết nối DB hoặc đổi Connection String sai → Cả 2 khung báo Đỏ tức thì & tự xanh lại khi khôi phục!</p>
+        </div>
+      </div>
+      <button id="btnCloseGuide" class="text-slate-400 hover:text-white p-1 self-end lg:self-center">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Split View Container -->
+  <main id="splitContainer" class="flex-1 flex relative overflow-hidden bg-slate-950">
+    <!-- Drag Shield Overlay (prevents iframe pointer capture while resizing) -->
+    <div id="dragOverlay" class="hidden fixed inset-0 z-40 cursor-col-resize"></div>
+
+    <!-- Left Pane: Customer App (/) -->
+    <section id="leftPane" style="width: 50%;" class="h-full flex flex-col min-w-[300px] border-r border-slate-800">
+      <div class="h-8 bg-slate-900/90 border-b border-slate-800 px-3 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-2 font-semibold text-orange-400">
+          <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+          <span>GIAO DIỆN 1: KHÁCH HÀNG — CYBERFOOD & REAL-TIME TRACKING</span>
+        </div>
+        <button id="reloadLeft" class="text-slate-400 hover:text-white flex items-center gap-1 transition" title="Tải lại khung Khách hàng">
+          <i data-lucide="rotate-cw" class="w-3 h-3"></i>
+          <span>Tải lại</span>
+        </button>
+      </div>
+      <iframe id="customerFrame" src="/" title="JalongFood Customer App" class="flex-1 w-full bg-slate-950 border-0"></iframe>
+    </section>
+
+    <!-- Draggable Divider Handle -->
+    <div id="splitterHandle" class="w-2 bg-slate-800 hover:bg-indigo-500 active:bg-indigo-400 cursor-col-resize flex items-center justify-center transition-colors z-30 shrink-0" title="Kéo để thay đổi tỷ lệ khung hình">
+      <div class="w-0.5 h-10 bg-slate-500 rounded-full"></div>
+    </div>
+
+    <!-- Right Pane: Lecturer DB Live Inspector (/inspector.html) -->
+    <section id="rightPane" style="width: 50%;" class="h-full flex-1 flex flex-col min-w-[340px]">
+      <div class="h-8 bg-slate-900/90 border-b border-slate-800 px-3 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-2 font-semibold text-indigo-400">
+          <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+          <span>GIAO DIỆN 2: GIẢNG VIÊN — DB LIVE INSPECTOR & CHAOS LAB (<code>/inspector.html</code>)</span>
+        </div>
+        <button id="reloadRight" class="text-slate-400 hover:text-white flex items-center gap-1 transition" title="Tải lại khung DB Inspector">
+          <i data-lucide="rotate-cw" class="w-3 h-3"></i>
+          <span>Tải lại</span>
+        </button>
+      </div>
+      <iframe id="inspectorFrame" src="/inspector.html" title="DB Live Inspector" class="flex-1 w-full bg-slate-950 border-0"></iframe>
+    </section>
+  </main>
+
+  <script type="module">
+    import * as RealtimeModule from './js/realtime-client.js';
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    const leftPane = document.getElementById('leftPane');
+    const rightPane = document.getElementById('rightPane');
+    const splitter = document.getElementById('splitterHandle');
+    const dragOverlay = document.getElementById('dragOverlay');
+    const splitContainer = document.getElementById('splitContainer');
+    const ratioButtons = document.querySelectorAll('.ratio-btn');
+
+    function applyLeftRatio(percent) {
+      const clamped = Math.max(25, Math.min(75, Number(percent)));
+      leftPane.style.width = `${clamped}%`;
+      rightPane.style.width = `${100 - clamped}%`;
+      ratioButtons.forEach((btn) => {
+        const isMatch = Number(btn.dataset.ratio) === Math.round(clamped);
+        btn.className = isMatch
+          ? 'ratio-btn px-2.5 py-1 rounded-md font-medium bg-indigo-600 text-white transition'
+          : 'ratio-btn px-2.5 py-1 rounded-md font-medium text-slate-400 hover:text-white transition';
+      });
+    }
+
+    ratioButtons.forEach((btn) => {
+      btn.addEventListener('click', () => applyLeftRatio(btn.dataset.ratio));
+    });
+
+    // Smooth Splitter Dragging
+    let isDragging = false;
+    splitter.addEventListener('mousedown', () => {
+      isDragging = true;
+      dragOverlay.classList.remove('hidden');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const rect = splitContainer.getBoundingClientRect();
+      const pct = ((e.clientX - rect.left) / rect.width) * 100;
+      applyLeftRatio(pct);
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      dragOverlay.classList.add('hidden');
+    });
+
+    // Guide Toggle & Reload Controls
+    const guidePanel = document.getElementById('demoGuidePanel');
+    document.getElementById('btnToggleGuide').addEventListener('click', () => {
+      guidePanel.classList.toggle('hidden');
+    });
+    document.getElementById('btnCloseGuide').addEventListener('click', () => {
+      guidePanel.classList.add('hidden');
+    });
+
+    const customerFrame = document.getElementById('customerFrame');
+    const inspectorFrame = document.getElementById('inspectorFrame');
+
+    document.getElementById('reloadLeft').addEventListener('click', () => {
+      customerFrame.contentWindow.location.reload();
+    });
+    document.getElementById('reloadRight').addEventListener('click', () => {
+      inspectorFrame.contentWindow.location.reload();
+    });
+    document.getElementById('btnReloadBoth').addEventListener('click', () => {
+      customerFrame.contentWindow.location.reload();
+      inspectorFrame.contentWindow.location.reload();
+    });
+
+    // Connect Top Bar Monitor using Sub-Agent 3's RealtimeClient / createRealtimeClient
+    const splitDbDot = document.getElementById('splitDbDot');
+    const splitDbLabel = document.getElementById('splitDbLabel');
+    const splitEventTicker = document.getElementById('splitEventTicker');
+    const splitEventCount = document.getElementById('splitEventCount');
+    const splitOfflineBanner = document.getElementById('splitOfflineBanner');
+
+    let totalEvents = 0;
+
+    function updateTopBarDbState(isOnline, latencyMs) {
+      if (isOnline) {
+        splitDbDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-online';
+        splitDbLabel.className = 'text-xs font-semibold text-emerald-400';
+        splitDbLabel.textContent = latencyMs != null ? `PostgreSQL ONLINE (${latencyMs}ms)` : 'PostgreSQL ONLINE';
+        splitOfflineBanner.classList.add('hidden');
+      } else {
+        splitDbDot.className = 'w-2.5 h-2.5 rounded-full bg-red-500 pulse-offline';
+        splitDbLabel.className = 'text-xs font-semibold text-red-400';
+        splitDbLabel.textContent = 'PostgreSQL OFFLINE';
+        splitOfflineBanner.classList.remove('hidden');
+      }
+    }
+
+    function recordRealtimeEvent(eventName) {
+      totalEvents += 1;
+      splitEventCount.textContent = `${totalEvents} events`;
+      const timeStr = new Date().toLocaleTimeString('vi-VN', { hour12: false });
+      splitEventTicker.textContent = `[${timeStr}] ⚡ ${eventName}`;
+    }
+
+    try {
+      const client = RealtimeModule.createRealtimeClient
+        ? RealtimeModule.createRealtimeClient({ transport: 'sse' })
+        : (RealtimeModule.RealtimeClient ? new RealtimeModule.RealtimeClient({ transport: 'sse' }) : null);
+
+      // Initial health check for top presentation bar
+      fetch('/api/db/status')
+        .then((r) => r.json())
+        .then((res) => {
+          const st = res?.data || res;
+          if (st && typeof st.connected === 'boolean') {
+            updateTopBarDbState(st.connected && !st.simulatedOffline, st.latencyMs);
+          }
+        })
+        .catch(() => {});
+
+      if (client) {
+        // Register custom named SSE events so EventSource binds listeners for them
+        const customNamedEvents = [
+          'db:simulation_changed',
+          'db:config_changed',
+          'db:constraint_violated',
+          'order:status_updated',
+        ];
+        customNamedEvents.forEach((evtName) => client.on(evtName, () => {}));
+
+        client.on('*', (envelope) => {
+          const eventType = envelope?.type || envelope?.event || 'realtime:event';
+          const data = envelope?.data || envelope || {};
+
+          if (eventType !== 'db:query_logged' || data?.status === 'error') {
+            recordRealtimeEvent(eventType);
+          }
+
+          if (
+            eventType === 'db:simulation_changed' ||
+            eventType === 'db:config_changed' ||
+            eventType === 'db:status_changed'
+          ) {
+            const isOffline =
+              data.offline === true ||
+              data.simulatedOffline === true ||
+              data.connected === false;
+            updateTopBarDbState(!isOffline, data.latencyMs ?? null);
+          }
+        });
+      }
+    } catch (err) {
+      console.warn('[SplitView] Realtime monitor init deferred:', err);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JaLong CyberFood • Ẩm Thực Tương Lai • Giao Siêu Tốc 15 Phút</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#080c14',
+              card: '#0f172a',
+              neonCyan: '#00f0ff',
+              neonPink: '#f72585',
+              neonOrange: '#ff7b00',
+              neonAmber: '#ffb703',
+              neonEmerald: '#00ff88',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    body {
+      background-color: #070b12;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(247, 37, 133, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(0, 240, 255, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(255, 123, 0, 0.1) 0px, transparent 60%);
+      background-attachment: fixed;
+      color: #f1f5f9;
+    }
+    .neon-text-glow {
+      text-shadow: 0 0 10px rgba(255, 123, 0, 0.6), 0 0 20px rgba(247, 37, 133, 0.4);
+    }
+    .neon-cyan-glow {
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 25px rgba(0, 240, 255, 0.4);
+    }
+    .glass-cyber-nav {
+      background: rgba(11, 17, 32, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-orange-500 selection:text-white">
+
+  <!-- Canvas for Neon Confetti Celebrations -->
+  <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+  <!-- Friendly Service Interruption Banner -->
+  <div id="dbEmergencyBanner" class="hidden db-offline-banner text-white px-4 py-2.5 shadow-2xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+      <div class="flex items-center gap-2.5 font-bold">
+        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+          <i data-lucide="wifi-off" class="w-4 h-4 text-white"></i>
+        </span>
+        <span id="dbEmergencyMessage">
+          Hệ thống đang đồng bộ kết nối dữ liệu. Xin vui lòng chờ trong giây lát...
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="dbEmergencyCode" class="font-mono-code text-[11px] bg-black/40 px-2 py-0.5 rounded text-amber-300">Đang đồng bộ</span>
+        <button id="btnRetryHealth" class="px-3 py-1 rounded-lg bg-white text-rose-700 font-bold text-xs hover:bg-rose-50 transition shadow">
+          Kết nối lại
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Navigation Header (Pure Customer Aesthetic) -->
+  <header class="glass-cyber-nav sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Logo with Neon Cyber Styling -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="relative">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-orange-500/30 group-hover:scale-105 transition-transform duration-300">
+            <i data-lucide="flame" class="w-6 h-6 text-white drop-shadow"></i>
+          </div>
+          <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-slate-900 blink-dot"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-black text-xl tracking-tight text-white group-hover:text-orange-400 transition neon-text-glow">
+              JaLong<span class="text-orange-500">Food</span>
+            </span>
+            <span class="cyber-flash-badge text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full text-white shadow-sm tracking-wider">
+              ⚡ Cyber Live
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>Ẩm thực nóng sốt • Giao siêu tốc 15 phút</span>
+          </p>
+        </div>
+      </a>
+
+      <!-- Right Header Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Live Server Status Badge -->
+        <div id="dbStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 text-xs font-bold shadow-sm">
+          <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-emerald-400 blink-dot"></span>
+          <span id="dbStatusText">Máy chủ Trực tuyến</span>
+          <span id="dbLatencyBadge" class="px-1.5 py-0.5 rounded bg-emerald-900/60 text-[10px] text-emerald-300 font-mono-code font-semibold">0ms</span>
+          <span id="realtimeTransportBadge" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px] text-emerald-300 font-black">LIVE</span>
+        </div>
+
+        <!-- Customer Identity Pill (Matching Image 2) -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700/80 shadow-sm">
+          <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs font-black">
+            <i data-lucide="user" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="text-left">
+            <div class="text-[9px] font-black uppercase tracking-wider text-slate-400 leading-none">KHÁCH HÀNG</div>
+            <div id="headerCustomerNameDisplay" class="text-xs font-extrabold text-white leading-tight mt-0.5">Hoàng Long (Bạn)</div>
+          </div>
+        </div>
+
+        <!-- Hidden compatibility select for programmatic listeners -->
+        <select id="customerSelect" class="hidden" style="display: none;"></select>
+
+        <!-- Lecturer Mode Quick Link -->
+        <a id="navInspector" href="/inspector.html" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold shadow-sm transition" title="Bảng điều khiển Giảng viên (DB Live Inspector 3NF)">
+          <i data-lucide="settings-2" class="w-3.5 h-3.5 text-orange-400"></i>
+          <span class="hidden md:inline">Chế độ Giảng viên (Inspector)</span>
+        </a>
+
+        <a id="navSplitMode" href="/split" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-700/60 text-xs font-semibold transition" title="Chia đôi màn hình thuyết trình">
+          <i data-lucide="columns-2" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span>Chia đôi Màn hình</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
+
+    <!-- ==================================================================
+         HERO BANNER: CYBER FLASH SALE & HOT DEALS (CHỚP CHỚP HIỆU ỨNG)
+         ================================================================== -->
+    <section class="relative overflow-hidden rounded-3xl p-6 sm:p-10 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border border-orange-500/30 shadow-2xl shadow-orange-500/10">
+      <div class="absolute -right-12 -top-12 w-72 h-72 bg-orange-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-12 -bottom-12 w-72 h-72 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10 max-w-3xl mx-auto text-center space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/40 text-orange-400 text-xs font-extrabold uppercase tracking-widest cyber-badge-pulse mx-auto">
+          <span class="w-2 h-2 rounded-full bg-orange-400 blink-dot"></span>
+          <span>🔥 SIÊU TIỆC ẨM THỰC CYBERPUNK • GIẢM 20% HÔM NAY</span>
+        </div>
+
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+          Thưởng Thức Món Ngon<br />
+          <span class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-rose-400 neon-text-glow mt-1 sm:mt-2">Nóng Hổi Tận Nhà</span>
+        </h1>
+
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
+          Chọn món tươi ngon yêu thích, nhà bếp chế biến tức thì và tài xế giao tận tay trong 15 phút. Theo dõi hành trình đơn hàng cập nhật liên tục từng giây!
+        </p>
+
+        <!-- Badges Commitment (Căn đều giữa) -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2 text-xs font-bold text-slate-300">
+          <div class="flex items-center gap-1.5 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-md">
+            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+            <span>Giao siêu tốc 15 phút</span>
+          </div>
+          <div class="flex items-center gap-1.5 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-md">
+            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
+            <span>Tươi sạch 100% trong ngày</span>
+          </div>
+          <div class="flex items-center gap-1.5 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-md">
+            <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
+            <span>Miễn phí ship đơn đầu</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         SECTION: CS:GO STYLE FOOD ROULETTE ("HÔM NAY ĂN GÌ ?")
+         ================================================================== -->
+    <section id="foodRouletteSection" class="relative overflow-hidden rounded-3xl p-5 sm:p-6 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-2 border-cyan-500/40 shadow-2xl shadow-cyan-500/15">
+      <!-- Glow Accents -->
+      <div class="absolute -right-16 -top-16 w-56 h-56 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-16 -bottom-16 w-56 h-56 bg-orange-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Roulette Header & Budget Tier Controls -->
+      <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-2.5 mb-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 text-white text-[11px] font-black uppercase tracking-wider shadow-md whitespace-nowrap shrink-0">
+              <span class="w-2 h-2 rounded-full bg-white blink-dot"></span>
+              <span>✨ VÒNG QUAY ẨM THỰC • RANDOM MÓN NGON</span>
+            </span>
+            <span id="rouletteStatusBadge" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-xs font-black text-amber-300 shadow-sm whitespace-nowrap">
+              Sẵn sàng quay món
+            </span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+            <span>Băn Khoăn "Hôm Nay Ăn Gì ?" — Quay Random Định Mệnh!</span>
+          </h2>
+          <p class="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            Không biết chọn món gì cho bữa ăn? Hãy chọn mốc tài chính và bấm quay ngay — vòng quay trượt ngang sẽ tìm món ngon chân ái cho bạn trong tích tắc!
+          </p>
+        </div>
+
+        <!-- Budget Tier Selector (Mốc tài chính: nằm ngang hàng đẹp mắt) -->
+        <div class="flex items-center gap-2.5 w-full lg:w-auto shrink-0 flex-nowrap overflow-x-auto no-scrollbar py-1">
+          <span class="text-xs uppercase font-extrabold text-slate-400 whitespace-nowrap flex items-center gap-1.5 shrink-0">
+            <i data-lucide="wallet" class="w-4 h-4 text-orange-400"></i>
+            <span>Mốc tài chính:</span>
+          </span>
+          <div id="rouletteBudgetPills" class="flex items-center gap-1.5 p-1 bg-slate-950/90 rounded-2xl border border-slate-800 shrink-0">
+            <button
+              type="button"
+              data-roulette-budget="all"
+              class="budget-pill-btn active px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/30 whitespace-nowrap"
+            >
+              Tất cả món
+            </button>
+            <button
+              type="button"
+              data-roulette-budget="under40k"
+              class="budget-pill-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer whitespace-nowrap"
+            >
+              Hạt dẻ (&lt; 40k)
+            </button>
+            <button
+              type="button"
+              data-roulette-budget="40k-65k"
+              class="budget-pill-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer whitespace-nowrap"
+            >
+              Chuẩn bữa (40k-65k)
+            </button>
+            <button
+              type="button"
+              data-roulette-budget="over65k"
+              class="budget-pill-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer whitespace-nowrap"
+            >
+              Ăn sang (&gt; 65k)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- The CS:GO Case Opening Viewport -->
+      <div class="relative z-10 my-4">
+        <!-- Viewport Box -->
+        <div class="relative h-48 sm:h-52 w-full bg-slate-950/95 rounded-2xl overflow-hidden border-2 border-slate-800 shadow-[inset_0_4px_24px_rgba(0,0,0,0.8)]">
+          
+          <!-- Center Vertical Needle & Indicator Arrows -->
+          <div class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-amber-400 via-rose-500 to-amber-400 z-30 shadow-[0_0_14px_rgba(251,191,36,0.9)] pointer-events-none"></div>
+          <!-- Top Arrow -->
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[12px] border-t-amber-400 z-30 drop-shadow-[0_2px_6px_rgba(251,191,36,0.8)] pointer-events-none"></div>
+          <!-- Bottom Arrow -->
+          <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[12px] border-b-amber-400 z-30 drop-shadow-[0_-2px_6px_rgba(251,191,36,0.8)] pointer-events-none"></div>
+
+          <!-- Left & Right Vignette Shadows (Depth Blur) -->
+          <div class="absolute inset-y-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent z-20 pointer-events-none"></div>
+          <div class="absolute inset-y-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-slate-950 via-slate-950/80 to-transparent z-20 pointer-events-none"></div>
+
+          <!-- Horizontal Roulette Strip Track -->
+          <div
+            id="rouletteStrip"
+            class="h-full flex items-center will-change-transform"
+            style="transform: translateX(0px);"
+          >
+            <!-- Populated dynamically via JS -->
+            <div class="p-8 text-center text-xs text-slate-500 w-full">
+              Đang nạp thực đơn tươi ngon...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Footer: Spin Button + Rarity Legend -->
+      <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        <!-- Rarity Legend -->
+        <div class="flex flex-wrap items-center gap-2 text-[10px] text-slate-400">
+          <span class="font-extrabold uppercase tracking-wider text-slate-500">Phẩm cấp:</span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800/60 font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span> Hạt dẻ
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/60 font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Chuẩn vị
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-pink-950 text-pink-300 border border-pink-800/60 font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-pink-400"></span> No nê
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/60 font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Thượng hạng
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/60 font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> ★ Món Bếp Trưởng VIP ★
+          </span>
+        </div>
+
+        <!-- Spin Action Button -->
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button
+            id="btnSpinRoulette"
+            type="button"
+            class="w-full sm:w-auto px-7 py-3 rounded-2xl bg-gradient-to-r from-orange-500 via-rose-500 to-amber-500 hover:from-orange-600 hover:to-rose-600 text-white font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-orange-500/30 transition-all hover:scale-105 active:scale-95 cursor-pointer neon-pulse-btn"
+          >
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+            <span>QUAY MÓN NGAY ⚡</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal: CS:GO Weapon Inspect Style Winning Reveal -->
+    <div id="rouletteWinnerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+      <div id="rouletteWinnerCard" class="relative max-w-md w-full bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 rounded-3xl border-2 border-amber-400 shadow-[0_0_50px_rgba(251,191,36,0.35)] p-6 text-center transform scale-95 transition-transform duration-300 space-y-4">
+        <!-- Close Button -->
+        <button id="btnCloseWinnerModal" type="button" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Inspect Badge -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-black uppercase tracking-wider">
+          <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="winnerRarityLabel">★ MÓN NGON ĐỊNH MỆNH ★</span>
+        </div>
+
+        <!-- Big Food Image with Radial Glow -->
+        <div class="relative w-48 h-48 mx-auto my-2 rounded-2xl overflow-hidden border-2 border-amber-400/60 shadow-2xl bg-slate-900 group">
+          <img id="winnerFoodImg" src="" alt="Món trúng" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\' viewBox=\'0 0 400 400\'><rect width=\'400\' height=\'400\' fill=\'%230f172a\'/><text x=\'200\' y=\'210\' font-size=\'60\' text-anchor=\'middle\'>🍲</text></svg>';" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+        </div>
+
+        <div>
+          <span id="winnerCategoryName" class="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 block"></span>
+          <h3 id="winnerFoodName" class="text-xl font-black text-white mt-1 neon-text-glow leading-snug"></h3>
+          <p id="winnerFoodDesc" class="text-xs text-slate-300 mt-1 line-clamp-2 leading-relaxed px-2"></p>
+          <div class="mt-3">
+            <span class="text-[11px] text-slate-400 block">Giá niêm yết</span>
+            <span id="winnerFoodPrice" class="text-2xl font-black text-orange-400 neon-text-glow font-mono-code"></span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-2 flex flex-col gap-2">
+          <button
+            id="btnAddWinnerToCart"
+            type="button"
+            class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-orange-500 via-rose-500 to-orange-600 hover:from-orange-600 hover:to-rose-600 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-orange-500/30 transition cursor-pointer"
+          >
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span>CHỐT MÓN NÀY (THÊM VÀO GIỎ) ⚡</span>
+          </button>
+          <button
+            id="btnSpinAgainModal"
+            type="button"
+            class="w-full py-2.5 px-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer"
+          >
+            <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span>Quay lại món khác</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================
+         SECTION 1: ORDER TRACKER (LIVE REAL-TIME PROGRESS FOR CUSTOMER)
+         ================================================================== -->
+    <section id="orderTrackerSection" class="cyber-card rounded-3xl overflow-hidden transition-all shadow-2xl hidden">
+      <!-- Tracker Header -->
+      <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80">
+        <div class="flex items-center gap-3">
+          <div class="relative w-10 h-10 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 shadow-inner">
+            <i data-lucide="radar" class="w-5 h-5"></i>
+            <span class="radar-wave"></span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-sm sm:text-base font-black tracking-tight text-white">
+                Hành Trình Giao Món Của Bạn
+              </h2>
+              <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink-dot"></span>
+                <span>Trực Tiếp</span>
+              </span>
+            </div>
+            <p class="text-xs text-slate-400">
+              Trạng thái đơn hàng sẽ tự động cập nhật ngay khi nhà hàng và tài xế thay đổi
+            </p>
+          </div>
+        </div>
+
+        <!-- Order Selector for Current Customer + Collapse Button -->
+        <div class="flex items-center gap-2">
+          <select id="activeOrderSelect" class="bg-slate-900 border border-slate-700 text-white text-xs font-semibold rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-orange-500 max-w-[240px]">
+            <option value="">Chưa có đơn hàng nào</option>
+          </select>
+          <button id="btnRefreshTracker" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition" title="Làm mới trạng thái">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
+          <button id="btnToggleTrackerBody" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition" title="Thu gọn / Mở rộng">
+            <i data-lucide="chevron-up" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tracker Body -->
+      <div id="orderTrackerBody" class="p-5 sm:p-6 space-y-5">
+        <!-- Empty State when customer has no orders -->
+        <div id="trackerEmptyState" class="hidden py-8 text-center">
+          <div class="w-14 h-14 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="shopping-basket" class="w-7 h-7"></i>
+          </div>
+          <p class="text-sm font-bold text-slate-200">Bạn chưa có đơn hàng nào đang diễn ra</p>
+          <p class="text-xs text-slate-400 mt-1">Hãy lướt menu bên dưới và chọn món ngon bạn thích để đặt ngay nhé!</p>
+        </div>
+
+        <!-- Active Order Content -->
+        <div id="trackerActiveContent" class="space-y-6">
+          <!-- Top Order Meta Summary -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span id="trackedOrderCode" class="font-mono-code font-black text-sm px-3 py-1 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/40">#ORD---</span>
+              <span id="trackedStatusBadge" class="px-3.5 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                Chờ xác nhận
+              </span>
+              <span id="trackedOrderTime" class="text-xs text-slate-400 flex items-center gap-1">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                <span>--:--</span>
+              </span>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+              <div class="text-slate-400">
+                Giao đến: <strong id="trackedOrderAddress" class="text-slate-100 font-bold">---</strong>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-400">Tổng thanh toán:</span>
+                <strong id="trackedOrderTotal" class="text-lg font-black text-orange-400 ml-1.5 neon-text-glow">0 ₫</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cancelled Alert Banner -->
+          <div id="trackerCancelledAlert" class="hidden rounded-2xl bg-rose-950/60 border border-rose-800/80 p-4 flex items-center gap-3 text-rose-200">
+            <div class="w-10 h-10 rounded-full bg-rose-900/60 flex items-center justify-center shrink-0 text-rose-400">
+              <i data-lucide="x-circle" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">Đơn hàng này đã được hủy</h4>
+              <p id="trackerCancelledReason" class="text-xs text-rose-300 mt-0.5">Số lượng món ăn đã được hoàn về kho của nhà hàng.</p>
+            </div>
+          </div>
+
+          <!-- 4-Step Visual Progress Stepper -->
+          <div id="trackerStepperWrapper" class="py-2">
+            <div class="relative">
+              <!-- Connector Track Behind Steps -->
+              <div class="hidden sm:block absolute top-6 left-[12%] right-[12%] h-1 bg-slate-800 rounded-full overflow-hidden">
+                <div id="trackerProgressBar" class="h-full bg-gradient-to-r from-orange-500 via-amber-400 to-emerald-400 transition-all duration-700" style="width: 0%;"></div>
+              </div>
+
+              <!-- 4 Step Nodes -->
+              <div id="trackerStepsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 relative z-10">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================================================================
+               SIMULATED LIVE DELIVERY MAP (GPS & DRIVING SHIPPER)
+               ================================================================== -->
+          <div id="simulatedMapContainer" class="relative rounded-3xl overflow-hidden border border-cyan-500/30 bg-slate-950 p-4 sm:p-5 shadow-2xl space-y-3.5">
+            <!-- Top Map Header -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+              <div class="flex items-center gap-3">
+                <div class="relative w-9 h-9 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shadow-inner">
+                  <i data-lucide="map-pin" class="w-4 h-4"></i>
+                  <span class="radar-wave"></span>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">Bản Đồ Giao Hàng Trực Tiếp (Live GPS)</span>
+                    <span id="mapLiveBadge" class="px-2.5 py-0.5 text-[10px] font-black rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink-dot"></span>
+                      <span id="mapLiveStatusText">GPS Hoạt động</span>
+                    </span>
+                  </div>
+                  <p id="mapStatusSubtitle" class="text-xs text-slate-400 mt-0.5">
+                    Tài xế đang nhận đơn và chuẩn bị di chuyển tới địa chỉ của bạn
+                  </p>
+                </div>
+              </div>
+
+              <!-- Shipper Quick Contact Card -->
+              <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-800 rounded-2xl px-3.5 py-1.5 text-xs shadow-md">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
+                  🛵
+                </div>
+                <div>
+                  <div class="font-bold text-white text-xs">Lê Hoàng Giao Nhanh</div>
+                  <div class="text-[10px] text-slate-400">Xe AirBlade • <span class="text-cyan-400 font-mono-code font-bold">29-X1 888.88</span></div>
+                </div>
+                <button type="button" id="btnCallShipper" class="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/30 text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer">
+                  <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                  <span>Gọi tài xế</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Interactive Visual Map Box -->
+            <div class="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden bg-[#090d1a] border border-slate-800/80 select-none">
+              <!-- Map Canvas / SVG Grid Lines & Cyber Streets -->
+              <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="cyberGrid" width="36" height="36" patternUnits="userSpaceOnUse">
+                    <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#1e293b" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#cyberGrid)" />
+                
+                <!-- Simulated Cyber River & Avenues -->
+                <path d="M -10 170 Q 200 110 450 150 T 1000 130" fill="none" stroke="#00f0ff" stroke-width="3" stroke-opacity="0.3" stroke-dasharray="6,6" />
+                <path d="M 110 -10 L 110 400" fill="none" stroke="#334155" stroke-width="12" stroke-opacity="0.25" />
+                <path d="M 360 -10 L 360 400" fill="none" stroke="#334155" stroke-width="12" stroke-opacity="0.25" />
+                <path d="M -10 70 L 1000 70" fill="none" stroke="#334155" stroke-width="10" stroke-opacity="0.25" />
+                <path d="M -10 190 L 1000 190" fill="none" stroke="#334155" stroke-width="12" stroke-opacity="0.25" />
+                
+                <!-- Glowing Delivery Route Path -->
+                <path id="svgDeliveryRoute" d="M 60 70 C 180 70, 220 180, 360 180 S 520 110, 680 150" fill="none" stroke="#ff7b00" stroke-width="4" stroke-dasharray="8,6" class="route-dash-glow" />
+              </svg>
+
+              <!-- Map Landmark Point A: Restaurant (JaLong Food) -->
+              <div class="absolute left-6 sm:left-10 top-8 flex flex-col items-center pointer-events-none z-10">
+                <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-500 to-rose-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/50">
+                  <i data-lucide="store" class="w-5 h-5"></i>
+                  <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border border-slate-900 blink-dot"></span>
+                </div>
+                <span class="mt-1 px-2.5 py-0.5 rounded-lg bg-slate-950/90 text-orange-400 border border-orange-500/30 text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-md">
+                  🏪 Bếp JaLong Food
+                </span>
+              </div>
+
+              <!-- Map Landmark Point B: Customer Destination -->
+              <div class="absolute right-6 sm:right-12 bottom-8 flex flex-col items-center pointer-events-none z-10">
+                <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-400 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-cyan-500/50">
+                  <i data-lucide="home" class="w-5 h-5"></i>
+                  <span class="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full border border-slate-900 blink-dot"></span>
+                </div>
+                <span id="mapCustomerAddressLabel" class="mt-1 px-2.5 py-0.5 rounded-lg bg-slate-950/90 text-cyan-300 border border-cyan-500/30 text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-md max-w-[170px] truncate">
+                  🏠 Vị trí của bạn
+                </span>
+              </div>
+
+              <!-- Moving Shipper Marker (Smooth Transition & Pulse) -->
+              <div id="mapShipperMarker" class="absolute z-20 flex flex-col items-center transition-all duration-1000 ease-in-out" style="left: 18%; top: 32%;">
+                <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center font-black shadow-xl shadow-orange-500/60 border-2 border-white shipper-bike-icon">
+                  <span class="text-xl">🛵</span>
+                  <span class="radar-wave"></span>
+                </div>
+                <div id="mapShipperTooltip" class="mt-1 px-2.5 py-0.5 rounded-full bg-slate-950/95 text-white border border-amber-400/50 text-[10px] font-extrabold whitespace-nowrap shadow-lg flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink-dot"></span>
+                  <span id="mapShipperTooltipText">Tài xế đang nhận đơn • 0 km/h</span>
+                </div>
+              </div>
+
+              <!-- Map Bottom Telemetry HUD Overlay -->
+              <div class="absolute bottom-3 left-3 bg-slate-950/90 backdrop-blur-md border border-slate-800 rounded-xl px-3 py-1.5 text-[11px] font-mono-code text-slate-300 flex items-center gap-3 shadow-md">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="gauge" class="w-3.5 h-3.5 text-cyan-400"></i>
+                  <span id="mapSpeedText" class="font-bold">Vận tốc: 0 km/h</span>
+                </div>
+                <span class="text-slate-600">|</span>
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="milestone" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span id="mapDistanceText">Cách bạn: ~850m</span>
+                </div>
+                <span class="text-slate-600 hidden sm:inline">|</span>
+                <div class="hidden sm:flex items-center gap-1.5">
+                  <i data-lucide="timer" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span id="mapEtaText">Dự kiến: 6-8 phút</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two-Column Detail: Ordered Items + Delivery Milestones -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 pt-2">
+            <!-- Ordered Items List -->
+            <div class="lg:col-span-5 bg-slate-900/80 rounded-2xl p-4 border border-slate-800/80">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+                <span>Món ăn trong đơn</span>
+                <span id="trackedItemsCount" class="text-orange-400 font-bold">0 món</span>
+              </h3>
+              <div id="trackedItemsList" class="space-y-2 max-h-56 overflow-y-auto dark-scrollbar pr-1">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Delivery Journey Timeline -->
+            <div class="lg:col-span-7 bg-slate-900/80 rounded-2xl p-4 border border-slate-800/80">
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                  <i data-lucide="navigation" class="w-4 h-4"></i>
+                  <span>Lịch trình Giao nhận Đơn hàng</span>
+                </h3>
+                <span class="text-[11px] font-bold text-slate-400 flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400 blink-dot"></span>
+                  <span>Cập nhật tự động</span>
+                </span>
+              </div>
+              <ol id="trackedHistoryTimeline" class="relative border-l-2 border-slate-800 ml-2.5 space-y-3.5 max-h-56 overflow-y-auto dark-scrollbar pl-4 pr-1">
+                <!-- Populated dynamically -->
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         SECTION 2: LIVE MENU GRID + STICKY CART & CHECKOUT
+         ================================================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- Left 8 Cols: Food Menu -->
+      <section class="lg:col-span-8 space-y-5">
+        <!-- Menu Search & Filter Controls -->
+        <div class="cyber-card rounded-3xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-xl font-black text-white tracking-tight">Thực Đơn Tươi Ngon Hôm Nay</h2>
+                <span id="liveMenuCountBadge" class="px-2.5 py-0.5 text-xs font-black rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/40">0 món</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">
+                Chế biến nóng hổi ngay khi nhận đơn • Nguyên liệu nhập tươi mỗi ngày
+              </p>
+            </div>
+
+            <!-- Search Input + Available Toggle -->
+            <div class="flex items-center gap-2.5">
+              <div class="relative flex-1 sm:w-64">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input
+                  id="menuSearchInput"
+                  type="text"
+                  placeholder="Tìm món phở, cơm, trà..."
+                  class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                />
+                <button id="btnClearSearch" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+
+              <label class="inline-flex items-center gap-2 text-xs font-bold text-slate-300 bg-slate-900 border border-slate-700/80 px-3.5 py-2 rounded-2xl cursor-pointer select-none shrink-0 hover:border-orange-500/40 transition">
+                <input id="chkOnlyAvailable" type="checkbox" class="rounded text-orange-500 focus:ring-orange-500 bg-slate-800 border-slate-700" />
+                <span>Chỉ món còn</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Food Cards Grid -->
+        <div id="foodsGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+          <!-- Skeleton placeholders before API resolves -->
+          <div class="cyber-card rounded-3xl p-4 space-y-3">
+            <div class="h-40 rounded-2xl skeleton"></div>
+            <div class="h-4 w-2/3 rounded skeleton"></div>
+            <div class="h-3 w-full rounded skeleton"></div>
+            <div class="h-9 w-full rounded-2xl skeleton"></div>
+          </div>
+          <div class="cyber-card rounded-3xl p-4 space-y-3">
+            <div class="h-40 rounded-2xl skeleton"></div>
+            <div class="h-4 w-2/3 rounded skeleton"></div>
+            <div class="h-3 w-full rounded skeleton"></div>
+            <div class="h-9 w-full rounded-2xl skeleton"></div>
+          </div>
+          <div class="cyber-card rounded-3xl p-4 space-y-3 hidden xl:block">
+            <div class="h-40 rounded-2xl skeleton"></div>
+            <div class="h-4 w-2/3 rounded skeleton"></div>
+            <div class="h-3 w-full rounded skeleton"></div>
+            <div class="h-9 w-full rounded-2xl skeleton"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right 4 Cols: Shopping Cart & Instant Checkout -->
+      <aside id="cartSidebar" class="lg:col-span-4 lg:sticky lg:top-24 cyber-card rounded-3xl overflow-hidden shadow-2xl">
+        <!-- Cart Header -->
+        <div class="px-5 py-4 border-b border-slate-800 bg-gradient-to-r from-orange-950/40 to-slate-900 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-orange-500 to-rose-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/30">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-sm font-black text-white">Giỏ Hàng Của Bạn</h2>
+              <p class="text-[11px] text-slate-400">Kiểm tra món & giao tận nơi</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="cartCountBadge" class="px-2.5 py-0.5 text-xs font-black rounded-full bg-orange-500 text-white shadow-sm">0</span>
+            <button id="btnClearCart" class="hidden text-xs font-bold text-rose-400 hover:text-rose-300 underline">
+              Xóa tất cả
+            </button>
+          </div>
+        </div>
+
+        <!-- Cart Items List -->
+        <div class="p-5 space-y-4">
+          <div id="cartEmptyState" class="py-10 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-800 text-slate-500 flex items-center justify-center mx-auto mb-3">
+              <i data-lucide="utensils-crossed" class="w-7 h-7"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-300">Giỏ hàng của bạn đang trống</p>
+            <p class="text-[11px] text-slate-500 mt-1">Bấm nút "Chọn món" trên thực đơn để thêm vào đây!</p>
+          </div>
+
+          <div id="cartItemsContainer" class="hidden space-y-3 max-h-72 overflow-y-auto dark-scrollbar pr-1">
+            <!-- Populated dynamically with qty controls + per-item note input -->
+          </div>
+
+          <!-- Delivery Form -->
+          <form id="checkoutForm" class="space-y-3.5 pt-4 border-t border-slate-800">
+            <div>
+              <label for="customerNameInput" class="block text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
+                <span>Họ và tên người nhận <span class="text-rose-400">*</span></span>
+                <span class="text-[10px] text-orange-400 font-semibold">Tự do nhập tên</span>
+              </label>
+              <div class="relative">
+                <i data-lucide="user" class="w-4 h-4 text-orange-400 absolute left-3.5 top-3"></i>
+                <input
+                  id="customerNameInput"
+                  type="text"
+                  required
+                  placeholder="Nhập tên của bạn (VD: Hoàng Long, Tuấn Kiệt...)"
+                  class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+                />
+              </div>
+            </div>
+
+            <!-- Phone & Gmail Inputs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="customerPhoneInput" class="block text-xs font-bold text-slate-300 mb-1.5">
+                  <span>Số điện thoại <span class="text-rose-400">*</span></span>
+                </label>
+                <div class="relative">
+                  <i data-lucide="phone" class="w-4 h-4 text-emerald-400 absolute left-3.5 top-3"></i>
+                  <input
+                    id="customerPhoneInput"
+                    type="tel"
+                    required
+                    placeholder="0988 123 456"
+                    class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="customerEmailInput" class="block text-xs font-bold text-slate-300 mb-1.5">
+                  <span>Gmail / Email <span class="text-rose-400">*</span></span>
+                </label>
+                <div class="relative">
+                  <i data-lucide="mail" class="w-4 h-4 text-sky-400 absolute left-3.5 top-3"></i>
+                  <input
+                    id="customerEmailInput"
+                    type="email"
+                    required
+                    placeholder="hoanglong@gmail.com"
+                    class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="deliveryAddressInput" class="block text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
+                <span>Địa chỉ nhận món <span class="text-rose-400">*</span></span>
+                <span class="text-[10px] text-orange-400 font-semibold">Tự động gợi ý</span>
+              </label>
+              <div class="relative">
+                <i data-lucide="map-pin" class="w-4 h-4 text-orange-400 absolute left-3.5 top-3"></i>
+                <input
+                  id="deliveryAddressInput"
+                  type="text"
+                  required
+                  placeholder="Nhập số nhà, tên đường, tòa nhà..."
+                  class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="orderNoteInput" class="block text-xs font-bold text-slate-300 mb-1.5">
+                Ghi chú cho nhà bếp / tài xế
+              </label>
+              <input
+                id="orderNoteInput"
+                type="text"
+                placeholder="VD: Không lấy hành, cho nhiều ớt, gọi trước khi đến..."
+                class="w-full px-3.5 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              />
+            </div>
+
+            <!-- Totals Summary & Loyalty Discount -->
+            <div class="bg-slate-900/90 rounded-2xl p-4 space-y-2 border border-slate-800">
+              <!-- Returning Customer 10% Loyalty Banner -->
+              <div id="cartDiscountBanner" class="hidden px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center justify-between gap-2 shadow-sm">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+                  <span>Tri ân khách cũ: <strong>Giảm 10%</strong></span>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-200 font-black text-[10px]">-10%</span>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>Số lượng món</span>
+                <span id="cartTotalPortions" class="font-bold text-white">0 phần</span>
+              </div>
+              <div id="cartSubtotalRow" class="hidden flex items-center justify-between text-xs text-slate-400">
+                <span>Tạm tính</span>
+                <span id="cartSubtotalPrice" class="font-bold text-slate-200">0 ₫</span>
+              </div>
+              <div id="cartDiscountRow" class="hidden flex items-center justify-between text-xs text-amber-400">
+                <span class="flex items-center gap-1">
+                  <i data-lucide="tag" class="w-3.5 h-3.5"></i>
+                  <span>Ưu đãi khách quen (-10%)</span>
+                </span>
+                <span id="cartDiscountAmount" class="font-extrabold">-0 ₫</span>
+              </div>
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>Phí giao hàng</span>
+                <span class="font-bold text-emerald-400 flex items-center gap-1">
+                  <i data-lucide="gift" class="w-3.5 h-3.5"></i>
+                  <span>Miễn phí (Ưu đãi)</span>
+                </span>
+              </div>
+              <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+                <span class="text-xs font-bold text-slate-200">Tổng thanh toán</span>
+                <span id="cartTotalPrice" class="text-xl font-black text-orange-400 neon-text-glow">0 ₫</span>
+              </div>
+            </div>
+
+            <!-- Submit Checkout Button (Neon Pulse Glow) -->
+            <button
+              id="btnSubmitOrder"
+              type="submit"
+              disabled
+              class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-orange-500 via-rose-500 to-orange-600 hover:from-orange-600 hover:to-rose-600 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-600 disabled:border-slate-800 disabled:cursor-not-allowed text-white font-black text-sm shadow-xl shadow-orange-500/25 flex items-center justify-center gap-2 transition neon-pulse-btn cursor-pointer"
+            >
+              <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
+              <span id="btnSubmitOrderLabel">XÁC NHẬN ĐẶT MÓN NGAY ⚡</span>
+            </button>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Clean Customer Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/90 mt-12 py-6 px-4 text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="font-black text-white">JaLong<span class="text-orange-500">Food</span></span>
+        <span>• Giao đồ ăn tận nơi 15 phút</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <a href="/inspector.html" target="_blank" class="hover:text-orange-400 transition">DB Live Inspector (Giảng viên)</a>
+        <span>•</span>
+        <a href="/demo-split.html" class="hover:text-orange-400 transition">Trình chiếu Chia đôi Màn hình</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Stack -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <script type="module" src="/js/customer-app.js?v=20261109_csgo_v4"></script>
+</body>
+</html>
