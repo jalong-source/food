@@ -1,0 +1,1155 @@
+/* ==========================================================================
+   JaLong Bistro • Classic Parisian Bistro & Vintage Paper Menu Design System
+   Course Project: Database Design (3NF, Stored Procedures, Triggers, Pool, SSE/WS)
+   File: vintage-theme.css
+   Style: Classic Parisian Bistro, Antique Paper Menu, Guest Check Receipts & Ledger
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. GOOGLE FONTS IMPORT
+   -------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
+
+/* --------------------------------------------------------------------------
+   2. DESIGN SYSTEM TOKENS & CSS VARIABLES (:root)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Core Vintage Palette */
+  --vintage-bg: #F6F1E7;            /* Kem giấy cổ (Warm parchment / antique paper) */
+  --vintage-surface: #FFFDF9;       /* Trắng ngà thẻ & modal (Warm ivory surface) */
+  --vintage-text: #2C1E16;          /* Nâu cà phê Espresso đậm (Deep espresso brown) */
+  --vintage-subtext: #6B584C;       /* Nâu trầm mô tả phụ (Muted sepia brown) */
+  --vintage-border: #D8CBB8;        /* Đường kẻ phân cách giấy (Parchment border) */
+  --vintage-border-dark: #A89882;   /* Đường viền nhấn giấy đậm */
+  --vintage-accent: #A63A2B;        /* Đỏ gạch / Đỏ rượu vang (Terracotta / Wine red) */
+  --vintage-accent-hover: #8C2E21;  /* Đỏ gạch đậm khi hover */
+  --vintage-success: #3B5249;       /* Xanh rêu cổ (Antique forest moss) */
+  --vintage-success-hover: #2C3E37; /* Xanh rêu cổ đậm */
+  --vintage-warning: #B8860B;       /* Vàng mù tạt trầm (Muted Dijon mustard) */
+  --vintage-dark: #231A14;          /* Nâu gỗ tối cho Live SQL Console */
+  --vintage-line: #EFE8DA;          /* Dòng kẻ mờ sổ kế toán (Ledger rule line) */
+
+  /* Extra Bistro Accent Hues */
+  --vintage-gold: #C5A059;          /* Vàng kim loại đồng cổ / Antique Brass */
+  --vintage-gold-hover: #AD8840;    
+  --vintage-paper-crease: #ECE3D2;  /* Nếp gấp giấy */
+  --vintage-stamp-ink: #A63A2B;     /* Màu mực dấu mộc */
+
+  /* Typography Families */
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Shadows (Classic Hard Shadows & Subtle Diffused) */
+  --vintage-shadow-xs: 1px 1px 0px var(--vintage-text);
+  --vintage-shadow-sm: 2px 2px 0px var(--vintage-text);
+  --vintage-shadow-md: 3px 3px 0px var(--vintage-text);
+  --vintage-shadow-lg: 5px 5px 0px var(--vintage-text);
+  --vintage-shadow-pressed: 1px 1px 0px var(--vintage-text);
+  --vintage-shadow-soft: 0 4px 20px -2px rgba(44, 30, 22, 0.08);
+  --vintage-shadow-modal: 0 20px 45px -10px rgba(44, 30, 22, 0.28), 3px 3px 0px var(--vintage-text);
+
+  /* Border Radii */
+  --vintage-radius-xs: 2px;
+  --vintage-radius-sm: 4px;
+  --vintage-radius: 6px;
+  --vintage-radius-md: 8px;
+  --vintage-radius-lg: 12px;
+  --vintage-radius-pill: 9999px;
+
+  /* Transitions */
+  --vintage-transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --vintage-transition: 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  --vintage-transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --------------------------------------------------------------------------
+   3. BASE RESET & VINTAGE PAPER TEXTURE
+   -------------------------------------------------------------------------- */
+.vintage-paper-bg,
+body.vintage-theme,
+[data-theme="vintage"] {
+  background-color: var(--vintage-bg);
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, rgba(255, 253, 249, 0.75) 0%, rgba(246, 241, 231, 0.95) 70%, rgba(235, 225, 209, 0.85) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='0.038'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  color: var(--vintage-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Utility Classes */
+.font-playfair {
+  font-family: var(--font-serif) !important;
+}
+
+.font-vietnam {
+  font-family: var(--font-sans) !important;
+}
+
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+
+.italic-serif {
+  font-family: var(--font-serif) !important;
+  font-style: italic !important;
+}
+
+/* Headings with Classic Parisian Bistro Flare */
+h1.vintage-title,
+.vintage-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--vintage-text);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+h2.vintage-heading,
+.vintage-heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--vintage-text);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+h3.vintage-subheading,
+.vintage-subheading {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--vintage-text);
+  line-height: 1.3;
+}
+
+.vintage-lead {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: var(--vintage-subtext);
+  line-height: 1.6;
+}
+
+/* Dropcap for editorial intros */
+.vintage-dropcap::first-letter {
+  font-family: var(--font-serif);
+  font-size: 3.2rem;
+  float: left;
+  line-height: 0.8;
+  margin: 0.15rem 0.6rem 0 0;
+  color: var(--vintage-accent);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   4. FOOD CARDS (.vintage-card & .vintage-food-img)
+   -------------------------------------------------------------------------- */
+.vintage-card {
+  position: relative;
+  background-color: var(--vintage-surface);
+  border: 1px solid var(--vintage-border);
+  border-radius: var(--vintage-radius);
+  outline: 1px solid var(--vintage-border);
+  outline-offset: -5px;
+  padding: 1.25rem;
+  color: var(--vintage-text);
+  box-shadow: 1px 1px 0px rgba(44, 30, 22, 0.08);
+  transition: transform var(--vintage-transition), box-shadow var(--vintage-transition), border-color var(--vintage-transition);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.vintage-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--vintage-shadow-md);
+  border-color: var(--vintage-text);
+  outline-color: var(--vintage-border-dark);
+}
+
+/* Double border variant for special / signature dishes */
+.vintage-card-double {
+  border: 3px double var(--vintage-border-dark);
+  outline: none;
+}
+
+.vintage-card-double:hover {
+  border-color: var(--vintage-text);
+  box-shadow: var(--vintage-shadow-md);
+  transform: translate(-2px, -2px);
+}
+
+/* Food Image with Warm Parisian Sepia Filter */
+.vintage-food-img {
+  width: 100%;
+  border-radius: var(--vintage-radius-sm);
+  border: 1px solid var(--vintage-border);
+  filter: sepia(10%) contrast(98%);
+  transition: filter var(--vintage-transition), transform var(--vintage-transition);
+  object-fit: cover;
+  display: block;
+}
+
+.vintage-card:hover .vintage-food-img,
+.vintage-food-img:hover {
+  filter: sepia(0%) contrast(102%);
+}
+
+.vintage-img-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--vintage-radius-sm);
+  background-color: var(--vintage-line);
+}
+
+.vintage-img-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(44, 30, 22, 0.1);
+  border-radius: var(--vintage-radius-sm);
+  pointer-events: none;
+}
+
+/* Card Content Hierarchy */
+.vintage-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--vintage-text);
+  line-height: 1.3;
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.vintage-card-desc {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--vintage-subtext);
+  line-height: 1.5;
+  flex-grow: 1;
+  margin-bottom: 0.85rem;
+}
+
+.vintage-price {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--vintage-accent);
+  letter-spacing: -0.02em;
+}
+
+/* Classic Menu Dotted Leader (for list views & printed menu style) */
+.vintage-menu-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.vintage-menu-name {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--vintage-text);
+  white-space: nowrap;
+}
+
+.vintage-menu-dots {
+  flex-grow: 1;
+  border-bottom: 1.5px dotted var(--vintage-border-dark);
+  margin: 0 0.5rem;
+  position: relative;
+  top: -4px;
+}
+
+.vintage-menu-price {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--vintage-accent);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   5. GUEST CHECK & RECEIPT (.guest-check & .receipt-edge)
+   -------------------------------------------------------------------------- */
+.guest-check {
+  position: relative;
+  background-color: var(--vintage-surface);
+  color: var(--vintage-text);
+  border: 1px solid var(--vintage-border);
+  outline: 1px dashed var(--vintage-border);
+  outline-offset: -7px;
+  padding: 1.75rem 1.5rem 2.25rem 1.5rem;
+  font-family: var(--font-sans);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 27px,
+    var(--vintage-line) 28px
+  );
+  background-size: 100% 28px;
+  box-shadow: 4px 4px 0px rgba(44, 30, 22, 0.12), 0 10px 25px -5px rgba(44, 30, 22, 0.08);
+  border-radius: var(--vintage-radius-sm) var(--vintage-radius-sm) 0 0;
+}
+
+/* Guest Check Header Banner */
+.guest-check-header {
+  text-align: center;
+  border-bottom: 2px solid var(--vintage-text);
+  padding-bottom: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.guest-check-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--vintage-text);
+  margin-bottom: 0.2rem;
+}
+
+.guest-check-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--vintage-subtext);
+}
+
+/* Guest Check Metadata Grid */
+.guest-check-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--vintage-border);
+  background-color: var(--vintage-surface);
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+}
+
+.guest-check-meta-cell {
+  padding: 0.35rem 0.5rem;
+  border-right: 1px solid var(--vintage-border);
+}
+
+.guest-check-meta-cell:last-child {
+  border-right: none;
+}
+
+.guest-check-meta-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--vintage-subtext);
+  font-weight: 600;
+}
+
+.guest-check-meta-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--vintage-text);
+  font-size: 0.82rem;
+}
+
+/* Guest Check Perforated Sawtooth Edge */
+.receipt-edge {
+  position: relative;
+}
+
+.receipt-edge::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10' preserveAspectRatio='none'%3E%3Cpolygon points='0,0 10,10 20,0' fill='%23FFFDF9'/%3E%3Cpath d='M0,0 L10,10 L20,0' stroke='%23D8CBB8' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 16px 10px;
+  z-index: 10;
+}
+
+/* Top Perforated Edge (When ripped from receipt book) */
+.receipt-edge-top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10px;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10' preserveAspectRatio='none'%3E%3Cpolygon points='0,10 10,0 20,10' fill='%23FFFDF9'/%3E%3Cpath d='M0,10 L10,0 L20,10' stroke='%23D8CBB8' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 16px 10px;
+  z-index: 10;
+}
+
+/* --------------------------------------------------------------------------
+   6. RUBBER STAMP BADGES (.stamp-badge)
+   -------------------------------------------------------------------------- */
+.stamp-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: 2px dashed currentColor;
+  border-radius: var(--vintage-radius-sm);
+  background-color: rgba(255, 253, 249, 0.94);
+  transform: rotate(-3deg);
+  box-shadow: inset 0 0 0 1px currentColor, 2px 2px 0px rgba(44, 30, 22, 0.15);
+  opacity: 0.92;
+  user-select: none;
+  transition: transform var(--vintage-transition);
+  line-height: 1.2;
+}
+
+.stamp-badge:hover {
+  transform: rotate(0deg) scale(1.05);
+  opacity: 1;
+}
+
+/* Circular Rubber Stamp */
+.stamp-badge-round {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2.5px dashed currentColor;
+  text-align: center;
+  flex-direction: column;
+  padding: 0.25rem;
+  line-height: 1.1;
+  font-size: 0.72rem;
+  box-shadow: inset 0 0 0 1.5px currentColor, 2px 2px 0px rgba(44, 30, 22, 0.15);
+}
+
+/* Color & Status Variants */
+.stamp-badge-accent,
+.stamp-badge-danger {
+  color: var(--vintage-accent);
+}
+
+.stamp-badge-success {
+  color: var(--vintage-success);
+}
+
+.stamp-badge-warning {
+  color: var(--vintage-warning);
+}
+
+.stamp-badge-neutral {
+  color: var(--vintage-subtext);
+}
+
+/* Predefined Status Stamps */
+.stamp-pending {
+  color: var(--vintage-warning);
+  transform: rotate(2.5deg);
+}
+
+.stamp-cooking {
+  color: #C05621;
+  transform: rotate(-3deg);
+}
+
+.stamp-delivering {
+  color: #2B6CB0;
+  transform: rotate(3deg);
+}
+
+.stamp-completed {
+  color: var(--vintage-success);
+  transform: rotate(-4deg);
+  border-style: double;
+  border-width: 3.5px;
+}
+
+.stamp-cancelled {
+  color: #8C2E21;
+  transform: rotate(1.5deg);
+  text-decoration: line-through;
+}
+
+/* --------------------------------------------------------------------------
+   7. VINTAGE BUTTONS (.btn-vintage-*)
+   -------------------------------------------------------------------------- */
+.btn-vintage-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--vintage-accent);
+  color: #FFFDF9 !important;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.625rem 1.35rem;
+  border-radius: var(--vintage-radius-sm);
+  border: 1px solid #75251A;
+  box-shadow: var(--vintage-shadow-sm);
+  cursor: pointer;
+  transition: transform var(--vintage-transition-fast), box-shadow var(--vintage-transition-fast), background-color var(--vintage-transition-fast);
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-vintage-primary:hover {
+  background-color: var(--vintage-accent-hover);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: var(--vintage-shadow-md);
+}
+
+.btn-vintage-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 transparent;
+}
+
+.btn-vintage-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--vintage-surface);
+  color: var(--vintage-text) !important;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.625rem 1.35rem;
+  border-radius: var(--vintage-radius-sm);
+  border: 1px solid var(--vintage-border);
+  box-shadow: var(--vintage-shadow-sm);
+  cursor: pointer;
+  transition: transform var(--vintage-transition-fast), box-shadow var(--vintage-transition-fast), background-color var(--vintage-transition-fast);
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-vintage-secondary:hover {
+  background-color: var(--vintage-line);
+  border-color: var(--vintage-text);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: var(--vintage-shadow-md);
+}
+
+.btn-vintage-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 transparent;
+}
+
+.btn-vintage-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: var(--vintage-text) !important;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--vintage-radius-sm);
+  border: 1px solid var(--vintage-text);
+  box-shadow: 2px 2px 0px rgba(44, 30, 22, 0.25);
+  cursor: pointer;
+  transition: transform var(--vintage-transition-fast), box-shadow var(--vintage-transition-fast), background-color var(--vintage-transition-fast);
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-vintage-outline:hover {
+  background-color: rgba(44, 30, 22, 0.06);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: var(--vintage-shadow-md);
+}
+
+.btn-vintage-outline:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 transparent;
+}
+
+.btn-vintage-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--vintage-success);
+  color: #FFFDF9 !important;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.625rem 1.35rem;
+  border-radius: var(--vintage-radius-sm);
+  border: 1px solid #23342E;
+  box-shadow: var(--vintage-shadow-sm);
+  cursor: pointer;
+  transition: transform var(--vintage-transition-fast), box-shadow var(--vintage-transition-fast), background-color var(--vintage-transition-fast);
+  text-decoration: none;
+}
+
+.btn-vintage-success:hover {
+  background-color: var(--vintage-success-hover);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: var(--vintage-shadow-md);
+}
+
+.btn-vintage-success:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 transparent;
+}
+
+/* Small / Icon Button Modifier */
+.btn-vintage-sm {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.btn-vintage-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   8. INPUTS & FORM CONTROLS (.input-vintage)
+   -------------------------------------------------------------------------- */
+.input-vintage,
+.textarea-vintage,
+.select-vintage {
+  width: 100%;
+  background-color: var(--vintage-surface);
+  border: 1px solid var(--vintage-border);
+  color: var(--vintage-text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 0.65rem 0.95rem;
+  border-radius: var(--vintage-radius-sm);
+  transition: border-color var(--vintage-transition-fast), box-shadow var(--vintage-transition-fast);
+  box-shadow: inset 0 1px 2px rgba(44, 30, 22, 0.06);
+}
+
+.input-vintage:focus,
+.textarea-vintage:focus,
+.select-vintage:focus {
+  outline: none;
+  border-color: var(--vintage-accent);
+  box-shadow: 0 0 0 3px rgba(166, 58, 43, 0.15), inset 0 1px 2px rgba(44, 30, 22, 0.05);
+}
+
+.input-vintage::placeholder,
+.textarea-vintage::placeholder {
+  color: #A39282;
+  font-style: italic;
+  font-family: var(--font-sans);
+}
+
+.input-vintage:disabled,
+.textarea-vintage:disabled {
+  background-color: var(--vintage-line);
+  color: var(--vintage-subtext);
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.vintage-label {
+  display: block;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--vintage-text);
+  margin-bottom: 0.35rem;
+}
+
+.vintage-helper-text {
+  font-size: 0.78rem;
+  color: var(--vintage-subtext);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   9. LIVE SQL CONSOLE (.vintage-console)
+   -------------------------------------------------------------------------- */
+.vintage-console {
+  background-color: var(--vintage-dark);
+  color: #EFE8DA;
+  border: 2px solid #3D2D23;
+  border-radius: var(--vintage-radius);
+  font-family: var(--font-mono);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.38), 0 0 0 1px #4A382C, 3px 3px 0px var(--vintage-text);
+  overflow: hidden;
+  position: relative;
+}
+
+.vintage-console-header {
+  background: #1B130E;
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #3D2D23;
+  font-size: 0.8rem;
+  color: #B5A496;
+}
+
+.vintage-console-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.vintage-console-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.vintage-console-dot.dot-red { background-color: #A63A2B; }
+.vintage-console-dot.dot-amber { background-color: #B8860B; }
+.vintage-console-dot.dot-green { background-color: #3B5249; }
+
+.vintage-console-title {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: #D4C5B9;
+  letter-spacing: 0.05em;
+}
+
+.vintage-console-body {
+  padding: 1.15rem;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  overflow-x: auto;
+  max-height: 480px;
+}
+
+/* Console Syntax Highlighting */
+.vintage-console .sql-keyword { color: #E5A952; font-weight: 600; }
+.vintage-console .sql-string { color: #88B282; }
+.vintage-console .sql-number { color: #E07A5F; }
+.vintage-console .sql-comment { color: #8D7B68; font-style: italic; }
+.vintage-console .sql-fn { color: #D4A373; font-weight: 600; }
+.vintage-console .sql-table { color: #F3C68F; }
+.vintage-console .sql-op { color: #E5A952; }
+.vintage-console .sql-success { color: #88B282; }
+.vintage-console .sql-error { color: #E07A5F; }
+
+/* --------------------------------------------------------------------------
+   10. BẢNG DỮ LIỆU 3NF KIỂU SỔ CÁI / LEDGER (.vintage-table)
+   -------------------------------------------------------------------------- */
+.vintage-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--vintage-surface);
+  border: 1px solid var(--vintage-border);
+  border-radius: var(--vintage-radius-sm);
+  box-shadow: 2px 2px 0px rgba(44, 30, 22, 0.08);
+}
+
+.vintage-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: var(--vintage-surface);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--vintage-text);
+}
+
+.vintage-table thead th {
+  background-color: var(--vintage-line);
+  color: var(--vintage-text);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--vintage-border-dark);
+  border-right: 1px solid rgba(216, 203, 184, 0.6);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.vintage-table thead th:last-child {
+  border-right: none;
+}
+
+.vintage-table tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--vintage-line);
+  border-right: 1px solid rgba(216, 203, 184, 0.4);
+  vertical-align: middle;
+}
+
+.vintage-table tbody td:last-child {
+  border-right: none;
+}
+
+.vintage-table tbody tr:nth-child(even) {
+  background-color: rgba(246, 241, 231, 0.45);
+}
+
+.vintage-table tbody tr:hover {
+  background-color: rgba(166, 58, 43, 0.05);
+}
+
+.vintage-table .col-mono,
+.vintage-table td.col-mono {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.vintage-table .col-price,
+.vintage-table td.col-price {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--vintage-accent);
+}
+
+/* --------------------------------------------------------------------------
+   11. HIỆU ỨNG NHỊP ĐẬP TRẠNG THÁI (PULSE ANIMATIONS)
+   -------------------------------------------------------------------------- */
+@keyframes vintagePulseRingOnline {
+  0% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(59, 82, 73, 0.75);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 7px rgba(59, 82, 73, 0);
+  }
+  100% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(59, 82, 73, 0);
+  }
+}
+
+@keyframes vintagePulseRingOffline {
+  0% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(166, 58, 43, 0.85);
+  }
+  70% {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 8px rgba(166, 58, 43, 0);
+  }
+  100% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(166, 58, 43, 0);
+  }
+}
+
+@keyframes vintagePulseRingWarning {
+  0% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.75);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 7px rgba(184, 134, 11, 0);
+  }
+  100% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
+  }
+}
+
+.vintage-pulse-online {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--vintage-success);
+  animation: vintagePulseRingOnline 2s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.vintage-pulse-offline {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--vintage-accent);
+  animation: vintagePulseRingOffline 1.4s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.vintage-pulse-warning {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--vintage-warning);
+  animation: vintagePulseRingWarning 1.8s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   12. VINTAGE ORNAMENTS, FLEURONS & DIVIDERS
+   -------------------------------------------------------------------------- */
+.vintage-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.75rem 0;
+  color: var(--vintage-border-dark);
+}
+
+.vintage-divider::before,
+.vintage-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--vintage-border);
+}
+
+.vintage-divider-ornament {
+  padding: 0 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--vintage-subtext);
+  line-height: 1;
+}
+
+/* Double decorative line */
+.vintage-double-line {
+  border: 0;
+  height: 3px;
+  border-top: 1px solid var(--vintage-border);
+  border-bottom: 1px solid var(--vintage-border);
+  margin: 1.5rem 0;
+}
+
+/* --------------------------------------------------------------------------
+   13. NAVIGATION, CATEGORY TABS & PILLS
+   -------------------------------------------------------------------------- */
+.vintage-nav {
+  background-color: rgba(255, 253, 249, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--vintage-border);
+  box-shadow: 0 2px 10px rgba(44, 30, 22, 0.05);
+}
+
+.vintage-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--vintage-subtext);
+  border-bottom: 2px solid transparent;
+  transition: all var(--vintage-transition-fast);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.vintage-tab:hover {
+  color: var(--vintage-text);
+  border-bottom-color: var(--vintage-border-dark);
+}
+
+.vintage-tab.active {
+  color: var(--vintage-accent);
+  border-bottom-color: var(--vintage-accent);
+  font-weight: 700;
+}
+
+.vintage-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--vintage-radius-pill);
+  background-color: var(--vintage-surface);
+  border: 1px solid var(--vintage-border);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--vintage-text);
+  cursor: pointer;
+  transition: var(--vintage-transition-fast);
+  box-shadow: 1px 1px 0px rgba(44, 30, 22, 0.08);
+}
+
+.vintage-pill:hover,
+.vintage-pill.active {
+  background-color: var(--vintage-text);
+  color: #FFFDF9;
+  border-color: var(--vintage-text);
+}
+
+/* --------------------------------------------------------------------------
+   14. BADGES & VINTAGE TAGS
+   -------------------------------------------------------------------------- */
+.vintage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--vintage-radius-xs);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--vintage-border);
+  background-color: var(--vintage-line);
+  color: var(--vintage-text);
+}
+
+.vintage-badge-accent {
+  background-color: rgba(166, 58, 43, 0.12);
+  border-color: rgba(166, 58, 43, 0.35);
+  color: var(--vintage-accent);
+}
+
+.vintage-badge-success {
+  background-color: rgba(59, 82, 73, 0.12);
+  border-color: rgba(59, 82, 73, 0.35);
+  color: var(--vintage-success);
+}
+
+.vintage-badge-warning {
+  background-color: rgba(184, 134, 11, 0.12);
+  border-color: rgba(184, 134, 11, 0.35);
+  color: var(--vintage-warning);
+}
+
+/* --------------------------------------------------------------------------
+   15. MODAL & OVERLAY SYSTEM (.vintage-modal)
+   -------------------------------------------------------------------------- */
+.vintage-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(35, 26, 20, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.vintage-modal {
+  position: relative;
+  background-color: var(--vintage-surface);
+  border: 2px solid var(--vintage-text);
+  border-radius: var(--vintage-radius);
+  outline: 1px solid var(--vintage-border);
+  outline-offset: -7px;
+  box-shadow: var(--vintage-shadow-modal);
+  width: 100%;
+  max-width: 580px;
+  padding: 1.75rem;
+  color: var(--vintage-text);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.vintage-modal-header {
+  border-bottom: 2px solid var(--vintage-border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vintage-modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--vintage-text);
+}
+
+.vintage-modal-footer {
+  border-top: 1px solid var(--vintage-border);
+  padding-top: 1.25rem;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   16. CUSTOM VINTAGE SCROLLBARS
+   -------------------------------------------------------------------------- */
+.vintage-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.vintage-scrollbar::-webkit-scrollbar-track {
+  background: var(--vintage-line);
+  border-radius: var(--vintage-radius-pill);
+}
+
+.vintage-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--vintage-border-dark);
+  border-radius: var(--vintage-radius-pill);
+  border: 1px solid var(--vintage-line);
+}
+
+.vintage-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--vintage-subtext);
+}
+
+/* Console Dark Scrollbar */
+.vintage-console-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.vintage-console-scrollbar::-webkit-scrollbar-track {
+  background: #1B130E;
+}
+
+.vintage-console-scrollbar::-webkit-scrollbar-thumb {
+  background: #4A382C;
+  border-radius: var(--vintage-radius-pill);
+}
+
+.vintage-console-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6B584C;
+}
+
+/* --------------------------------------------------------------------------
+   17. REAL-TIME FLASH & HIGHLIGHT ANIMATION (SSE / Trigger events)
+   -------------------------------------------------------------------------- */
+@keyframes vintageFlashHighlight {
+  0% {
+    box-shadow: 0 0 0 4px rgba(166, 58, 43, 0.45), 4px 4px 0px var(--vintage-text);
+    transform: translateY(-2px);
+    background-color: #FDF3F1;
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(59, 82, 73, 0.45);
+    background-color: #F0F4F2;
+  }
+  100% {
+    box-shadow: 1px 1px 0px rgba(44, 30, 22, 0.08);
+    transform: translateY(0);
+  }
+}
+
+.vintage-flash {
+  animation: vintageFlashHighlight 1.8s ease-out;
+}

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi" class="dark">
+<html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JaLong CyberFood • Ẩm Thực Tương Lai • Giao Siêu Tốc 15 Phút</title>
+  <title>JaLong Bistro • Thực Đơn Đặc Sản & Giao Hàng Tận Nơi</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -11,15 +11,27 @@
       theme: {
         extend: {
           colors: {
-            cyber: {
-              bg: '#080c14',
-              card: '#0f172a',
-              neonCyan: '#00f0ff',
-              neonPink: '#f72585',
-              neonOrange: '#ff7b00',
-              neonAmber: '#ffb703',
-              neonEmerald: '#00ff88',
+            bistro: {
+              cream: '#FFFDF9',
+              paper: '#FAF6EE',
+              parchment: '#F2EBD9',
+              border: '#D8CBB8',
+              espresso: '#2C1E16',
+              espressoDark: '#1E1510',
+              charcoal: '#3B312A',
+              wine: '#A63A2B',
+              wineDark: '#8C2D19',
+              gold: '#C5A059',
+              brass: '#D4A373',
+              moss: '#3B5249',
+              mossLight: '#4A7C59',
+              muted: '#7A6E65',
             }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Consolas', 'monospace'],
           }
         }
       }
@@ -27,119 +39,119 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/vintage-theme.css" />
   <style>
     body {
-      background-color: #070b12;
+      background-color: #F8F4EB;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(247, 37, 133, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(0, 240, 255, 0.12) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(255, 123, 0, 0.1) 0px, transparent 60%);
-      background-attachment: fixed;
-      color: #f1f5f9;
+        radial-gradient(circle at 12% 12%, rgba(212, 163, 115, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 88% 88%, rgba(166, 58, 43, 0.05) 0%, transparent 55%),
+        radial-gradient(circle at 50% 50%, rgba(216, 203, 184, 0.15) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 28px 28px;
+      color: #2C1E16;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .neon-text-glow {
-      text-shadow: 0 0 10px rgba(255, 123, 0, 0.6), 0 0 20px rgba(247, 37, 133, 0.4);
+    .bistro-nav {
+      background-color: rgba(255, 253, 249, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #D8CBB8;
     }
-    .neon-cyan-glow {
-      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 25px rgba(0, 240, 255, 0.4);
-    }
-    .glass-cyber-nav {
-      background: rgba(11, 17, 32, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    .font-serif-bistro {
+      font-family: 'Playfair Display', Georgia, serif;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-orange-500 selection:text-white">
+<body class="min-h-screen flex flex-col selection:bg-[#A63A2B] selection:text-white">
 
-  <!-- Canvas for Neon Confetti Celebrations -->
+  <!-- Canvas for Confetti Celebrations -->
   <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
 
-  <!-- Friendly Service Interruption Banner -->
-  <div id="dbEmergencyBanner" class="hidden db-offline-banner text-white px-4 py-2.5 shadow-2xl sticky top-0 z-50">
+  <!-- Friendly Service Interruption Banner (Vintage Hazard) -->
+  <div id="dbEmergencyBanner" class="hidden db-offline-banner text-white px-4 py-2.5 shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
       <div class="flex items-center gap-2.5 font-bold">
         <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
           <i data-lucide="wifi-off" class="w-4 h-4 text-white"></i>
         </span>
         <span id="dbEmergencyMessage">
-          Hệ thống đang đồng bộ kết nối dữ liệu. Xin vui lòng chờ trong giây lát...
+          Hệ thống đang đồng bộ kết nối dữ liệu. Xin quý khách vui lòng chờ trong giây lát...
         </span>
       </div>
       <div class="flex items-center gap-2">
         <span id="dbEmergencyCode" class="font-mono-code text-[11px] bg-black/40 px-2 py-0.5 rounded text-amber-300">Đang đồng bộ</span>
-        <button id="btnRetryHealth" class="px-3 py-1 rounded-lg bg-white text-rose-700 font-bold text-xs hover:bg-rose-50 transition shadow">
+        <button id="btnRetryHealth" class="px-3 py-1 rounded bg-[#FFFDF9] text-[#A63A2B] font-bold text-xs hover:bg-[#F2EBD9] transition shadow">
           Kết nối lại
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Top Navigation Header (Pure Customer Aesthetic) -->
-  <header class="glass-cyber-nav sticky top-0 z-40">
+  <!-- Top Navigation Header (Classic Parisian Bistro Aesthetic) -->
+  <header class="bistro-nav sticky top-0 z-40 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
       
-      <!-- Brand Logo with Neon Cyber Styling -->
+      <!-- Brand Logo: JaLong Bistro / French Classic Kitchen -->
       <a href="/" class="flex items-center gap-3 group">
         <div class="relative">
-          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-orange-500/30 group-hover:scale-105 transition-transform duration-300">
-            <i data-lucide="flame" class="w-6 h-6 text-white drop-shadow"></i>
+          <div class="w-11 h-11 rounded-lg bg-[#2C1E16] text-[#D4A373] border-2 border-[#D8CBB8] flex items-center justify-center shadow-sm group-hover:border-[#A63A2B] transition-colors duration-300">
+            <i data-lucide="utensils" class="w-5 h-5 text-[#D4A373]"></i>
           </div>
-          <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-slate-900 blink-dot"></span>
+          <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#4A7C59] rounded-full border-2 border-[#FFFDF9]"></span>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-black text-xl tracking-tight text-white group-hover:text-orange-400 transition neon-text-glow">
-              JaLong<span class="text-orange-500">Food</span>
+            <span class="font-serif-bistro font-extrabold text-xl sm:text-2xl tracking-tight text-[#2C1E16] group-hover:text-[#A63A2B] transition">
+              JaLong <span class="italic text-[#A63A2B]">Bistro</span>
             </span>
-            <span class="cyber-flash-badge text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full text-white shadow-sm tracking-wider">
-              ⚡ Cyber Live
+            <span class="border border-[#C5A059] bg-[#FAF3E0] text-[#8C6200] text-[9.5px] font-black uppercase px-2 py-0.5 rounded tracking-wider shadow-2xs">
+              ✦ PARIS EST. 2026 ✦
             </span>
           </div>
-          <p class="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <span>Ẩm thực nóng sốt • Giao siêu tốc 15 phút</span>
+          <p class="text-[11px] text-[#7A6E65] font-serif italic flex items-center gap-1.5 mt-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
+            <span>Thực đơn Đặc sản & Giao hàng Tận nơi</span>
           </p>
         </div>
       </a>
 
       <!-- Right Header Controls -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Live Server Status Badge -->
-        <div id="dbStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 text-xs font-bold shadow-sm">
-          <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-emerald-400 blink-dot"></span>
+        <!-- Live Server Status Badge (Vintage Moss Stamp) -->
+        <div id="dbStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#EAEFEA] border border-[#8BA89B] text-[#2D4A3E] text-xs font-bold shadow-2xs">
+          <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-[#4A7C59]"></span>
           <span id="dbStatusText">Máy chủ Trực tuyến</span>
-          <span id="dbLatencyBadge" class="px-1.5 py-0.5 rounded bg-emerald-900/60 text-[10px] text-emerald-300 font-mono-code font-semibold">0ms</span>
-          <span id="realtimeTransportBadge" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px] text-emerald-300 font-black">LIVE</span>
+          <span id="dbLatencyBadge" class="px-1.5 py-0.5 rounded bg-[#D3E0D6] text-[10px] text-[#2D4A3E] font-mono-code font-bold">0ms</span>
+          <span id="realtimeTransportBadge" class="px-1.5 py-0.5 rounded bg-[#3B5249] text-[10px] text-[#FFFDF9] font-black">LIVE</span>
         </div>
 
-        <!-- Customer Identity Pill (Matching Image 2) -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700/80 shadow-sm">
-          <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs font-black">
-            <i data-lucide="user" class="w-3.5 h-3.5"></i>
+        <!-- Customer Identity Pill -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#FFFDF9] border border-[#D8CBB8] shadow-2xs">
+          <div class="w-6 h-6 rounded-full bg-[#2C1E16] text-[#D4A373] flex items-center justify-center text-xs font-bold">
+            <i data-lucide="user" class="w-3.5 h-3.5 text-[#D4A373]"></i>
           </div>
           <div class="text-left">
-            <div class="text-[9px] font-black uppercase tracking-wider text-slate-400 leading-none">KHÁCH HÀNG</div>
-            <div id="headerCustomerNameDisplay" class="text-xs font-extrabold text-white leading-tight mt-0.5">Hoàng Long (Bạn)</div>
+            <div class="text-[9px] font-bold uppercase tracking-wider text-[#7A6E65] leading-none">QUÝ KHÁCH</div>
+            <div id="headerCustomerNameDisplay" class="text-xs font-bold text-[#2C1E16] leading-tight mt-0.5">Hoàng Long (Bạn)</div>
           </div>
         </div>
 
         <!-- Hidden compatibility select for programmatic listeners -->
         <select id="customerSelect" class="hidden" style="display: none;"></select>
 
-        <!-- Lecturer Mode Quick Link -->
-        <a id="navInspector" href="/inspector.html" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold shadow-sm transition" title="Bảng điều khiển Giảng viên (DB Live Inspector 3NF)">
-          <i data-lucide="settings-2" class="w-3.5 h-3.5 text-orange-400"></i>
-          <span class="hidden md:inline">Chế độ Giảng viên (Inspector)</span>
+        <!-- Inspector Mode Quick Link -->
+        <a id="navInspector" href="/inspector.html" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] hover:text-[#A63A2B] border border-[#D8CBB8] text-xs font-semibold shadow-2xs transition" title="Bảng điều khiển Giảng viên (DB Live Inspector 3NF)">
+          <i data-lucide="settings-2" class="w-3.5 h-3.5 text-[#C5A059]"></i>
+          <span class="hidden md:inline font-serif">Bàn Giảng Viên (Inspector)</span>
         </a>
 
-        <a id="navSplitMode" href="/split" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-700/60 text-xs font-semibold transition" title="Chia đôi màn hình thuyết trình">
-          <i data-lucide="columns-2" class="w-3.5 h-3.5 text-indigo-400"></i>
-          <span>Chia đôi Màn hình</span>
+        <!-- Split Screen Mode Quick Link -->
+        <a id="navSplitMode" href="/split" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#2C1E16] border border-[#D8CBB8] text-xs font-semibold transition" title="Chia đôi màn hình thuyết trình">
+          <i data-lucide="columns-2" class="w-3.5 h-3.5 text-[#A63A2B]"></i>
+          <span class="font-serif">Chia đôi Màn hình</span>
         </a>
       </div>
     </div>
@@ -149,105 +161,100 @@
   <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
 
     <!-- ==================================================================
-         HERO BANNER: CYBER FLASH SALE & HOT DEALS (CHỚP CHỚP HIỆU ỨNG)
+         HERO BANNER: CLASSIC PARISIAN BISTRO WELCOME
          ================================================================== -->
-    <section class="relative overflow-hidden rounded-3xl p-6 sm:p-10 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border border-orange-500/30 shadow-2xl shadow-orange-500/10">
-      <div class="absolute -right-12 -top-12 w-72 h-72 bg-orange-500/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -left-12 -bottom-12 w-72 h-72 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
-      
-      <div class="relative z-10 max-w-3xl mx-auto text-center space-y-4">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/40 text-orange-400 text-xs font-extrabold uppercase tracking-widest cyber-badge-pulse mx-auto">
-          <span class="w-2 h-2 rounded-full bg-orange-400 blink-dot"></span>
-          <span>🔥 SIÊU TIỆC ẨM THỰC CYBERPUNK • GIẢM 20% HÔM NAY</span>
+    <section class="relative overflow-hidden rounded-xl p-6 sm:p-9 bg-[#FFFDF9] border border-[#D8CBB8] shadow-sm">
+      <!-- Vintage Double Border Inset -->
+      <div class="absolute inset-2 sm:inset-3 border border-dashed border-[#D8CBB8] rounded-lg pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-3xl mx-auto text-center space-y-3.5">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded bg-[#FAF3E0] border border-[#C5A059] text-[#8C6200] text-[11px] font-black uppercase tracking-widest mx-auto">
+          <span>⚜ MAISON DE GASTRONOMIE • THỰC ĐƠN ĐẶC BIỆT HÔM NAY ⚜</span>
         </div>
 
-        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-          Thưởng Thức Món Ngon<br />
-          <span class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-rose-400 neon-text-glow mt-1 sm:mt-2">Nóng Hổi Tận Nhà</span>
+        <h1 class="font-serif-bistro text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#2C1E16] leading-tight">
+          Nét Ẩm Thực Cổ Điển &amp; Tươi Ngon<br />
+          <span class="italic text-[#A63A2B] font-normal">Giao Nóng Hổi Tận Cửa Trong 15 Phút</span>
         </h1>
 
-        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
-          Chọn món tươi ngon yêu thích, nhà bếp chế biến tức thì và tài xế giao tận tay trong 15 phút. Theo dõi hành trình đơn hàng cập nhật liên tục từng giây!
+        <p class="text-xs sm:text-sm text-[#5C4332] font-serif leading-relaxed max-w-2xl mx-auto italic">
+          "Kính mời quý khách thưởng thức những món ăn đặc sản được chuẩn bị công phu từ nguyên liệu tươi mới trong ngày, bếp trưởng chế biến tức thì và giao hàng siêu tốc."
         </p>
 
-        <!-- Badges Commitment (Căn đều giữa) -->
-        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2 text-xs font-bold text-slate-300">
-          <div class="flex items-center gap-1.5 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-md">
-            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+        <!-- Bistro Commitments (Con dấu mộc cam kết) -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2 text-xs font-bold text-[#2C1E16]">
+          <div class="flex items-center gap-1.5 bg-[#FAF6EE] px-3.5 py-1.5 rounded border border-[#D8CBB8] shadow-2xs">
+            <i data-lucide="clock" class="w-4 h-4 text-[#A63A2B]"></i>
             <span>Giao siêu tốc 15 phút</span>
           </div>
-          <div class="flex items-center gap-1.5 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-md">
-            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
+          <div class="flex items-center gap-1.5 bg-[#FAF6EE] px-3.5 py-1.5 rounded border border-[#D8CBB8] shadow-2xs">
+            <i data-lucide="sparkles" class="w-4 h-4 text-[#4A7C59]"></i>
             <span>Tươi sạch 100% trong ngày</span>
           </div>
-          <div class="flex items-center gap-1.5 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-md">
-            <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
-            <span>Miễn phí ship đơn đầu</span>
+          <div class="flex items-center gap-1.5 bg-[#FAF6EE] px-3.5 py-1.5 rounded border border-[#D8CBB8] shadow-2xs">
+            <i data-lucide="award" class="w-4 h-4 text-[#C5A059]"></i>
+            <span>Công thức chuẩn vị Bistro</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==================================================================
-         SECTION: CS:GO STYLE FOOD ROULETTE ("HÔM NAY ĂN GÌ ?")
+         SECTION: BẢNG GỢI Ý MÓN ĂN HÔM NAY / VÒNG QUAY MAY MẮN CỔ ĐIỂN
+         (Antique Brass & Wood Frame / Vintage Parisian Food Lottery)
          ================================================================== -->
-    <section id="foodRouletteSection" class="relative overflow-hidden rounded-3xl p-5 sm:p-6 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-2 border-cyan-500/40 shadow-2xl shadow-cyan-500/15">
-      <!-- Glow Accents -->
-      <div class="absolute -right-16 -top-16 w-56 h-56 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -left-16 -bottom-16 w-56 h-56 bg-orange-500/15 rounded-full blur-3xl pointer-events-none"></div>
-
-      <!-- Roulette Header & Budget Tier Controls -->
-      <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <section id="foodRouletteSection" class="relative overflow-hidden rounded-xl p-5 sm:p-6 bg-[#2C1E16] text-[#F6F1E7] border-2 border-[#5C4332] shadow-xl">
+      <!-- Antique Wood & Brass Header -->
+      <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-[#4D382B] pb-4">
         <div class="min-w-0 flex-1">
-          <div class="flex flex-wrap items-center gap-2.5 mb-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 text-white text-[11px] font-black uppercase tracking-wider shadow-md whitespace-nowrap shrink-0">
-              <span class="w-2 h-2 rounded-full bg-white blink-dot"></span>
-              <span>✨ VÒNG QUAY ẨM THỰC • RANDOM MÓN NGON</span>
+          <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#A63A2B] text-[#FFFDF9] text-[10.5px] font-black uppercase tracking-wider shadow-sm shrink-0 font-serif">
+              <span>✦ BẢNG GỢI Ý MÓN ĂN TRONG NGÀY ✦</span>
             </span>
-            <span id="rouletteStatusBadge" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-xs font-black text-amber-300 shadow-sm whitespace-nowrap">
+            <span id="rouletteStatusBadge" class="inline-flex items-center gap-1 px-3 py-1 rounded bg-[#FAF3E0] border border-[#C5A059] text-xs font-bold text-[#8C6200] shadow-2xs">
               Sẵn sàng quay món
             </span>
           </div>
-          <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-            <span>Băn Khoăn "Hôm Nay Ăn Gì ?" — Quay Random Định Mệnh!</span>
+          <h2 class="font-serif-bistro text-xl sm:text-2xl font-bold text-[#FFFDF9] tracking-tight flex items-center gap-2">
+            <span>Băn Khoăn "Hôm Nay Ăn Gì ?" — Thử Vận May Cổ Điển!</span>
           </h2>
-          <p class="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
-            Không biết chọn món gì cho bữa ăn? Hãy chọn mốc tài chính và bấm quay ngay — vòng quay trượt ngang sẽ tìm món ngon chân ái cho bạn trong tích tắc!
+          <p class="text-xs text-[#D8CBB8] mt-1 max-w-2xl leading-relaxed">
+            Chưa quyết định được món cho bữa ăn hôm nay? Quý khách hãy chọn mốc ngân sách và bấm nút quay — vòng quay may mắn sẽ tìm món ngon tâm đắc nhất!
           </p>
         </div>
 
-        <!-- Budget Tier Selector (Mốc tài chính: nằm ngang hàng đẹp mắt) -->
+        <!-- Budget Tier Selector (Thẻ tab giấy cổ điển) -->
         <div class="flex items-center gap-2.5 w-full lg:w-auto shrink-0 flex-nowrap overflow-x-auto no-scrollbar py-1">
-          <span class="text-xs uppercase font-extrabold text-slate-400 whitespace-nowrap flex items-center gap-1.5 shrink-0">
-            <i data-lucide="wallet" class="w-4 h-4 text-orange-400"></i>
-            <span>Mốc tài chính:</span>
+          <span class="text-xs uppercase font-bold text-[#D8CBB8] whitespace-nowrap flex items-center gap-1.5 shrink-0 font-serif">
+            <i data-lucide="coins" class="w-4 h-4 text-[#D4A373]"></i>
+            <span>Mức ngân sách:</span>
           </span>
-          <div id="rouletteBudgetPills" class="flex items-center gap-1.5 p-1 bg-slate-950/90 rounded-2xl border border-slate-800 shrink-0">
+          <div id="rouletteBudgetPills" class="flex items-center gap-1.5 p-1 bg-[#1E1510] rounded-lg border border-[#4D382B] shrink-0">
             <button
               type="button"
               data-roulette-budget="all"
-              class="budget-pill-btn active px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/30 whitespace-nowrap"
+              class="budget-pill-btn active px-3.5 py-1.5 rounded text-xs font-bold transition cursor-pointer bg-[#A63A2B] text-[#FFFDF9] shadow-sm whitespace-nowrap"
             >
               Tất cả món
             </button>
             <button
               type="button"
               data-roulette-budget="under40k"
-              class="budget-pill-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer whitespace-nowrap"
+              class="budget-pill-btn px-3.5 py-1.5 rounded text-xs font-bold text-[#D8CBB8] hover:text-[#FFFDF9] transition cursor-pointer whitespace-nowrap"
             >
               Hạt dẻ (&lt; 40k)
             </button>
             <button
               type="button"
               data-roulette-budget="40k-65k"
-              class="budget-pill-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer whitespace-nowrap"
+              class="budget-pill-btn px-3.5 py-1.5 rounded text-xs font-bold text-[#D8CBB8] hover:text-[#FFFDF9] transition cursor-pointer whitespace-nowrap"
             >
               Chuẩn bữa (40k-65k)
             </button>
             <button
               type="button"
               data-roulette-budget="over65k"
-              class="budget-pill-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer whitespace-nowrap"
+              class="budget-pill-btn px-3.5 py-1.5 rounded text-xs font-bold text-[#D8CBB8] hover:text-[#FFFDF9] transition cursor-pointer whitespace-nowrap"
             >
               Ăn sang (&gt; 65k)
             </button>
@@ -255,21 +262,20 @@
         </div>
       </div>
 
-      <!-- The CS:GO Case Opening Viewport -->
+      <!-- The Antique Roulette Strip Viewport -->
       <div class="relative z-10 my-4">
-        <!-- Viewport Box -->
-        <div class="relative h-48 sm:h-52 w-full bg-slate-950/95 rounded-2xl overflow-hidden border-2 border-slate-800 shadow-[inset_0_4px_24px_rgba(0,0,0,0.8)]">
+        <div class="relative h-48 sm:h-52 w-full bg-[#1E1510] rounded-xl overflow-hidden border-2 border-[#5C4332] shadow-[inset_0_4px_20px_rgba(0,0,0,0.8)]">
           
-          <!-- Center Vertical Needle & Indicator Arrows -->
-          <div class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-amber-400 via-rose-500 to-amber-400 z-30 shadow-[0_0_14px_rgba(251,191,36,0.9)] pointer-events-none"></div>
+          <!-- Center Vertical Antique Brass Needle & Triangle Pointers -->
+          <div class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-[#C5A059] via-[#D4AF37] to-[#C5A059] z-30 shadow-[0_0_10px_rgba(212,175,55,0.8)] pointer-events-none"></div>
           <!-- Top Arrow -->
-          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[12px] border-t-amber-400 z-30 drop-shadow-[0_2px_6px_rgba(251,191,36,0.8)] pointer-events-none"></div>
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[12px] border-t-[#D4AF37] z-30 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] pointer-events-none"></div>
           <!-- Bottom Arrow -->
-          <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[12px] border-b-amber-400 z-30 drop-shadow-[0_-2px_6px_rgba(251,191,36,0.8)] pointer-events-none"></div>
+          <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[12px] border-b-[#D4AF37] z-30 drop-shadow-[0_-2px_4px_rgba(0,0,0,0.8)] pointer-events-none"></div>
 
           <!-- Left & Right Vignette Shadows (Depth Blur) -->
-          <div class="absolute inset-y-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent z-20 pointer-events-none"></div>
-          <div class="absolute inset-y-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-slate-950 via-slate-950/80 to-transparent z-20 pointer-events-none"></div>
+          <div class="absolute inset-y-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-[#1E1510] via-[#1E1510]/85 to-transparent z-20 pointer-events-none"></div>
+          <div class="absolute inset-y-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-[#1E1510] via-[#1E1510]/85 to-transparent z-20 pointer-events-none"></div>
 
           <!-- Horizontal Roulette Strip Track -->
           <div
@@ -277,33 +283,32 @@
             class="h-full flex items-center will-change-transform"
             style="transform: translateX(0px);"
           >
-            <!-- Populated dynamically via JS -->
-            <div class="p-8 text-center text-xs text-slate-500 w-full">
-              Đang nạp thực đơn tươi ngon...
+            <div class="p-8 text-center text-xs text-[#D8CBB8] w-full font-serif italic">
+              Đang chuẩn bị thực đơn thơm ngon...
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Control Footer: Spin Button + Rarity Legend -->
+      <!-- Control Footer: Spin Button + Bistro Rarity Legend -->
       <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-        <!-- Rarity Legend -->
-        <div class="flex flex-wrap items-center gap-2 text-[10px] text-slate-400">
-          <span class="font-extrabold uppercase tracking-wider text-slate-500">Phẩm cấp:</span>
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800/60 font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span> Hạt dẻ
+        <!-- Bistro Rarity Legend -->
+        <div class="flex flex-wrap items-center gap-2 text-[10.5px] text-[#D8CBB8]">
+          <span class="font-bold uppercase tracking-wider text-[#A69584] font-serif">Phẩm cấp:</span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#52886B]"></span> Hạt dẻ
           </span>
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/60 font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Chuẩn vị
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#1E3A8A] border border-[#93C5FD] font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#3B82F6]"></span> Chuẩn vị
           </span>
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-pink-950 text-pink-300 border border-pink-800/60 font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-pink-400"></span> No nê
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#6B21A8] border border-[#D8B4FE] font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#9333EA]"></span> No nê
           </span>
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/60 font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Thượng hạng
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#A63A2B] border border-[#FCA5A5] font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#A63A2B]"></span> Thượng hạng
           </span>
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/60 font-bold">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> ★ Món Bếp Trưởng VIP ★
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span> ★ Món Bếp Trưởng VIP ★
           </span>
         </div>
 
@@ -312,61 +317,63 @@
           <button
             id="btnSpinRoulette"
             type="button"
-            class="w-full sm:w-auto px-7 py-3 rounded-2xl bg-gradient-to-r from-orange-500 via-rose-500 to-amber-500 hover:from-orange-600 hover:to-rose-600 text-white font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-orange-500/30 transition-all hover:scale-105 active:scale-95 cursor-pointer neon-pulse-btn"
+            class="w-full sm:w-auto px-7 py-3 rounded-lg bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] font-serif-bistro font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all hover:translate-y-[-1px] active:translate-y-[1px] cursor-pointer border border-[#8C2D19]"
           >
-            <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
-            <span>QUAY MÓN NGAY ⚡</span>
+            <i data-lucide="sparkles" class="w-4 h-4 text-[#D4AF37]"></i>
+            <span>QUAY MÓN NGAY ✦</span>
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Modal: CS:GO Weapon Inspect Style Winning Reveal -->
-    <div id="rouletteWinnerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-      <div id="rouletteWinnerCard" class="relative max-w-md w-full bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 rounded-3xl border-2 border-amber-400 shadow-[0_0_50px_rgba(251,191,36,0.35)] p-6 text-center transform scale-95 transition-transform duration-300 space-y-4">
+    <!-- Modal: Vintage Diploma / Bistro Recommendation Card Winning Reveal -->
+    <div id="rouletteWinnerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs hidden opacity-0 transition-opacity duration-300">
+      <div id="rouletteWinnerCard" class="relative max-w-md w-full bg-[#FFFDF9] rounded-xl border-2 border-[#C5A059] shadow-2xl p-6 text-center transform scale-95 transition-transform duration-300 space-y-4 text-[#2C1E16]">
+        <!-- Ornate Inner Frame -->
+        <div class="absolute inset-2 border border-dashed border-[#D8CBB8] rounded-lg pointer-events-none"></div>
+
         <!-- Close Button -->
-        <button id="btnCloseWinnerModal" type="button" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+        <button id="btnCloseWinnerModal" type="button" class="relative z-10 absolute top-4 right-4 w-8 h-8 rounded-full bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#7A6E65] hover:text-[#2C1E16] flex items-center justify-center transition border border-[#D8CBB8]">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
 
-        <!-- Inspect Badge -->
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-black uppercase tracking-wider">
-          <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span id="winnerRarityLabel">★ MÓN NGON ĐỊNH MỆNH ★</span>
+        <!-- Inspect / Recommendation Badge -->
+        <div class="relative z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#FAF3E0] border border-[#C5A059] text-[#8C6200] text-xs font-black uppercase tracking-wider font-serif">
+          <i data-lucide="award" class="w-3.5 h-3.5 text-[#C5A059]"></i>
+          <span id="winnerRarityLabel">★ MÓN NGON GỢI Ý ĐẶC BIỆT ★</span>
         </div>
 
-        <!-- Big Food Image with Radial Glow -->
-        <div class="relative w-48 h-48 mx-auto my-2 rounded-2xl overflow-hidden border-2 border-amber-400/60 shadow-2xl bg-slate-900 group">
-          <img id="winnerFoodImg" src="" alt="Món trúng" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\' viewBox=\'0 0 400 400\'><rect width=\'400\' height=\'400\' fill=\'%230f172a\'/><text x=\'200\' y=\'210\' font-size=\'60\' text-anchor=\'middle\'>🍲</text></svg>';" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+        <!-- Food Image with Warm Filter -->
+        <div class="relative z-10 w-44 h-44 mx-auto my-2 rounded-lg overflow-hidden border-2 border-[#D8CBB8] shadow-sm bg-[#FAF6EE] group">
+          <img id="winnerFoodImg" src="" alt="Món trúng" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\' viewBox=\'0 0 400 400\'><rect width=\'400\' height=\'400\' fill=\'%23FAF6EE\'/><text x=\'200\' y=\'210\' font-size=\'60\' text-anchor=\'middle\'>🍲</text></svg>';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 filter sepia-[8%]" />
         </div>
 
-        <div>
-          <span id="winnerCategoryName" class="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 block"></span>
-          <h3 id="winnerFoodName" class="text-xl font-black text-white mt-1 neon-text-glow leading-snug"></h3>
-          <p id="winnerFoodDesc" class="text-xs text-slate-300 mt-1 line-clamp-2 leading-relaxed px-2"></p>
+        <div class="relative z-10">
+          <span id="winnerCategoryName" class="text-[11px] font-bold uppercase tracking-widest text-[#7A6E65] block font-serif"></span>
+          <h3 id="winnerFoodName" class="font-serif-bistro text-2xl font-black text-[#2C1E16] mt-1 leading-snug"></h3>
+          <p id="winnerFoodDesc" class="text-xs text-[#5C4332] font-serif italic mt-1 line-clamp-2 leading-relaxed px-2"></p>
           <div class="mt-3">
-            <span class="text-[11px] text-slate-400 block">Giá niêm yết</span>
-            <span id="winnerFoodPrice" class="text-2xl font-black text-orange-400 neon-text-glow font-mono-code"></span>
+            <span class="text-[11px] text-[#7A6E65] block font-serif">Giá niêm yết</span>
+            <span id="winnerFoodPrice" class="text-2xl font-bold text-[#A63A2B] font-mono-code"></span>
           </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="pt-2 flex flex-col gap-2">
+        <div class="relative z-10 pt-2 flex flex-col gap-2">
           <button
             id="btnAddWinnerToCart"
             type="button"
-            class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-orange-500 via-rose-500 to-orange-600 hover:from-orange-600 hover:to-rose-600 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-orange-500/30 transition cursor-pointer"
+            class="w-full py-3 px-4 rounded-lg bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] font-serif-bistro font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition cursor-pointer border border-[#8C2D19]"
           >
             <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-            <span>CHỐT MÓN NÀY (THÊM VÀO GIỎ) ⚡</span>
+            <span>CHỐT MÓN NÀY (THÊM VÀO PHIẾU) ✦</span>
           </button>
           <button
             id="btnSpinAgainModal"
             type="button"
-            class="w-full py-2.5 px-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer"
+            class="w-full py-2.5 px-4 rounded-lg bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#2C1E16] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer border border-[#D8CBB8]"
           >
-            <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-[#C5A059]"></i>
             <span>Quay lại món khác</span>
           </button>
         </div>
@@ -374,41 +381,40 @@
     </div>
 
     <!-- ==================================================================
-         SECTION 1: ORDER TRACKER (LIVE REAL-TIME PROGRESS FOR CUSTOMER)
+         SECTION: ORDER TRACKER (MINI GUEST CHECK DOSSIER & REAL-TIME MAP)
          ================================================================== -->
-    <section id="orderTrackerSection" class="cyber-card rounded-3xl overflow-hidden transition-all shadow-2xl hidden">
+    <section id="orderTrackerSection" class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-xl overflow-hidden transition-all shadow-sm hidden">
       <!-- Tracker Header -->
-      <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80">
+      <div class="bg-[#FAF6EE] px-5 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#D8CBB8]">
         <div class="flex items-center gap-3">
-          <div class="relative w-10 h-10 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 shadow-inner">
-            <i data-lucide="radar" class="w-5 h-5"></i>
-            <span class="radar-wave"></span>
+          <div class="w-10 h-10 rounded-lg bg-[#2C1E16] text-[#D4A373] border border-[#D8CBB8] flex items-center justify-center shrink-0">
+            <i data-lucide="map-pin" class="w-5 h-5 text-[#D4A373]"></i>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h2 class="text-sm sm:text-base font-black tracking-tight text-white">
-                Hành Trình Giao Món Của Bạn
+              <h2 class="font-serif-bistro text-base sm:text-lg font-bold text-[#2C1E16]">
+                Hành Trình Giao Món Của Quý Khách
               </h2>
-              <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink-dot"></span>
+              <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
                 <span>Trực Tiếp</span>
               </span>
             </div>
-            <p class="text-xs text-slate-400">
-              Trạng thái đơn hàng sẽ tự động cập nhật ngay khi nhà hàng và tài xế thay đổi
+            <p class="text-xs text-[#7A6E65] font-serif">
+              Trạng thái đơn hàng tự động cập nhật ngay khi nhà hàng và tài xế thay đổi
             </p>
           </div>
         </div>
 
-        <!-- Order Selector for Current Customer + Collapse Button -->
+        <!-- Order Selector for Current Customer + Controls -->
         <div class="flex items-center gap-2">
-          <select id="activeOrderSelect" class="bg-slate-900 border border-slate-700 text-white text-xs font-semibold rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-orange-500 max-w-[240px]">
+          <select id="activeOrderSelect" class="bg-[#FFFDF9] border border-[#D8CBB8] text-[#2C1E16] text-xs font-semibold rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#A63A2B] max-w-[240px]">
             <option value="">Chưa có đơn hàng nào</option>
           </select>
-          <button id="btnRefreshTracker" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition" title="Làm mới trạng thái">
+          <button id="btnRefreshTracker" class="p-2 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] transition" title="Làm mới trạng thái">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
           </button>
-          <button id="btnToggleTrackerBody" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition" title="Thu gọn / Mở rộng">
+          <button id="btnToggleTrackerBody" class="p-2 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] transition" title="Thu gọn / Mở rộng">
             <i data-lucide="chevron-up" class="w-4 h-4"></i>
           </button>
         </div>
@@ -416,210 +422,202 @@
 
       <!-- Tracker Body -->
       <div id="orderTrackerBody" class="p-5 sm:p-6 space-y-5">
-        <!-- Empty State when customer has no orders -->
+        <!-- Empty State -->
         <div id="trackerEmptyState" class="hidden py-8 text-center">
-          <div class="w-14 h-14 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center mx-auto mb-3">
+          <div class="w-14 h-14 rounded-lg bg-[#FAF6EE] text-[#7A6E65] border border-[#D8CBB8] flex items-center justify-center mx-auto mb-3">
             <i data-lucide="shopping-basket" class="w-7 h-7"></i>
           </div>
-          <p class="text-sm font-bold text-slate-200">Bạn chưa có đơn hàng nào đang diễn ra</p>
-          <p class="text-xs text-slate-400 mt-1">Hãy lướt menu bên dưới và chọn món ngon bạn thích để đặt ngay nhé!</p>
+          <p class="text-sm font-bold text-[#2C1E16] font-serif">Quý khách chưa có đơn hàng nào đang diễn ra</p>
+          <p class="text-xs text-[#7A6E65] mt-1 font-serif">Kính mời quý khách chọn món ngon bên dưới thực đơn để thưởng thức ngay!</p>
         </div>
 
         <!-- Active Order Content -->
         <div id="trackerActiveContent" class="space-y-6">
           <!-- Top Order Meta Summary -->
-          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#D8CBB8]">
             <div class="flex flex-wrap items-center gap-2.5">
-              <span id="trackedOrderCode" class="font-mono-code font-black text-sm px-3 py-1 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/40">#ORD---</span>
-              <span id="trackedStatusBadge" class="px-3.5 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+              <span id="trackedOrderCode" class="font-mono-code font-bold text-sm px-3 py-1 rounded bg-[#2C1E16] text-[#FFFDF9]">#ORD---</span>
+              <span id="trackedStatusBadge" class="stamp-badge stamp-pending">
                 Chờ xác nhận
               </span>
-              <span id="trackedOrderTime" class="text-xs text-slate-400 flex items-center gap-1">
+              <span id="trackedOrderTime" class="text-xs text-[#7A6E65] flex items-center gap-1 font-mono-code">
                 <i data-lucide="clock" class="w-3.5 h-3.5"></i>
                 <span>--:--</span>
               </span>
             </div>
             <div class="flex items-center gap-4 text-xs">
-              <div class="text-slate-400">
-                Giao đến: <strong id="trackedOrderAddress" class="text-slate-100 font-bold">---</strong>
+              <div class="text-[#7A6E65]">
+                Giao đến: <strong id="trackedOrderAddress" class="text-[#2C1E16] font-bold">---</strong>
               </div>
               <div class="text-right">
-                <span class="text-slate-400">Tổng thanh toán:</span>
-                <strong id="trackedOrderTotal" class="text-lg font-black text-orange-400 ml-1.5 neon-text-glow">0 ₫</strong>
+                <span class="text-[#7A6E65]">Tổng thanh toán:</span>
+                <strong id="trackedOrderTotal" class="text-lg font-bold text-[#A63A2B] ml-1.5 font-mono-code">0 ₫</strong>
               </div>
             </div>
           </div>
 
           <!-- Cancelled Alert Banner -->
-          <div id="trackerCancelledAlert" class="hidden rounded-2xl bg-rose-950/60 border border-rose-800/80 p-4 flex items-center gap-3 text-rose-200">
-            <div class="w-10 h-10 rounded-full bg-rose-900/60 flex items-center justify-center shrink-0 text-rose-400">
+          <div id="trackerCancelledAlert" class="hidden rounded-lg bg-[#FEF2F2] border border-[#DC2626] p-4 flex items-center gap-3 text-[#7F1D1D]">
+            <div class="w-10 h-10 rounded-full bg-[#FEE2E2] flex items-center justify-center shrink-0 text-[#DC2626]">
               <i data-lucide="x-circle" class="w-6 h-6"></i>
             </div>
             <div>
-              <h4 class="text-sm font-bold text-white">Đơn hàng này đã được hủy</h4>
-              <p id="trackerCancelledReason" class="text-xs text-rose-300 mt-0.5">Số lượng món ăn đã được hoàn về kho của nhà hàng.</p>
+              <h4 class="text-sm font-bold text-[#991B1B]">Đơn hàng này đã được hủy</h4>
+              <p id="trackerCancelledReason" class="text-xs text-[#B91C1C] mt-0.5">Số lượng món ăn đã được hoàn về thực đơn của nhà hàng.</p>
             </div>
           </div>
 
-          <!-- 4-Step Visual Progress Stepper -->
+          <!-- 4-Step Visual Progress Stepper (Classic Bistro) -->
           <div id="trackerStepperWrapper" class="py-2">
             <div class="relative">
-              <!-- Connector Track Behind Steps -->
-              <div class="hidden sm:block absolute top-6 left-[12%] right-[12%] h-1 bg-slate-800 rounded-full overflow-hidden">
-                <div id="trackerProgressBar" class="h-full bg-gradient-to-r from-orange-500 via-amber-400 to-emerald-400 transition-all duration-700" style="width: 0%;"></div>
+              <div class="hidden sm:block absolute top-6 left-[12%] right-[12%] h-1 bg-[#E8DFD1] rounded-full overflow-hidden">
+                <div id="trackerProgressBar" class="h-full bg-[#A63A2B] transition-all duration-700" style="width: 0%;"></div>
               </div>
-
-              <!-- 4 Step Nodes -->
               <div id="trackerStepsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 relative z-10">
-                <!-- Populated dynamically -->
+                <!-- Populated dynamically via JS -->
               </div>
             </div>
           </div>
 
-          <!-- ==================================================================
-               SIMULATED LIVE DELIVERY MAP (GPS & DRIVING SHIPPER)
-               ================================================================== -->
-          <div id="simulatedMapContainer" class="relative rounded-3xl overflow-hidden border border-cyan-500/30 bg-slate-950 p-4 sm:p-5 shadow-2xl space-y-3.5">
+          <!-- Simulated Live Delivery Map (Parchment Cartography) -->
+          <div id="simulatedMapContainer" class="relative rounded-xl overflow-hidden border border-[#D8CBB8] bg-[#F7F1E5] p-4 sm:p-5 shadow-2xs space-y-3.5">
             <!-- Top Map Header -->
-            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#D8CBB8]">
               <div class="flex items-center gap-3">
-                <div class="relative w-9 h-9 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shadow-inner">
-                  <i data-lucide="map-pin" class="w-4 h-4"></i>
-                  <span class="radar-wave"></span>
+                <div class="w-8 h-8 rounded-lg bg-[#2C1E16] text-[#D4A373] flex items-center justify-center shrink-0">
+                  <i data-lucide="compass" class="w-4 h-4 text-[#D4A373]"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">Bản Đồ Giao Hàng Trực Tiếp (Live GPS)</span>
-                    <span id="mapLiveBadge" class="px-2.5 py-0.5 text-[10px] font-black rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink-dot"></span>
+                    <span class="text-xs sm:text-sm font-bold text-[#2C1E16] font-serif uppercase tracking-wider">Hải Đồ Giao Hàng Trực Tiếp (Live GPS)</span>
+                    <span id="mapLiveBadge" class="px-2 py-0.5 text-[10px] font-bold rounded bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
                       <span id="mapLiveStatusText">GPS Hoạt động</span>
                     </span>
                   </div>
-                  <p id="mapStatusSubtitle" class="text-xs text-slate-400 mt-0.5">
+                  <p id="mapStatusSubtitle" class="text-xs text-[#7A6E65] font-serif mt-0.5">
                     Tài xế đang nhận đơn và chuẩn bị di chuyển tới địa chỉ của bạn
                   </p>
                 </div>
               </div>
 
               <!-- Shipper Quick Contact Card -->
-              <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-800 rounded-2xl px-3.5 py-1.5 text-xs shadow-md">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
+              <div class="flex items-center gap-3 bg-[#FFFDF9] border border-[#D8CBB8] rounded-lg px-3.5 py-1.5 text-xs shadow-2xs">
+                <div class="w-7 h-7 rounded-full bg-[#2C1E16] text-[#FFFDF9] flex items-center justify-center font-bold text-xs">
                   🛵
                 </div>
                 <div>
-                  <div class="font-bold text-white text-xs">Lê Hoàng Giao Nhanh</div>
-                  <div class="text-[10px] text-slate-400">Xe AirBlade • <span class="text-cyan-400 font-mono-code font-bold">29-X1 888.88</span></div>
+                  <div class="font-bold text-[#2C1E16] text-xs">Lê Hoàng Giao Nhanh</div>
+                  <div class="text-[10px] text-[#7A6E65]">Xe AirBlade • <span class="text-[#A63A2B] font-mono-code font-bold">29-X1 888.88</span></div>
                 </div>
-                <button type="button" id="btnCallShipper" class="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/30 text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer">
-                  <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                <button type="button" id="btnCallShipper" class="px-2.5 py-1 rounded bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#2C1E16] border border-[#D8CBB8] text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer">
+                  <i data-lucide="phone-call" class="w-3.5 h-3.5 text-[#A63A2B]"></i>
                   <span>Gọi tài xế</span>
                 </button>
               </div>
             </div>
 
-            <!-- Interactive Visual Map Box -->
-            <div class="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden bg-[#090d1a] border border-slate-800/80 select-none">
-              <!-- Map Canvas / SVG Grid Lines & Cyber Streets -->
-              <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
+            <!-- Interactive Visual Map Box (Cartographic Parchment) -->
+            <div class="relative w-full h-56 sm:h-64 rounded-lg overflow-hidden bg-[#EFE8DA] border border-[#D8CBB8] select-none">
+              <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-50" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <pattern id="cyberGrid" width="36" height="36" patternUnits="userSpaceOnUse">
-                    <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#1e293b" stroke-width="1"/>
+                  <pattern id="bistroGrid" width="36" height="36" patternUnits="userSpaceOnUse">
+                    <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#D8CBB8" stroke-width="1"/>
                   </pattern>
                 </defs>
-                <rect width="100%" height="100%" fill="url(#cyberGrid)" />
+                <rect width="100%" height="100%" fill="url(#bistroGrid)" />
                 
-                <!-- Simulated Cyber River & Avenues -->
-                <path d="M -10 170 Q 200 110 450 150 T 1000 130" fill="none" stroke="#00f0ff" stroke-width="3" stroke-opacity="0.3" stroke-dasharray="6,6" />
-                <path d="M 110 -10 L 110 400" fill="none" stroke="#334155" stroke-width="12" stroke-opacity="0.25" />
-                <path d="M 360 -10 L 360 400" fill="none" stroke="#334155" stroke-width="12" stroke-opacity="0.25" />
-                <path d="M -10 70 L 1000 70" fill="none" stroke="#334155" stroke-width="10" stroke-opacity="0.25" />
-                <path d="M -10 190 L 1000 190" fill="none" stroke="#334155" stroke-width="12" stroke-opacity="0.25" />
+                <!-- River Seine Style Curve -->
+                <path d="M -10 170 Q 200 110 450 150 T 1000 130" fill="none" stroke="#A7C4BC" stroke-width="6" stroke-opacity="0.6" />
+                <path d="M 110 -10 L 110 400" fill="none" stroke="#D8CBB8" stroke-width="10" stroke-opacity="0.5" />
+                <path d="M 360 -10 L 360 400" fill="none" stroke="#D8CBB8" stroke-width="10" stroke-opacity="0.5" />
+                <path d="M -10 70 L 1000 70" fill="none" stroke="#D8CBB8" stroke-width="8" stroke-opacity="0.5" />
+                <path d="M -10 190 L 1000 190" fill="none" stroke="#D8CBB8" stroke-width="10" stroke-opacity="0.5" />
                 
-                <!-- Glowing Delivery Route Path -->
-                <path id="svgDeliveryRoute" d="M 60 70 C 180 70, 220 180, 360 180 S 520 110, 680 150" fill="none" stroke="#ff7b00" stroke-width="4" stroke-dasharray="8,6" class="route-dash-glow" />
+                <!-- Delivery Route Path -->
+                <path id="svgDeliveryRoute" d="M 60 70 C 180 70, 220 180, 360 180 S 520 110, 680 150" fill="none" stroke="#A63A2B" stroke-width="3" stroke-dasharray="6,4" />
               </svg>
 
-              <!-- Map Landmark Point A: Restaurant (JaLong Food) -->
+              <!-- Map Landmark Point A: Restaurant (JaLong Bistro) -->
               <div class="absolute left-6 sm:left-10 top-8 flex flex-col items-center pointer-events-none z-10">
-                <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-500 to-rose-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/50">
-                  <i data-lucide="store" class="w-5 h-5"></i>
-                  <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border border-slate-900 blink-dot"></span>
+                <div class="relative w-9 h-9 rounded-lg bg-[#2C1E16] text-[#D4A373] border border-[#D8CBB8] flex items-center justify-center shadow-md">
+                  <i data-lucide="store" class="w-4 h-4 text-[#D4A373]"></i>
+                  <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#4A7C59] rounded-full border border-[#FFFDF9]"></span>
                 </div>
-                <span class="mt-1 px-2.5 py-0.5 rounded-lg bg-slate-950/90 text-orange-400 border border-orange-500/30 text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-md">
-                  🏪 Bếp JaLong Food
+                <span class="mt-1 px-2 py-0.5 rounded bg-[#FFFDF9] text-[#2C1E16] border border-[#D8CBB8] text-[9.5px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs font-serif">
+                  🏪 Bếp JaLong Bistro
                 </span>
               </div>
 
               <!-- Map Landmark Point B: Customer Destination -->
               <div class="absolute right-6 sm:right-12 bottom-8 flex flex-col items-center pointer-events-none z-10">
-                <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-400 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-cyan-500/50">
-                  <i data-lucide="home" class="w-5 h-5"></i>
-                  <span class="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full border border-slate-900 blink-dot"></span>
+                <div class="relative w-9 h-9 rounded-lg bg-[#A63A2B] text-[#FFFDF9] border border-[#8C2D19] flex items-center justify-center shadow-md">
+                  <i data-lucide="home" class="w-4 h-4 text-[#FFFDF9]"></i>
+                  <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#C5A059] rounded-full border border-[#FFFDF9]"></span>
                 </div>
-                <span id="mapCustomerAddressLabel" class="mt-1 px-2.5 py-0.5 rounded-lg bg-slate-950/90 text-cyan-300 border border-cyan-500/30 text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-md max-w-[170px] truncate">
+                <span id="mapCustomerAddressLabel" class="mt-1 px-2 py-0.5 rounded bg-[#FFFDF9] text-[#2C1E16] border border-[#D8CBB8] text-[9.5px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs max-w-[170px] truncate font-serif">
                   🏠 Vị trí của bạn
                 </span>
               </div>
 
-              <!-- Moving Shipper Marker (Smooth Transition & Pulse) -->
+              <!-- Moving Shipper Marker -->
               <div id="mapShipperMarker" class="absolute z-20 flex flex-col items-center transition-all duration-1000 ease-in-out" style="left: 18%; top: 32%;">
-                <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center font-black shadow-xl shadow-orange-500/60 border-2 border-white shipper-bike-icon">
-                  <span class="text-xl">🛵</span>
-                  <span class="radar-wave"></span>
+                <div class="relative w-10 h-10 rounded-lg bg-[#2C1E16] text-[#FFFDF9] flex items-center justify-center font-bold shadow-lg border-2 border-[#D8CBB8]">
+                  <span class="text-lg">🛵</span>
                 </div>
-                <div id="mapShipperTooltip" class="mt-1 px-2.5 py-0.5 rounded-full bg-slate-950/95 text-white border border-amber-400/50 text-[10px] font-extrabold whitespace-nowrap shadow-lg flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink-dot"></span>
+                <div id="mapShipperTooltip" class="mt-1 px-2 py-0.5 rounded bg-[#FFFDF9] text-[#2C1E16] border border-[#D8CBB8] text-[9.5px] font-bold whitespace-nowrap shadow-xs flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
                   <span id="mapShipperTooltipText">Tài xế đang nhận đơn • 0 km/h</span>
                 </div>
               </div>
 
-              <!-- Map Bottom Telemetry HUD Overlay -->
-              <div class="absolute bottom-3 left-3 bg-slate-950/90 backdrop-blur-md border border-slate-800 rounded-xl px-3 py-1.5 text-[11px] font-mono-code text-slate-300 flex items-center gap-3 shadow-md">
+              <!-- Map Bottom Telemetry HUD Overlay (Vintage Brass Bar) -->
+              <div class="absolute bottom-3 left-3 bg-[#FFFDF9]/95 border border-[#D8CBB8] rounded-md px-3 py-1.5 text-[11px] font-mono-code text-[#2C1E16] flex items-center gap-3 shadow-2xs">
                 <div class="flex items-center gap-1.5">
-                  <i data-lucide="gauge" class="w-3.5 h-3.5 text-cyan-400"></i>
+                  <i data-lucide="gauge" class="w-3.5 h-3.5 text-[#A63A2B]"></i>
                   <span id="mapSpeedText" class="font-bold">Vận tốc: 0 km/h</span>
                 </div>
-                <span class="text-slate-600">|</span>
+                <span class="text-[#D8CBB8]">|</span>
                 <div class="flex items-center gap-1.5">
-                  <i data-lucide="milestone" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <i data-lucide="milestone" class="w-3.5 h-3.5 text-[#C5A059]"></i>
                   <span id="mapDistanceText">Cách bạn: ~850m</span>
                 </div>
-                <span class="text-slate-600 hidden sm:inline">|</span>
+                <span class="text-[#D8CBB8] hidden sm:inline">|</span>
                 <div class="hidden sm:flex items-center gap-1.5">
-                  <i data-lucide="timer" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <i data-lucide="timer" class="w-3.5 h-3.5 text-[#4A7C59]"></i>
                   <span id="mapEtaText">Dự kiến: 6-8 phút</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Two-Column Detail: Ordered Items + Delivery Milestones -->
+          <!-- Two-Column Detail: Ordered Items + Timeline -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 pt-2">
             <!-- Ordered Items List -->
-            <div class="lg:col-span-5 bg-slate-900/80 rounded-2xl p-4 border border-slate-800/80">
-              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+            <div class="lg:col-span-5 bg-[#FAF6EE] rounded-lg p-4 border border-[#D8CBB8]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6E65] font-serif mb-3 flex items-center justify-between">
                 <span>Món ăn trong đơn</span>
-                <span id="trackedItemsCount" class="text-orange-400 font-bold">0 món</span>
+                <span id="trackedItemsCount" class="text-[#A63A2B] font-bold font-mono-code">0 món</span>
               </h3>
-              <div id="trackedItemsList" class="space-y-2 max-h-56 overflow-y-auto dark-scrollbar pr-1">
-                <!-- Populated dynamically -->
+              <div id="trackedItemsList" class="space-y-2 max-h-56 overflow-y-auto ledger-scrollbar pr-1">
+                <!-- Populated dynamically via JS -->
               </div>
             </div>
 
             <!-- Delivery Journey Timeline -->
-            <div class="lg:col-span-7 bg-slate-900/80 rounded-2xl p-4 border border-slate-800/80">
+            <div class="lg:col-span-7 bg-[#FAF6EE] rounded-lg p-4 border border-[#D8CBB8]">
               <div class="flex items-center justify-between gap-2 mb-3">
-                <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-                  <i data-lucide="navigation" class="w-4 h-4"></i>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-[#2C1E16] font-serif flex items-center gap-1.5">
+                  <i data-lucide="navigation" class="w-4 h-4 text-[#A63A2B]"></i>
                   <span>Lịch trình Giao nhận Đơn hàng</span>
                 </h3>
-                <span class="text-[11px] font-bold text-slate-400 flex items-center gap-1">
-                  <span class="w-2 h-2 rounded-full bg-cyan-400 blink-dot"></span>
-                  <span>Cập nhật tự động</span>
+                <span class="text-[11px] font-bold text-[#7A6E65] flex items-center gap-1 font-serif">
+                  <span class="w-2 h-2 rounded-full bg-[#4A7C59]"></span>
+                  <span>Cập nhật tức thì</span>
                 </span>
               </div>
-              <ol id="trackedHistoryTimeline" class="relative border-l-2 border-slate-800 ml-2.5 space-y-3.5 max-h-56 overflow-y-auto dark-scrollbar pl-4 pr-1">
-                <!-- Populated dynamically -->
+              <ol id="trackedHistoryTimeline" class="relative border-l-2 border-[#D8CBB8] ml-2.5 space-y-3 max-h-56 overflow-y-auto ledger-scrollbar pl-4 pr-1">
+                <!-- Populated dynamically via JS -->
               </ol>
             </div>
           </div>
@@ -628,261 +626,274 @@
     </section>
 
     <!-- ==================================================================
-         SECTION 2: LIVE MENU GRID + STICKY CART & CHECKOUT
+         SECTION: LIVE MENU (LEFT 8 COLS) + GUEST CHECK SIDEBAR (RIGHT 4 COLS)
          ================================================================== -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- Left 8 Cols: Food Menu -->
       <section class="lg:col-span-8 space-y-5">
-        <!-- Menu Search & Filter Controls -->
-        <div class="cyber-card rounded-3xl p-5 space-y-4">
+        <!-- Menu Search & Category Filter Controls -->
+        <div class="bg-[#FFFDF9] rounded-xl p-5 border border-[#D8CBB8] shadow-2xs space-y-4">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div>
               <div class="flex items-center gap-2">
-                <h2 class="text-xl font-black text-white tracking-tight">Thực Đơn Tươi Ngon Hôm Nay</h2>
-                <span id="liveMenuCountBadge" class="px-2.5 py-0.5 text-xs font-black rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/40">0 món</span>
+                <h2 class="font-serif-bistro text-xl font-bold text-[#2C1E16] tracking-tight">Thực Đơn Tươi Mới Hôm Nay</h2>
+                <span id="liveMenuCountBadge" class="px-2.5 py-0.5 text-xs font-bold rounded bg-[#FAF6EE] text-[#A63A2B] border border-[#D8CBB8] font-mono-code">0 món</span>
               </div>
-              <p class="text-xs text-slate-400 mt-0.5">
-                Chế biến nóng hổi ngay khi nhận đơn • Nguyên liệu nhập tươi mỗi ngày
+              <p class="text-xs text-[#7A6E65] font-serif italic mt-0.5">
+                Chế biến nóng hổi ngay khi nhận đơn • Nguyên liệu nhập tươi tuyển chọn mỗi sớm
               </p>
             </div>
 
             <!-- Search Input + Available Toggle -->
             <div class="flex items-center gap-2.5">
               <div class="relative flex-1 sm:w-64">
-                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <i data-lucide="search" class="w-4 h-4 text-[#7A6E65] absolute left-3 top-1/2 -translate-y-1/2"></i>
                 <input
                   id="menuSearchInput"
                   type="text"
-                  placeholder="Tìm món phở, cơm, trà..."
-                  class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  placeholder="Tìm món phở, cơm, bít tết..."
+                  class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-[#FAF6EE] border border-[#D8CBB8] rounded-lg text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] focus:border-[#A63A2B] transition"
                 />
-                <button id="btnClearSearch" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                <button id="btnClearSearch" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-[#7A6E65] hover:text-[#2C1E16]">
                   <i data-lucide="x" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
 
-              <label class="inline-flex items-center gap-2 text-xs font-bold text-slate-300 bg-slate-900 border border-slate-700/80 px-3.5 py-2 rounded-2xl cursor-pointer select-none shrink-0 hover:border-orange-500/40 transition">
-                <input id="chkOnlyAvailable" type="checkbox" class="rounded text-orange-500 focus:ring-orange-500 bg-slate-800 border-slate-700" />
+              <label class="inline-flex items-center gap-2 text-xs font-bold text-[#2C1E16] bg-[#FAF6EE] border border-[#D8CBB8] px-3 py-2 rounded-lg cursor-pointer select-none shrink-0 hover:bg-[#F2EBD9] transition font-serif">
+                <input id="chkOnlyAvailable" type="checkbox" class="rounded text-[#A63A2B] focus:ring-[#A63A2B] bg-[#FFFDF9] border-[#D8CBB8]" />
                 <span>Chỉ món còn</span>
               </label>
             </div>
           </div>
 
-          <!-- Category Filter Pills -->
+          <!-- Category Filter Pills (Thẻ tab giấy thực đơn) -->
           <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
-            <!-- Populated dynamically -->
+            <!-- Populated dynamically via JS -->
           </div>
         </div>
 
         <!-- Food Cards Grid -->
         <div id="foodsGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
           <!-- Skeleton placeholders before API resolves -->
-          <div class="cyber-card rounded-3xl p-4 space-y-3">
-            <div class="h-40 rounded-2xl skeleton"></div>
-            <div class="h-4 w-2/3 rounded skeleton"></div>
-            <div class="h-3 w-full rounded skeleton"></div>
-            <div class="h-9 w-full rounded-2xl skeleton"></div>
+          <div class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-lg p-4 space-y-3">
+            <div class="h-40 rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-4 w-2/3 rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-3 w-full rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-9 w-full rounded bg-[#FAF6EE] animate-pulse"></div>
           </div>
-          <div class="cyber-card rounded-3xl p-4 space-y-3">
-            <div class="h-40 rounded-2xl skeleton"></div>
-            <div class="h-4 w-2/3 rounded skeleton"></div>
-            <div class="h-3 w-full rounded skeleton"></div>
-            <div class="h-9 w-full rounded-2xl skeleton"></div>
+          <div class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-lg p-4 space-y-3">
+            <div class="h-40 rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-4 w-2/3 rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-3 w-full rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-9 w-full rounded bg-[#FAF6EE] animate-pulse"></div>
           </div>
-          <div class="cyber-card rounded-3xl p-4 space-y-3 hidden xl:block">
-            <div class="h-40 rounded-2xl skeleton"></div>
-            <div class="h-4 w-2/3 rounded skeleton"></div>
-            <div class="h-3 w-full rounded skeleton"></div>
-            <div class="h-9 w-full rounded-2xl skeleton"></div>
+          <div class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-lg p-4 space-y-3 hidden xl:block">
+            <div class="h-40 rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-4 w-2/3 rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-3 w-full rounded bg-[#FAF6EE] animate-pulse"></div>
+            <div class="h-9 w-full rounded bg-[#FAF6EE] animate-pulse"></div>
           </div>
         </div>
       </section>
 
-      <!-- Right 4 Cols: Shopping Cart & Instant Checkout -->
-      <aside id="cartSidebar" class="lg:col-span-4 lg:sticky lg:top-24 cyber-card rounded-3xl overflow-hidden shadow-2xl">
-        <!-- Cart Header -->
-        <div class="px-5 py-4 border-b border-slate-800 bg-gradient-to-r from-orange-950/40 to-slate-900 flex items-center justify-between">
+      <!-- Right 4 Cols: Shopping Cart (AUTHENTIC GUEST CHECK BILL) -->
+      <aside id="cartSidebar" class="lg:col-span-4 lg:sticky lg:top-20 guest-check-container rounded-t-lg shadow-md">
+        <!-- Guest Check Top Header -->
+        <div class="px-5 py-4 guest-check-header flex items-center justify-between">
           <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-orange-500 to-rose-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/30">
-              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <div class="w-9 h-9 rounded-md bg-[#2C1E16] text-[#D4A373] flex items-center justify-center shadow-xs">
+              <i data-lucide="receipt" class="w-4 h-4 text-[#D4A373]"></i>
             </div>
             <div>
-              <h2 class="text-sm font-black text-white">Giỏ Hàng Của Bạn</h2>
-              <p class="text-[11px] text-slate-400">Kiểm tra món & giao tận nơi</p>
+              <h2 class="font-serif-bistro text-sm font-extrabold uppercase tracking-wider text-[#2C1E16]">
+                GUEST CHECK • BISTRO JALONG
+              </h2>
+              <p class="text-[10px] text-[#7A6E65] font-mono-code">TABLE: 01 • SERVER: BISTRO • DATE: TODAY</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span id="cartCountBadge" class="px-2.5 py-0.5 text-xs font-black rounded-full bg-orange-500 text-white shadow-sm">0</span>
-            <button id="btnClearCart" class="hidden text-xs font-bold text-rose-400 hover:text-rose-300 underline">
-              Xóa tất cả
+            <span id="cartCountBadge" class="px-2 py-0.5 text-xs font-bold rounded bg-[#A63A2B] text-[#FFFDF9] font-mono-code">0</span>
+            <button id="btnClearCart" class="hidden text-xs font-bold text-[#A63A2B] hover:underline font-serif">
+              Xóa hết
             </button>
           </div>
         </div>
 
-        <!-- Cart Items List -->
+        <!-- Cart Items List & Form -->
         <div class="p-5 space-y-4">
+          <!-- Empty State -->
           <div id="cartEmptyState" class="py-10 text-center">
-            <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-800 text-slate-500 flex items-center justify-center mx-auto mb-3">
+            <div class="w-14 h-14 rounded-lg bg-[#FAF6EE] border border-[#D8CBB8] text-[#7A6E65] flex items-center justify-center mx-auto mb-3">
               <i data-lucide="utensils-crossed" class="w-7 h-7"></i>
             </div>
-            <p class="text-xs font-bold text-slate-300">Giỏ hàng của bạn đang trống</p>
-            <p class="text-[11px] text-slate-500 mt-1">Bấm nút "Chọn món" trên thực đơn để thêm vào đây!</p>
+            <p class="text-xs font-bold text-[#2C1E16] font-serif">Phiếu tính tiền đang trống</p>
+            <p class="text-[11px] text-[#7A6E65] mt-1 font-serif italic">Bấm nút "Chọn món" trên thực đơn để ghi vào phiếu!</p>
           </div>
 
-          <div id="cartItemsContainer" class="hidden space-y-3 max-h-72 overflow-y-auto dark-scrollbar pr-1">
-            <!-- Populated dynamically with qty controls + per-item note input -->
+          <!-- Items Container -->
+          <div id="cartItemsContainer" class="hidden space-y-3 max-h-72 overflow-y-auto ledger-scrollbar pr-1">
+            <!-- Populated dynamically via JS -->
           </div>
 
-          <!-- Delivery Form -->
-          <form id="checkoutForm" class="space-y-3.5 pt-4 border-t border-slate-800">
+          <!-- Delivery Form (Vintage Ledger Fields) -->
+          <form id="checkoutForm" class="space-y-3.5 pt-4 border-t-2 border-dashed border-[#D8CBB8]">
             <div>
-              <label for="customerNameInput" class="block text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
-                <span>Họ và tên người nhận <span class="text-rose-400">*</span></span>
-                <span class="text-[10px] text-orange-400 font-semibold">Tự do nhập tên</span>
+              <label for="customerNameInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 flex items-center justify-between font-serif">
+                <span>Họ và tên người nhận <span class="text-[#A63A2B]">*</span></span>
+                <span class="text-[10px] text-[#7A6E65] font-sans">NAME</span>
               </label>
               <div class="relative">
-                <i data-lucide="user" class="w-4 h-4 text-orange-400 absolute left-3.5 top-3"></i>
+                <i data-lucide="user" class="w-4 h-4 text-[#C5A059] absolute left-3.5 top-3"></i>
                 <input
                   id="customerNameInput"
                   type="text"
                   required
                   placeholder="Nhập tên của bạn (VD: Hoàng Long, Tuấn Kiệt...)"
-                  class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+                  class="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] transition"
                 />
               </div>
             </div>
 
-            <!-- Phone & Gmail Inputs -->
+            <!-- Phone & Email Inputs -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label for="customerPhoneInput" class="block text-xs font-bold text-slate-300 mb-1.5">
-                  <span>Số điện thoại <span class="text-rose-400">*</span></span>
+                <label for="customerPhoneInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+                  <span>Số điện thoại <span class="text-[#A63A2B]">*</span></span>
+                  <span class="text-[10px] text-[#7A6E65] font-sans">TEL</span>
                 </label>
                 <div class="relative">
-                  <i data-lucide="phone" class="w-4 h-4 text-emerald-400 absolute left-3.5 top-3"></i>
+                  <i data-lucide="phone" class="w-4 h-4 text-[#4A7C59] absolute left-3.5 top-3"></i>
                   <input
                     id="customerPhoneInput"
                     type="tel"
                     required
                     placeholder="0988 123 456"
-                    class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+                    class="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#4A7C59] transition"
                   />
                 </div>
               </div>
 
               <div>
-                <label for="customerEmailInput" class="block text-xs font-bold text-slate-300 mb-1.5">
-                  <span>Gmail / Email <span class="text-rose-400">*</span></span>
+                <label for="customerEmailInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+                  <span>Email <span class="text-[#A63A2B]">*</span></span>
+                  <span class="text-[10px] text-[#7A6E65] font-sans">MAIL</span>
                 </label>
                 <div class="relative">
-                  <i data-lucide="mail" class="w-4 h-4 text-sky-400 absolute left-3.5 top-3"></i>
+                  <i data-lucide="mail" class="w-4 h-4 text-[#C5A059] absolute left-3.5 top-3"></i>
                   <input
                     id="customerEmailInput"
                     type="email"
                     required
                     placeholder="hoanglong@gmail.com"
-                    class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
+                    class="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#C5A059] transition"
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label for="deliveryAddressInput" class="block text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
-                <span>Địa chỉ nhận món <span class="text-rose-400">*</span></span>
-                <span class="text-[10px] text-orange-400 font-semibold">Tự động gợi ý</span>
+              <label for="deliveryAddressInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 flex items-center justify-between font-serif">
+                <span>Địa chỉ nhận món <span class="text-[#A63A2B]">*</span></span>
+                <span class="text-[10px] text-[#7A6E65] font-sans">ADDRESS</span>
               </label>
               <div class="relative">
-                <i data-lucide="map-pin" class="w-4 h-4 text-orange-400 absolute left-3.5 top-3"></i>
+                <i data-lucide="map-pin" class="w-4 h-4 text-[#A63A2B] absolute left-3.5 top-3"></i>
                 <input
                   id="deliveryAddressInput"
                   type="text"
                   required
                   placeholder="Nhập số nhà, tên đường, tòa nhà..."
-                  class="w-full pl-10 pr-3 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+                  class="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] transition"
                 />
               </div>
             </div>
 
             <div>
-              <label for="orderNoteInput" class="block text-xs font-bold text-slate-300 mb-1.5">
+              <label for="orderNoteInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif">
                 Ghi chú cho nhà bếp / tài xế
               </label>
               <input
                 id="orderNoteInput"
                 type="text"
-                placeholder="VD: Không lấy hành, cho nhiều ớt, gọi trước khi đến..."
-                class="w-full px-3.5 py-2.5 text-xs bg-slate-900 border border-slate-700/80 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+                placeholder="VD: Không lấy hành, ít cay, gọi trước khi đến..."
+                class="w-full px-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] transition"
               />
             </div>
 
-            <!-- Totals Summary & Loyalty Discount -->
-            <div class="bg-slate-900/90 rounded-2xl p-4 space-y-2 border border-slate-800">
-              <!-- Returning Customer 10% Loyalty Banner -->
-              <div id="cartDiscountBanner" class="hidden px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center justify-between gap-2 shadow-sm">
+            <!-- Totals Summary & Loyalty Discount Stamp -->
+            <div class="bg-[#FAF6EE] rounded-lg p-3.5 space-y-2 border border-[#D8CBB8]">
+              <!-- Returning Customer 10% Loyalty Rubber Stamp -->
+              <div id="cartDiscountBanner" class="hidden px-3 py-2 rounded bg-[#FFF5F4] border-2 border-dashed border-[#A63A2B] text-[#A63A2B] text-xs font-bold flex items-center justify-between gap-2 shadow-2xs font-serif">
                 <div class="flex items-center gap-1.5">
-                  <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
-                  <span>Tri ân khách cũ: <strong>Giảm 10%</strong></span>
+                  <i data-lucide="sparkles" class="w-4 h-4 text-[#A63A2B]"></i>
+                  <span>Mộc Tri Ân Khách Quen: <strong>Giảm 10%</strong></span>
                 </div>
-                <span class="px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-200 font-black text-[10px]">-10%</span>
+                <span class="px-2 py-0.5 rounded bg-[#A63A2B] text-[#FFFDF9] font-black text-[10px] font-mono-code">-10%</span>
               </div>
 
-              <div class="flex items-center justify-between text-xs text-slate-400">
+              <div class="flex items-center justify-between text-xs text-[#5C4332] font-serif">
                 <span>Số lượng món</span>
-                <span id="cartTotalPortions" class="font-bold text-white">0 phần</span>
+                <span id="cartTotalPortions" class="font-bold text-[#2C1E16] font-mono-code">0 phần</span>
               </div>
-              <div id="cartSubtotalRow" class="hidden flex items-center justify-between text-xs text-slate-400">
+              <div id="cartSubtotalRow" class="hidden flex items-center justify-between text-xs text-[#5C4332] font-serif">
                 <span>Tạm tính</span>
-                <span id="cartSubtotalPrice" class="font-bold text-slate-200">0 ₫</span>
+                <span id="cartSubtotalPrice" class="font-bold text-[#2C1E16] font-mono-code">0 ₫</span>
               </div>
-              <div id="cartDiscountRow" class="hidden flex items-center justify-between text-xs text-amber-400">
+              <div id="cartDiscountRow" class="hidden flex items-center justify-between text-xs text-[#A63A2B] font-serif">
                 <span class="flex items-center gap-1">
                   <i data-lucide="tag" class="w-3.5 h-3.5"></i>
                   <span>Ưu đãi khách quen (-10%)</span>
                 </span>
-                <span id="cartDiscountAmount" class="font-extrabold">-0 ₫</span>
+                <span id="cartDiscountAmount" class="font-bold font-mono-code">-0 ₫</span>
               </div>
-              <div class="flex items-center justify-between text-xs text-slate-400">
+              <div class="flex items-center justify-between text-xs text-[#5C4332] font-serif">
                 <span>Phí giao hàng</span>
-                <span class="font-bold text-emerald-400 flex items-center gap-1">
+                <span class="font-bold text-[#4A7C59] flex items-center gap-1 font-mono-code">
                   <i data-lucide="gift" class="w-3.5 h-3.5"></i>
                   <span>Miễn phí (Ưu đãi)</span>
                 </span>
               </div>
-              <div class="flex items-center justify-between pt-2 border-t border-slate-800">
-                <span class="text-xs font-bold text-slate-200">Tổng thanh toán</span>
-                <span id="cartTotalPrice" class="text-xl font-black text-orange-400 neon-text-glow">0 ₫</span>
+              <div class="flex items-center justify-between pt-2 border-t border-[#D8CBB8]">
+                <span class="text-xs font-bold text-[#2C1E16] font-serif uppercase">Tổng thanh toán</span>
+                <span id="cartTotalPrice" class="text-xl font-bold text-[#A63A2B] font-mono-code">0 ₫</span>
               </div>
             </div>
 
-            <!-- Submit Checkout Button (Neon Pulse Glow) -->
+            <!-- Submit Checkout Button -->
             <button
               id="btnSubmitOrder"
               type="submit"
               disabled
-              class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-orange-500 via-rose-500 to-orange-600 hover:from-orange-600 hover:to-rose-600 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-600 disabled:border-slate-800 disabled:cursor-not-allowed text-white font-black text-sm shadow-xl shadow-orange-500/25 flex items-center justify-center gap-2 transition neon-pulse-btn cursor-pointer"
+              class="w-full py-3.5 px-4 rounded-md bg-[#A63A2B] hover:bg-[#8C2D19] disabled:bg-[#D8CBB8] disabled:text-[#8C7E72] disabled:cursor-not-allowed text-[#FFFDF9] font-serif-bistro font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition cursor-pointer border border-[#8C2D19]"
             >
-              <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
-              <span id="btnSubmitOrderLabel">XÁC NHẬN ĐẶT MÓN NGAY ⚡</span>
+              <i data-lucide="check-check" class="w-4 h-4 text-[#D4AF37]"></i>
+              <span id="btnSubmitOrderLabel">XÁC NHẬN ĐẶT MÓN (GUEST CHECK) ✦</span>
             </button>
           </form>
+        </div>
+
+        <!-- Perforated Sawtooth Teeth at the Bottom Edge of Guest Check -->
+        <div class="w-full h-3 overflow-hidden text-[#FFFDF9] -mb-1 bg-[#2C1E16]">
+          <svg class="w-full h-full fill-[#FFFDF9]" preserveAspectRatio="none" viewBox="0 0 100 10">
+            <polygon points="0,0 2,10 4,0 6,10 8,0 10,10 12,0 14,10 16,0 18,10 20,0 22,10 24,0 26,10 28,0 30,10 32,0 34,10 36,0 38,10 40,0 42,10 44,0 46,10 48,0 50,10 52,0 54,10 56,0 58,10 60,0 62,10 64,0 66,10 68,0 70,10 72,0 74,10 76,0 78,10 80,0 82,10 84,0 86,10 88,0 90,10 92,0 94,10 96,0 98,10 100,0 100,0 0,0" />
+          </svg>
         </div>
       </aside>
     </div>
   </main>
 
-  <!-- Clean Customer Footer -->
-  <footer class="border-t border-slate-800/80 bg-slate-950/90 mt-12 py-6 px-4 text-center text-xs text-slate-400">
+  <!-- Clean Parisian Bistro Footer -->
+  <footer class="border-t border-[#D8CBB8] bg-[#FFFDF9] mt-12 py-6 px-4 text-center text-xs text-[#7A6E65] font-serif">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2">
-        <span class="font-black text-white">JaLong<span class="text-orange-500">Food</span></span>
-        <span>• Giao đồ ăn tận nơi 15 phút</span>
+        <span class="font-serif-bistro font-bold text-[#2C1E16]">JaLong <span class="italic text-[#A63A2B]">Bistro</span></span>
+        <span>• Parisian Classic Kitchen • Giao đồ ăn tận nơi 15 phút</span>
       </div>
-      <div class="flex items-center gap-4 text-slate-400">
-        <a href="/inspector.html" target="_blank" class="hover:text-orange-400 transition">DB Live Inspector (Giảng viên)</a>
+      <div class="flex items-center gap-4 text-[#7A6E65]">
+        <a href="/inspector.html" target="_blank" class="hover:text-[#A63A2B] transition">DB Live Inspector (Giảng viên)</a>
         <span>•</span>
-        <a href="/demo-split.html" class="hover:text-orange-400 transition">Trình chiếu Chia đôi Màn hình</a>
+        <a href="/demo-split.html" class="hover:text-[#A63A2B] transition">Trình chiếu Chia đôi Màn hình</a>
       </div>
     </div>
   </footer>
@@ -890,6 +901,6 @@
   <!-- Toast Notification Stack -->
   <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
-  <script type="module" src="/js/customer-app.js?v=20261109_csgo_v4"></script>
+  <script type="module" src="/js/customer-app.js?v=20261116_vintage_bistro"></script>
 </body>
 </html>

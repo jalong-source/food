@@ -1,5 +1,6 @@
 /**
  * JalongFood • jalong.io.vn — Lecturer "DB Live Inspector" & Chaos Engineering Lab
+ * Classic Vintage / Parisian Bistro Admin (Bảng Quản Trị & Sổ Cái CSDL Cổ Điển)
  * Covers:
  *   - Panel 1: Dynamic PostgreSQL Pool Hot-Swap, Telemetry & Chaos Simulation (Outage, Latency, SSE<->WS)
  *   - Panel 2: Visual `foods` CRUD + 3NF Foreign Key `ON DELETE RESTRICT` (`SQLSTATE 23503`) Proof
@@ -94,17 +95,17 @@ const SAMPLE_FOOD_IMAGES = [
 ];
 
 const ORDER_STATUS_STYLES = {
-  Pending: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-  Preparing: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
-  Delivering: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
-  Completed: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-  Cancelled: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+  Pending: 'badge-vintage-mustard',
+  Preparing: 'badge-vintage-mustard',
+  Delivering: 'bg-[#FAF3E0] text-[#8C6200] border border-[#DFC27D] font-bold px-2 py-0.5 rounded-full',
+  Completed: 'badge-vintage-moss',
+  Cancelled: 'badge-vintage-brick',
 };
 
 const NEXT_VALID_STATUS = {
-  Pending: { status: 'Preparing', label: 'Duyệt & Nấu (Preparing)', cls: 'bg-sky-600 hover:bg-sky-500 text-white' },
-  Preparing: { status: 'Delivering', label: 'Giao Tài xế (Delivering)', cls: 'bg-indigo-600 hover:bg-indigo-500 text-white' },
-  Delivering: { status: 'Completed', label: 'Hoàn tất (Completed)', cls: 'bg-emerald-600 hover:bg-emerald-500 text-white' },
+  Pending: { status: 'Preparing', label: 'Duyệt & Nấu (Preparing)', cls: 'bg-[#B8860B] hover:bg-[#A07409] text-white shadow-sm' },
+  Preparing: { status: 'Delivering', label: 'Giao Tài xế (Delivering)', cls: 'bg-[#8C6D46] hover:bg-[#785C3A] text-white shadow-sm' },
+  Delivering: { status: 'Completed', label: 'Hoàn tất (Completed)', cls: 'bg-[#3B5249] hover:bg-[#2D4A3E] text-white shadow-sm' },
 };
 
 // Intentionally invalid transition per status so Lecturer can 1-click test Stored Procedure FSM Guard!
@@ -117,7 +118,7 @@ const INVALID_TEST_STATUS = {
 };
 
 const FALLBACK_THUMB =
-  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><rect width='120' height='120' rx='12' fill='%230f172a'/><text x='60' y='68' font-size='38' text-anchor='middle'>🍲</text><rect x='1' y='1' width='118' height='118' rx='11' fill='none' stroke='%23ff7b00' stroke-width='1.5' stroke-opacity='0.4'/></svg>";
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><rect width='120' height='120' rx='12' fill='%23231a14'/><text x='60' y='68' font-size='38' text-anchor='middle'>🍲</text><rect x='1' y='1' width='118' height='118' rx='11' fill='none' stroke='%23c5a059' stroke-width='1.5' stroke-opacity='0.6'/></svg>";
 
 /* ==========================================================================
    STATE
@@ -218,6 +219,7 @@ const dom = {
   explorerRowLimit: document.getElementById('explorerRowLimit'),
   btnRefreshExplorer: document.getElementById('btnRefreshExplorer'),
   tableTabsContainer: document.getElementById('tableTabsContainer'),
+  tableSchemaNote: document.getElementById('tableSchemaNote'),
   tableSchemaDesc: document.getElementById('tableSchemaDesc'),
   tableRowSummary: document.getElementById('tableRowSummary'),
   explorerTableHead: document.getElementById('explorerTableHead'),
@@ -258,7 +260,7 @@ const dom = {
 };
 
 /* ==========================================================================
-   HELPERS: ICONS, TOASTS & SQL SYNTAX HIGHLIGHTING
+   HELPERS: ICONS, TOASTS & SQL SYNTAX HIGHLIGHTING (VINTAGE THEME)
    ========================================================================== */
 
 function refreshIcons() {
@@ -269,20 +271,20 @@ function refreshIcons() {
 
 function showToast(title, message = '', variant = 'info') {
   const styles = {
-    success: { border: 'border-emerald-500/50', icon: 'check-circle-2', color: 'text-emerald-400' },
-    warning: { border: 'border-amber-500/50', icon: 'shield-alert', color: 'text-amber-400' },
-    error: { border: 'border-rose-500/60', icon: 'octagon-alert', color: 'text-rose-400' },
-    info: { border: 'border-indigo-500/50', icon: 'terminal', color: 'text-indigo-400' },
+    success: { border: 'border-[#52886B]', icon: 'check-circle-2', color: 'text-[#6BBF8C]' },
+    warning: { border: 'border-[#DFC27D]', icon: 'shield-alert', color: 'text-[#E5A93C]' },
+    error: { border: 'border-[#DB988F]', icon: 'octagon-alert', color: 'text-[#E07A5F]' },
+    info: { border: 'border-[#8C6D46]', icon: 'terminal', color: 'text-[#C5A059]' },
   };
   const st = styles[variant] || styles.info;
 
   const el = document.createElement('div');
-  el.className = `pointer-events-auto toast-enter bg-slate-900/95 border ${st.border} text-slate-100 rounded-2xl p-3.5 shadow-2xl flex items-start gap-3`;
+  el.className = `pointer-events-auto toast-enter vintage-toast border ${st.border} p-3.5 shadow-2xl flex items-start gap-3`;
   el.innerHTML = `
     <i data-lucide="${st.icon}" class="w-5 h-5 ${st.color} shrink-0 mt-0.5"></i>
     <div class="min-w-0 flex-1">
-      <div class="text-xs font-extrabold leading-snug">${escapeHtml(title)}</div>
-      ${message ? `<div class="text-[11px] text-slate-300 mt-1 leading-relaxed">${escapeHtml(message)}</div>` : ''}
+      <div class="text-xs font-bold font-playfair text-[#F6F1E7] leading-snug">${escapeHtml(title)}</div>
+      ${message ? `<div class="text-[11px] text-[#D8CBB8] mt-1 leading-relaxed">${escapeHtml(message)}</div>` : ''}
     </div>
   `;
   dom.toastContainer.appendChild(el);
@@ -303,14 +305,14 @@ function highlightSql(rawSql) {
       '<span class="sql-kw">$1</span>'
     )
     .replace(
-      /\b(sp_create_order|sp_update_order_status|sp_upsert_food|trg_order_status_audit|trg_foods_realtime_notify|vw_orders_summary)\b/g,
+      /\b(sp_create_order|sp_update_order_status|sp_upsert_food|trg_order_status_audit|trg_foods_realtime_notify|vw_orders_summary|vw_flash_sale_active)\b/g,
       '<span class="sql-fn">$1</span>'
     )
-    .replace(/(\$\d+)/g, '<span class="sql-num">$1</span>');
+    .replace(/(\$\d+|\b\d+\b)/g, '<span class="sql-num">$1</span>');
 }
 
 /* ==========================================================================
-   PANEL 4B: LIVE SQL & TRIGGER STREAM CONSOLE
+   PANEL 4B: LIVE SQL & TRIGGER STREAM CONSOLE (VINTAGE LEDGER STREAM)
    ========================================================================== */
 
 let logUidCounter = 0;
@@ -346,24 +348,24 @@ function recordQueryEntryToConsole(q) {
     ? `SQL ERROR ${q.error?.code ? `[${q.error.code}]` : ''}`
     : `${q.operation || 'SQL'} • ${q.durationMs ?? 0}ms`;
   const badgeClass = isErr
-    ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
-    : 'bg-sky-500/15 text-sky-300 border-sky-500/30';
+    ? 'badge-vintage-brick'
+    : 'bg-[#C5A059]/20 text-[#E0C788] border border-[#C5A059]/40 font-mono-code font-bold text-[10px] px-1.5 py-0.5 rounded';
 
   const paramsHtml =
     Array.isArray(q.params) && q.params.length > 0
-      ? `<div class="text-[11px] text-slate-400 mt-1">params: <span class="text-amber-300">${escapeHtml(JSON.stringify(q.params))}</span></div>`
+      ? `<div class="text-[11px] text-[#D8CBB8]/80 mt-1">params: <span class="text-[#E5A93C] font-mono-code">${escapeHtml(JSON.stringify(q.params))}</span></div>`
       : '';
 
   const errHtml = isErr
-    ? `<div class="text-[11px] text-rose-400 font-semibold mt-1">↳ ${escapeHtml(q.error?.message || 'Query execution error')}${q.error?.detail ? ` (${escapeHtml(q.error.detail)})` : ''}</div>`
-    : `<div class="text-[10px] text-slate-500 mt-0.5">source: ${escapeHtml(q.source || 'api')} • rows: ${q.rowCount ?? 0}</div>`;
+    ? `<div class="text-[11px] text-[#E07A5F] font-semibold mt-1">↳ ${escapeHtml(q.error?.message || 'Query execution error')}${q.error?.detail ? ` (${escapeHtml(q.error.detail)})` : ''}</div>`
+    : `<div class="text-[10px] text-[#8C6D46] mt-0.5">source: ${escapeHtml(q.source || 'api')} • rows: ${q.rowCount ?? 0}</div>`;
 
   pushConsoleLog({
     category,
     badgeText,
     badgeClass,
     bodyHtml: `
-      <div class="text-slate-100 break-words">${highlightSql(q.sql)}</div>
+      <div class="text-[#F6F1E7] break-words font-mono-code leading-relaxed">${highlightSql(q.sql)}</div>
       ${paramsHtml}
       ${errHtml}
     `,
@@ -380,10 +382,10 @@ function recordTriggerToConsole(payload, timestamp) {
   pushConsoleLog({
     category: 'trigger',
     badgeText: `PG_NOTIFY • ${tbl}.${act}`,
-    badgeClass: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+    badgeClass: 'badge-vintage-moss',
     bodyHtml: `
-      <div class="text-purple-200 font-semibold">⚡ Trigger bắn kênh <span class="sql-str">'db_realtime_events'</span> → event: <span class="sql-fn">${escapeHtml(evt)}</span></div>
-      <div class="text-[11px] text-slate-300 mt-1 break-all">${escapeHtml(jsonCompact)}</div>
+      <div class="text-[#E0C788] font-semibold">⚡ Trigger bắn kênh <span class="sql-str">'db_realtime_events'</span> → event: <span class="sql-fn">${escapeHtml(evt)}</span></div>
+      <div class="text-[11px] text-[#D8CBB8] mt-1 break-all font-mono-code">${escapeHtml(jsonCompact)}</div>
     `,
     timestamp,
   });
@@ -394,11 +396,11 @@ function recordSystemToConsole(title, detail, isError = false) {
     category: isError ? 'error' : 'system',
     badgeText: isError ? 'ALERT / CONSTRAINT' : 'REALTIME / POOL',
     badgeClass: isError
-      ? 'bg-rose-500/25 text-rose-300 border-rose-500/40'
-      : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      ? 'badge-vintage-brick'
+      : 'badge-vintage-moss',
     bodyHtml: `
-      <div class="${isError ? 'text-rose-300 font-bold' : 'text-emerald-300 font-semibold'}">${escapeHtml(title)}</div>
-      ${detail ? `<div class="text-[11px] text-slate-400 mt-0.5 break-words">${escapeHtml(detail)}</div>` : ''}
+      <div class="${isError ? 'text-[#E07A5F] font-bold' : 'text-[#6BBF8C] font-semibold'}">${escapeHtml(title)}</div>
+      ${detail ? `<div class="text-[11px] text-[#D8CBB8]/80 mt-0.5 break-words font-mono-code">${escapeHtml(detail)}</div>` : ''}
     `,
   });
 }
@@ -414,7 +416,7 @@ function renderConsoleLogs() {
 
   if (!filtered.length) {
     dom.sqlConsoleOutput.innerHTML = `
-      <div class="py-12 text-center text-slate-500 text-xs">
+      <div class="py-12 text-center text-[#8C6D46] italic text-xs">
         Đang lắng nghe câu lệnh SQL trực tiếp & tín hiệu Trigger PostgreSQL (LISTEN db_realtime_events)...
       </div>
     `;
@@ -425,20 +427,20 @@ function renderConsoleLogs() {
     .map((item) => {
       const borderCls =
         item.category === 'trigger'
-          ? 'sql-entry-trigger'
+          ? 'vintage-sql-entry-trigger'
           : item.category === 'error'
-            ? 'sql-entry-error'
+            ? 'vintage-sql-entry-error'
             : item.category === 'system'
-              ? 'sql-entry-system'
-              : 'sql-entry-query';
+              ? 'vintage-sql-entry-system'
+              : 'vintage-sql-entry-query';
 
       return `
-        <div class="sql-entry ${borderCls} rounded-r-lg pl-3 pr-2 py-2">
+        <div class="vintage-sql-entry ${borderCls}">
           <div class="flex items-center justify-between gap-2 mb-1">
-            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded border ${item.badgeClass}">
+            <span class="${item.badgeClass}">
               ${escapeHtml(item.badgeText)}
             </span>
-            <span class="text-[10px] text-slate-500">${escapeHtml(formatTimeShort(item.timestamp))}</span>
+            <span class="text-[10px] text-[#8C6D46] font-mono-code">${escapeHtml(formatTimeShort(item.timestamp))}</span>
           </div>
           ${item.bodyHtml}
         </div>
@@ -448,7 +450,7 @@ function renderConsoleLogs() {
 }
 
 /* ==========================================================================
-   PANEL 1: DB STATUS, CONNECTION POOL & CHAOS CONTROLS
+   PANEL 1: DB STATUS, CONNECTION POOL & CHAOS CONTROLS (VINTAGE BRASS & DIALS)
    ========================================================================== */
 
 function renderDbStatusPanel(status) {
@@ -472,8 +474,8 @@ function renderDbStatusPanel(status) {
 
   // Card 1: PostgreSQL State
   if (isOnline) {
-    dom.metricDbDot.className = 'w-3 h-3 rounded-full bg-emerald-500 pulse-online';
-    dom.metricDbState.className = 'text-xl font-extrabold text-emerald-400 tracking-tight';
+    dom.metricDbDot.className = 'w-3.5 h-3.5 rounded-full bg-[#3B5249] pulse-online border border-[#6BBF8C]';
+    dom.metricDbState.className = 'text-xl font-extrabold font-playfair text-[#6BBF8C] tracking-wide';
     dom.metricDbState.textContent = 'ONLINE';
     const srv = status.server || {};
     const dbText = srv.databaseName || 'jalong_food_db';
@@ -481,8 +483,8 @@ function renderDbStatusPanel(status) {
     dom.metricDbSubtext.textContent = `${dbText}${sizeText}`;
     dom.serverMetaText.textContent = `${srv.version || 'PostgreSQL'} • ${dbText}${sizeText}`;
   } else {
-    dom.metricDbDot.className = 'w-3 h-3 rounded-full bg-rose-500 pulse-offline';
-    dom.metricDbState.className = 'text-xl font-extrabold text-rose-400 tracking-tight';
+    dom.metricDbDot.className = 'w-3.5 h-3.5 rounded-full bg-[#A63A2B] pulse-offline border border-[#E07A5F]';
+    dom.metricDbState.className = 'text-xl font-extrabold font-playfair text-[#E07A5F] tracking-wide';
     dom.metricDbState.textContent = 'OFFLINE';
     dom.metricDbSubtext.textContent = status.simulatedOffline
       ? 'Đang bật chế độ Mô phỏng Ngắt DB'
@@ -496,16 +498,16 @@ function renderDbStatusPanel(status) {
       : '-- ms';
   dom.metricLatencyValue.className =
     state.artificialDelayMs >= 500
-      ? 'text-2xl font-extrabold font-mono-code text-amber-400'
-      : 'text-2xl font-extrabold font-mono-code text-sky-400';
+      ? 'text-2xl font-extrabold font-mono-code text-[#E5A93C]'
+      : 'text-2xl font-extrabold font-mono-code text-[#E0C788]';
 
   dom.metricArtificialDelayBadge.textContent = `+${state.artificialDelayMs}ms giả lập`;
   dom.metricArtificialDelayBadge.className =
     state.artificialDelayMs > 0
-      ? 'text-[11px] font-mono-code px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30'
-      : 'text-[11px] font-mono-code px-1.5 py-0.5 rounded bg-slate-800 text-slate-400';
+      ? 'text-[11px] font-mono-code px-1.5 py-0.5 rounded bg-[#FAF3E0] text-[#8C6200] border border-[#DFC27D]'
+      : 'text-[11px] font-mono-code px-1.5 py-0.5 rounded bg-[#35251C] text-[#D8CBB8] border border-[#5C4332]';
 
-  // Card 3: Pool Metrics
+  // Card 3: Pool Metrics (Brass Pressure Gauge)
   const pool = status.pool || {};
   const total = pool.totalCount ?? 0;
   const idle = pool.idleCount ?? 0;
@@ -526,10 +528,10 @@ function renderDbStatusPanel(status) {
 
   dom.rtSseCount.textContent = String(sseClients);
   dom.rtWsCount.textContent = String(wsClients);
-  dom.rtPgListenState.textContent = pgListening ? 'LISTEN ON' : 'OFF';
+  dom.rtPgListenState.textContent = pgListening ? 'ON' : 'OFF';
   dom.rtPgListenState.className = pgListening
-    ? 'text-xs font-extrabold font-mono-code text-emerald-400 leading-5'
-    : 'text-xs font-extrabold font-mono-code text-rose-400 leading-5';
+    ? 'text-xs font-extrabold font-mono-code text-[#6BBF8C] leading-5'
+    : 'text-xs font-extrabold font-mono-code text-[#E07A5F] leading-5';
 
   // Connection String Status
   if (status.maskedConnectionString) {
@@ -538,21 +540,21 @@ function renderDbStatusPanel(status) {
   if (status.isDefaultConnection) {
     dom.connSourceBadge.textContent = 'Mặc định (.env)';
     dom.connSourceBadge.className =
-      'text-[10px] font-mono-code px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+      'text-[10px] font-mono-code px-2 py-0.5 rounded bg-[#3B5249]/30 text-[#6BBF8C] border border-[#52886B]/60';
   } else {
     dom.connSourceBadge.textContent = 'Đang dùng Chuỗi Động (Custom)';
     dom.connSourceBadge.className =
-      'text-[10px] font-mono-code px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+      'text-[10px] font-mono-code px-2 py-0.5 rounded bg-[#FAF3E0] text-[#8C6200] border border-[#DFC27D]';
   }
 
-  // Outage Toggle Button Appearance
+  // Outage Toggle Button Appearance (Vintage Seal Switch)
   if (state.simulatedOffline) {
     dom.btnToggleDbOutage.className =
-      'w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 transition';
+      'w-full py-2.5 px-3 rounded-xl vintage-seal-restore-btn text-xs font-bold flex items-center justify-center gap-2';
     dom.btnToggleDbOutageLabel.textContent = 'Đang Ngắt DB — Bấm để Kết nối Lại!';
   } else {
     dom.btnToggleDbOutage.className =
-      'w-full py-2.5 px-3 rounded-xl bg-rose-600/20 hover:bg-rose-600/35 border border-rose-500/40 text-rose-300 text-xs font-bold flex items-center justify-center gap-2 transition';
+      'w-full py-2.5 px-3 rounded-xl vintage-seal-btn text-xs font-bold flex items-center justify-center gap-2';
     dom.btnToggleDbOutageLabel.textContent = 'Ngắt kết nối DB (Mô phỏng sự cố)';
   }
 
@@ -562,8 +564,8 @@ function renderDbStatusPanel(status) {
     const val = Number(btn.dataset.delay);
     btn.className =
       val === state.artificialDelayMs
-        ? 'delay-preset-btn py-1 rounded-lg text-[11px] font-mono-code font-bold bg-indigo-600 text-white transition'
-        : 'delay-preset-btn py-1 rounded-lg text-[11px] font-mono-code font-semibold bg-slate-800 text-slate-300 hover:text-white transition';
+        ? 'delay-preset-btn py-1 rounded-lg text-[11px] font-mono-code font-bold bg-[#C5A059] text-[#1F150F] transition'
+        : 'delay-preset-btn py-1 rounded-lg text-[11px] font-mono-code font-semibold bg-[#2A1E17] text-[#D8CBB8] hover:text-[#FFFDF9] transition';
   });
 
   // Table Row Counts for Panel 4A Tabs
@@ -691,7 +693,7 @@ async function handleSetDelayMs(delayMs) {
 }
 
 /* ==========================================================================
-   PANEL 2: VISUAL MENU CRUD (`foods`) & 3NF FK `23503` PROOF
+   PANEL 2: VISUAL MENU CRUD (`foods`) & 3NF FK `23503` (VINTAGE LEDGER TABLE)
    ========================================================================== */
 
 function populateFoodCategorySelectors() {
@@ -725,7 +727,7 @@ function renderFoodsCrudTable(highlightId = null) {
   if (!filtered.length) {
     dom.inspFoodsTableBody.innerHTML = `
       <tr>
-        <td colspan="7" class="py-8 text-center text-slate-500">Không có món ăn nào khớp bộ lọc.</td>
+        <td colspan="7" class="py-8 text-center text-[#8C6D46] italic">Không có món ăn nào khớp bộ lọc.</td>
       </tr>
     `;
     return;
@@ -740,40 +742,40 @@ function renderFoodsCrudTable(highlightId = null) {
 
       const refBadge =
         refCount > 0
-          ? `<span class="inline-flex items-center gap-1 text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30" title="Món này đang được tham chiếu bởi ${refCount} dòng trong bảng order_items">🔗 ${refCount} đơn (FK)</span>`
-          : `<span class="inline-flex items-center text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-slate-800 text-slate-400" title="Món chưa có đơn hàng, có thể xóa cứng">0 đơn</span>`;
+          ? `<span class="badge-vintage-mustard" title="Món này đang được tham chiếu bởi ${refCount} dòng trong bảng order_items">🔗 ${refCount} đơn (FK)</span>`
+          : `<span class="badge-vintage-parchment" title="Món chưa có đơn hàng, có thể xóa cứng">0 đơn</span>`;
 
       return `
-        <tr id="insp-food-row-${food.id}" class="hover:bg-slate-900/80 transition">
-          <td class="py-2.5 px-3 font-mono-code font-bold text-slate-400">#${food.id}</td>
+        <tr id="insp-food-row-${food.id}">
+          <td class="py-2.5 px-3 font-mono-code font-bold text-[#8C6D46]">#${food.id}</td>
           <td class="py-2.5 px-3">
             <div class="flex items-center gap-2.5">
-              <img src="${thumb}" alt="" onerror="this.onerror=null;this.src='${FALLBACK_THUMB}';" class="w-9 h-9 rounded-lg object-cover border border-slate-700 shrink-0" />
+              <img src="${thumb}" alt="" onerror="this.onerror=null;this.src='${FALLBACK_THUMB}';" class="w-9 h-9 rounded-lg object-cover border border-[#D8CBB8] shrink-0 shadow-sm" />
               <div class="min-w-0">
-                <div class="font-bold text-white truncate max-w-[210px]">${escapeHtml(food.name)}</div>
+                <div class="font-bold text-[#2C1E16] truncate max-w-[210px]">${escapeHtml(food.name)}</div>
                 <div class="mt-0.5">${refBadge}</div>
               </div>
             </div>
           </td>
           <td class="py-2.5 px-3">
-            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[11px] font-medium">
+            <span class="badge-vintage-parchment">
               ${escapeHtml(food.category_name || `Cat #${food.category_id}`)}
             </span>
           </td>
-          <td class="py-2.5 px-3 text-right font-mono-code font-bold text-orange-300 whitespace-nowrap">
+          <td class="py-2.5 px-3 text-right font-mono-code font-bold text-[#8B2500] whitespace-nowrap">
             ${formatVND(food.price)}
           </td>
           <td class="py-2.5 px-3 text-center">
-            <div class="inline-flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg px-2 py-0.5">
-              <span class="font-mono-code font-bold ${stock <= 5 ? 'text-amber-400' : 'text-emerald-400'}">${stock}</span>
-              <button type="button" data-quick-stock="${food.id}" class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition" title="Cộng thêm +10 tồn kho nhanh">+10</button>
+            <div class="inline-flex items-center gap-1.5 bg-[#FAF6F0] border border-[#D8CBB8] rounded-lg px-2 py-0.5 shadow-inner">
+              <span class="font-mono-code font-bold ${stock <= 5 ? 'text-[#8C6200]' : 'text-[#2D4A3E]'}">${stock}</span>
+              <button type="button" data-quick-stock="${food.id}" class="text-[10px] px-1.5 py-0.5 rounded bg-[#EFE8DA] hover:bg-[#C5A059] text-[#2C1E16] hover:text-[#1F150F] font-bold transition" title="Cộng thêm +10 tồn kho nhanh">+10</button>
             </div>
           </td>
           <td class="py-2.5 px-3 text-center">
             ${
               isAvail
-                ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Đang bán</span>`
-                : `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-400 border border-slate-700">Ngừng bán</span>`
+                ? `<span class="badge-vintage-moss">Đang bán</span>`
+                : `<span class="badge-vintage-brick">Ngừng bán</span>`
             }
           </td>
           <td class="py-2.5 px-3 text-right whitespace-nowrap">
@@ -781,7 +783,7 @@ function renderFoodsCrudTable(highlightId = null) {
               <button
                 type="button"
                 data-edit-food="${food.id}"
-                class="px-2.5 py-1 rounded-lg bg-indigo-600/25 hover:bg-indigo-600 border border-indigo-500/40 text-indigo-200 hover:text-white font-semibold transition"
+                class="px-2.5 py-1 rounded-lg bg-[#3A2A1E] hover:bg-[#4A3528] border border-[#5C4332] text-[#E0C788] hover:text-[#FFFDF9] text-xs font-semibold transition"
               >
                 Sửa
               </button>
@@ -791,7 +793,7 @@ function renderFoodsCrudTable(highlightId = null) {
                     <button
                       type="button"
                       data-soft-del-food="${food.id}"
-                      class="px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 font-semibold transition"
+                      class="px-2.5 py-1 rounded-lg badge-vintage-mustard text-xs font-semibold hover:brightness-95 transition"
                       title="Soft Delete (?mode=soft): Đặt is_available = false an toàn chuẩn 3NF"
                     >
                       Ngừng bán (Soft)
@@ -801,7 +803,7 @@ function renderFoodsCrudTable(highlightId = null) {
                     <button
                       type="button"
                       data-reopen-food="${food.id}"
-                      class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-500/40 text-emerald-300 font-semibold transition"
+                      class="px-2.5 py-1 rounded-lg badge-vintage-moss text-xs font-semibold hover:brightness-95 transition"
                     >
                       Mở bán lại
                     </button>
@@ -810,7 +812,7 @@ function renderFoodsCrudTable(highlightId = null) {
               <button
                 type="button"
                 data-hard-del-food="${food.id}"
-                class="px-2.5 py-1 rounded-lg bg-rose-600/20 hover:bg-rose-600 border border-rose-500/40 text-rose-300 hover:text-white font-bold transition"
+                class="px-2.5 py-1 rounded-lg badge-vintage-brick text-xs font-bold hover:brightness-95 transition"
                 title="Gọi DELETE /api/foods/:id để kiểm chứng Khóa ngoại ON DELETE RESTRICT (SQLSTATE 23503)"
               >
                 Xóa cứng (Test FK)
@@ -857,7 +859,7 @@ function openFoodModal(foodId = null) {
   const existing = foodId ? state.foods.find((f) => Number(f.id) === Number(foodId)) : null;
 
   if (existing) {
-    dom.foodModalTitle.innerHTML = `<i data-lucide="pencil" class="w-4 h-4 text-indigo-400"></i><span>Cập nhật Món #${existing.id}: ${escapeHtml(existing.name)}</span>`;
+    dom.foodModalTitle.innerHTML = `<i data-lucide="pencil" class="w-4 h-4 text-[#C5A059]"></i><span>Cập nhật Món #${existing.id}: ${escapeHtml(existing.name)}</span>`;
     dom.foodFormId.value = String(existing.id);
     dom.foodFormName.value = existing.name || '';
     dom.foodFormCategory.value = String(existing.category_id);
@@ -867,7 +869,7 @@ function openFoodModal(foodId = null) {
     dom.foodFormImage.value = existing.image_url || '';
     dom.foodFormDesc.value = existing.description || '';
   } else {
-    dom.foodModalTitle.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4 text-orange-400"></i><span>Thêm Món Ăn Mới (CALL sp_upsert_food)</span>`;
+    dom.foodModalTitle.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4 text-[#C5A059]"></i><span>Thêm Món Ăn Mới (CALL sp_upsert_food)</span>`;
     dom.foodFormId.value = '';
     dom.foodFormName.value = '';
     if (state.categories[0]) {
@@ -1037,7 +1039,7 @@ function renderOrdersDispatchList(highlightOrderId = null) {
 
   if (!filtered.length) {
     dom.inspOrdersList.innerHTML = `
-      <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-8 text-center text-xs text-slate-500">
+      <div class="vintage-order-dossier p-8 text-center text-xs text-[#8C6D46] italic">
         Không có đơn hàng nào khớp trạng thái đang chọn.
       </div>
     `;
@@ -1059,33 +1061,33 @@ function renderOrdersDispatchList(highlightOrderId = null) {
       return `
         <article
           id="insp-order-card-${order.id}"
-          class="bg-slate-950/85 border ${isSelectedAudit ? 'border-purple-500/70 ring-1 ring-purple-500/40' : 'border-slate-800'} rounded-xl p-4 space-y-3 transition"
+          class="vintage-order-dossier ${isSelectedAudit ? 'audit-selected' : ''} space-y-3"
         >
           <div class="flex flex-wrap items-start justify-between gap-2">
             <div>
               <div class="flex flex-wrap items-center gap-2">
-                <span class="font-mono-code font-extrabold text-sm text-white">#ORD-${order.id}</span>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${badgeCls}">
+                <span class="font-mono-code font-extrabold text-sm text-[#2C1E16]">#ORD-${order.id}</span>
+                <span class="text-[11px] ${badgeCls}">
                   ${escapeHtml(order.status)}
                 </span>
-                <span class="text-xs font-semibold text-slate-300">
+                <span class="text-xs font-bold text-[#4A3528]">
                   👤 ${escapeHtml(order.customer_name || `User #${order.user_id}`)}
                 </span>
               </div>
-              <p class="text-[11px] text-slate-400 mt-1">
+              <p class="text-[11px] text-[#6E533F] mt-1">
                 📍 ${escapeHtml(order.delivery_address || '---')} • 🕒 ${escapeHtml(formatDateTime(order.created_at))}
               </p>
-              <p class="text-[11px] text-orange-300/90 mt-0.5 line-clamp-1">
+              <p class="text-[11px] text-[#8B2500] font-medium mt-0.5 line-clamp-1">
                 🍜 ${escapeHtml(itemsSummary)}
               </p>
             </div>
 
             <div class="text-right">
-              <div class="text-sm font-extrabold font-mono-code text-orange-400">${formatVND(order.total_amount)}</div>
+              <div class="text-base font-extrabold font-mono-code text-[#8B2500]">${formatVND(order.total_amount)}</div>
               <button
                 type="button"
                 data-filter-audit="${order.id}"
-                class="mt-1 text-[11px] text-purple-400 hover:text-purple-300 underline font-medium"
+                class="mt-1 text-[11px] text-[#8C6D46] hover:text-[#5C4332] underline font-semibold"
               >
                 Soi lịch sử Trigger (${Array.isArray(order.history) ? order.history.length : '?'})
               </button>
@@ -1093,7 +1095,7 @@ function renderOrdersDispatchList(highlightOrderId = null) {
           </div>
 
           <!-- 1-Touch FSM Transition & Proof Controls -->
-          <div class="pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
+          <div class="pt-2.5 border-t border-[#D8CBB8] flex flex-wrap items-center justify-between gap-2">
             <div class="flex flex-wrap items-center gap-1.5">
               ${
                 nextStep
@@ -1107,7 +1109,7 @@ function renderOrdersDispatchList(highlightOrderId = null) {
                       ⚡ ${escapeHtml(nextStep.label)}
                     </button>
                   `
-                  : `<span class="text-[11px] text-slate-500 italic">Đơn đã kết thúc vòng đời FSM</span>`
+                  : `<span class="text-[11px] text-[#8C6D46] italic">Đơn đã hoàn tất vòng đời FSM</span>`
               }
 
               ${
@@ -1116,7 +1118,7 @@ function renderOrdersDispatchList(highlightOrderId = null) {
                     <button
                       type="button"
                       data-order-cancel="${order.id}"
-                      class="px-2.5 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/30 text-rose-300 text-xs font-semibold transition"
+                      class="px-2.5 py-1.5 rounded-lg badge-vintage-brick text-xs font-semibold hover:brightness-95 transition"
                       title="Hủy đơn hàng (tự động hoàn lại tồn kho nếu đang ở Pending hoặc Preparing)"
                     >
                       Hủy đơn
@@ -1131,7 +1133,7 @@ function renderOrdersDispatchList(highlightOrderId = null) {
                 type="button"
                 data-order-invalid-fsm="${order.id}"
                 data-invalid-target="${invalidTarget}"
-                class="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-[11px] font-semibold transition"
+                class="px-2.5 py-1 rounded-lg border border-[#DFC27D] bg-[#FAF3E0] text-[#8C6200] text-[11px] font-semibold hover:bg-[#F2E6C4] transition"
                 title="Cố tình chuyển sai quy trình (${order.status} -> ${invalidTarget}) để kiểm chứng Stored Procedure sp_update_order_status chặn lỗi P0001!"
               >
                 Test Sai Quy trình (${order.status}→${invalidTarget})
@@ -1140,7 +1142,7 @@ function renderOrdersDispatchList(highlightOrderId = null) {
               <button
                 type="button"
                 data-order-cascade-del="${order.id}"
-                class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-rose-700 border border-slate-700 text-slate-300 hover:text-white text-[11px] font-semibold transition"
+                class="px-2.5 py-1 rounded-lg border border-[#DB988F] bg-[#FBECEB] text-[#8B2500] hover:bg-[#A63A2B] hover:text-[#FFFDF9] text-[11px] font-semibold transition"
                 title="Xóa đơn hàng để chứng minh ON DELETE CASCADE tự xóa sạch order_items & order_status_history"
               >
                 Xóa (CASCADE)
@@ -1284,7 +1286,7 @@ function renderAuditHistoryTable(flashTopRow = false) {
   if (!rows.length) {
     dom.inspAuditHistoryBody.innerHTML = `
       <tr>
-        <td colspan="5" class="py-8 text-center text-slate-500">Chưa có dòng kiểm toán trạng thái nào.</td>
+        <td colspan="5" class="py-8 text-center text-[#8C6D46] italic">Chưa có dòng kiểm toán trạng thái nào.</td>
       </tr>
     `;
     return;
@@ -1300,19 +1302,19 @@ function renderAuditHistoryTable(flashTopRow = false) {
       const flashCls = flashTopRow && idx === 0 ? 'live-flash-row' : '';
 
       return `
-        <tr class="${flashCls} hover:bg-slate-900/70 transition">
-          <td class="py-2 px-2 font-mono-code text-slate-500">#${h.id}</td>
-          <td class="py-2 px-2 font-mono-code font-bold text-white">#${h.order_id}</td>
+        <tr class="${flashCls}">
+          <td class="py-2 px-2 font-mono-code text-[#8C6D46]">#${h.id}</td>
+          <td class="py-2 px-2 font-mono-code font-bold text-[#2C1E16]">#${h.order_id}</td>
           <td class="py-2 px-2 whitespace-nowrap">
-            <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono-code text-[10px]">${escapeHtml(h.old_status || 'NULL')}</span>
-            <span class="text-slate-500 mx-0.5">→</span>
-            <span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono-code font-bold text-[10px]">${escapeHtml(h.new_status)}</span>
+            <span class="badge-vintage-parchment font-mono-code">${escapeHtml(h.old_status || 'NULL')}</span>
+            <span class="text-[#8C6D46] mx-0.5 font-bold">→</span>
+            <span class="badge-vintage-moss font-mono-code font-bold">${escapeHtml(h.new_status)}</span>
           </td>
           <td class="py-2 px-2">
-            <div class="text-[11px] font-semibold text-slate-200">${escapeHtml(actor)}</div>
-            ${h.note ? `<div class="text-[10px] text-slate-400 truncate max-w-[180px]" title="${escapeHtml(h.note)}">"${escapeHtml(h.note)}"</div>` : ''}
+            <div class="text-[11px] font-bold text-[#2C1E16]">${escapeHtml(actor)}</div>
+            ${h.note ? `<div class="text-[10px] text-[#6E533F] truncate max-w-[180px]" title="${escapeHtml(h.note)}">"${escapeHtml(h.note)}"</div>` : ''}
           </td>
-          <td class="py-2 px-2 text-right font-mono-code text-[10px] text-slate-400 whitespace-nowrap">
+          <td class="py-2 px-2 text-right font-mono-code text-[10px] text-[#8C6D46] whitespace-nowrap">
             ${escapeHtml(formatTimeShort(h.changed_at))}
           </td>
         </tr>
@@ -1322,7 +1324,7 @@ function renderAuditHistoryTable(flashTopRow = false) {
 }
 
 /* ==========================================================================
-   PANEL 4A: LIVE 6-TABLE 3NF + VIEW EXPLORER
+   PANEL 4A: LIVE 6-TABLE 3NF + VIEW EXPLORER (VINTAGE LEDGER TABLES)
    ========================================================================== */
 
 function renderExplorerTabs() {
@@ -1336,17 +1338,17 @@ function renderExplorerTabs() {
       countVal !== undefined && countVal !== null ? `${countVal}` : '•';
 
     const cls = isActive
-      ? 'bg-sky-600 text-white border-sky-500 shadow-sm'
-      : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800';
+      ? 'bg-[#C5A059] text-[#1F150F] border-[#E0C788] shadow-sm font-bold'
+      : 'bg-[#2E2018] hover:bg-[#3D2C20] text-[#D8CBB8] border-[#4D382B]';
 
     return `
       <button
         type="button"
         data-explorer-tab="${rel.name}"
-        class="px-3 py-1.5 rounded-xl border text-xs font-mono-code font-bold flex items-center gap-1.5 transition ${cls}"
+        class="px-3 py-1.5 rounded-xl border text-xs font-mono-code flex items-center gap-1.5 transition ${cls}"
       >
         <span>${escapeHtml(rel.label)}</span>
-        <span class="px-1.5 py-0.2 rounded-full text-[10px] ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-sky-300'}">${countBadge}</span>
+        <span class="px-1.5 py-0.2 rounded-full text-[10px] ${isActive ? 'bg-[#1F150F]/20 text-[#1F150F]' : 'bg-[#17100B] text-[#C5A059]'}">${countBadge}</span>
       </button>
     `;
   }).join('');
@@ -1362,21 +1364,21 @@ function renderExplorerTabs() {
 
 function formatCellValue(colName, val) {
   if (val === null || val === undefined) {
-    return `<span class="text-slate-600 italic">NULL</span>`;
+    return `<span class="text-[#8C6D46] italic">NULL</span>`;
   }
   if (typeof val === 'boolean') {
     return val
-      ? `<span class="text-emerald-400 font-bold">TRUE</span>`
-      : `<span class="text-rose-400 font-bold">FALSE</span>`;
+      ? `<span class="text-[#2D4A3E] font-bold">TRUE</span>`
+      : `<span class="text-[#8B2500] font-bold">FALSE</span>`;
   }
   if (colName.endsWith('_at') || colName === 'server_time') {
-    return `<span class="text-slate-400 whitespace-nowrap">${escapeHtml(formatDateTime(val))}</span>`;
+    return `<span class="text-[#5C4332] whitespace-nowrap">${escapeHtml(formatDateTime(val))}</span>`;
   }
   if (colName === 'price' || colName === 'unit_price' || colName === 'total_amount') {
-    return `<span class="text-orange-300 font-semibold whitespace-nowrap">${formatVND(val)}</span>`;
+    return `<span class="text-[#8B2500] font-bold whitespace-nowrap">${formatVND(val)}</span>`;
   }
   if (typeof val === 'object') {
-    return `<span class="text-amber-300">${escapeHtml(JSON.stringify(val))}</span>`;
+    return `<span class="text-[#8C6200] font-mono-code">${escapeHtml(JSON.stringify(val))}</span>`;
   }
   const str = String(val);
   if (str.length > 58) {
@@ -1408,22 +1410,22 @@ async function loadExplorerTable() {
       : '';
 
     if (!data.rows.length) {
-      dom.explorerTableBody.innerHTML = `<tr><td colspan="${Math.max(1, cols.length)}" class="p-6 text-center text-slate-500">Bảng hiện chưa có bản ghi nào (0 rows).</td></tr>`;
+      dom.explorerTableBody.innerHTML = `<tr><td colspan="${Math.max(1, cols.length)}" class="p-6 text-center text-[#8C6D46] italic">Bảng hiện chưa có bản ghi nào (0 rows).</td></tr>`;
       return;
     }
 
     dom.explorerTableBody.innerHTML = data.rows
       .map(
         (row) =>
-          `<tr class="hover:bg-slate-900/90 transition">${cols
-            .map((col) => `<td class="py-2 px-3 align-top">${formatCellValue(col, row[col])}</td>`)
+          `<tr>${cols
+            .map((col) => `<td class="py-2 px-3 align-top font-mono-code">${formatCellValue(col, row[col])}</td>`)
             .join('')}</tr>`
       )
       .join('');
   } catch (err) {
     dom.explorerTableBody.innerHTML = `
       <tr>
-        <td colspan="10" class="p-6 text-center text-rose-400">
+        <td colspan="10" class="p-6 text-center text-[#E07A5F]">
           Không thể truy vấn bảng "${escapeHtml(state.activeExplorerTable)}": ${escapeHtml(err?.message || 'DB Offline')}
         </td>
       </tr>
@@ -1515,7 +1517,8 @@ function initRealtimeInspectorStream() {
     const data = envelope?.data || envelope;
     recordSystemToConsole(
       `Vi phạm Ràng buộc Khóa ngoại 3NF [SQLSTATE ${data?.sqlState || '23503'}]`,
-      data?.message
+      data?.message,
+      true
     );
   });
 
@@ -1663,8 +1666,8 @@ function bindInspectorEvents() {
     state.consolePaused = !state.consolePaused;
     dom.btnPauseConsole.textContent = state.consolePaused ? 'Tiếp tục' : 'Tạm dừng';
     dom.btnPauseConsole.className = state.consolePaused
-      ? 'px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-[11px] font-extrabold transition'
-      : 'px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-slate-300 transition';
+      ? 'px-2.5 py-1 rounded-lg bg-[#C5A059] text-[#1F150F] text-[11px] font-extrabold transition'
+      : 'px-2.5 py-1 rounded-lg bg-[#35251C] hover:bg-[#4A3528] text-[11px] font-semibold text-[#E2D9CC] border border-[#5C4332] transition';
     if (!state.consolePaused) {
       renderConsoleLogs();
     }

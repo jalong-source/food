@@ -1,7 +1,7 @@
 /**
- * JaLong CyberFood • jalong.io.vn
+ * JaLong Bistro • Parisian Classic Kitchen
  * Customer Ordering & Real-time Live Experience
- * Audio Synthesizer • Neon Confetti • Pure Customer-Facing Interface
+ * Classic Parisian Bistro / Vintage Paper Menu & Guest Check
  */
 
 import {
@@ -56,23 +56,23 @@ const ORDER_STEPS = [
 const STATUS_META = {
   Pending: {
     label: 'Chờ xác nhận',
-    badgeClass: 'bg-amber-500/20 text-amber-300 border border-amber-500/40',
+    badgeClass: 'stamp-badge stamp-pending',
   },
   Preparing: {
     label: 'Bếp đang nấu',
-    badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-500/40',
+    badgeClass: 'stamp-badge stamp-preparing',
   },
   Delivering: {
     label: 'Tài xế đang giao',
-    badgeClass: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40',
+    badgeClass: 'stamp-badge stamp-delivering',
   },
   Completed: {
     label: 'Đã giao thành công',
-    badgeClass: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
+    badgeClass: 'stamp-badge stamp-completed',
   },
   Cancelled: {
     label: 'Đã hủy đơn',
-    badgeClass: 'bg-rose-500/20 text-rose-300 border border-rose-500/40',
+    badgeClass: 'stamp-badge stamp-cancelled',
   },
 };
 
@@ -273,7 +273,7 @@ function triggerNeonConfetti() {
   canvas.height = window.innerHeight;
 
   const particles = [];
-  const colors = ['#00f0ff', '#ff7b00', '#f72585', '#ffb703', '#00ff88', '#ffffff'];
+  const colors = ['#D4AF37', '#C5A059', '#A63A2B', '#4A7C59', '#FAF6EE', '#E07A5F'];
 
   for (let i = 0; i < 90; i++) {
     particles.push({
@@ -441,39 +441,43 @@ function showToast(title, message = '', variant = 'info') {
 
   const palette = {
     success: {
-      border: 'border-emerald-500/40',
-      bg: 'bg-slate-900/95',
+      border: 'border-[#4A7C59]',
+      bg: 'bg-[#FFFDF9]',
+      text: 'text-[#2C1E16]',
       icon: 'check-circle-2',
-      iconColor: 'text-emerald-400',
+      iconColor: 'text-[#4A7C59]',
     },
     warning: {
-      border: 'border-amber-500/40',
-      bg: 'bg-slate-900/95',
+      border: 'border-[#C5A059]',
+      bg: 'bg-[#FFFDF9]',
+      text: 'text-[#2C1E16]',
       icon: 'alert-triangle',
-      iconColor: 'text-amber-400',
+      iconColor: 'text-[#8C6200]',
     },
     error: {
-      border: 'border-rose-500/40',
-      bg: 'bg-slate-900/95',
+      border: 'border-[#A63A2B]',
+      bg: 'bg-[#FFFDF9]',
+      text: 'text-[#2C1E16]',
       icon: 'alert-octagon',
-      iconColor: 'text-rose-400',
+      iconColor: 'text-[#A63A2B]',
     },
     info: {
-      border: 'border-orange-500/40',
-      bg: 'bg-slate-900/95',
+      border: 'border-[#D8CBB8]',
+      bg: 'bg-[#FFFDF9]',
+      text: 'text-[#2C1E16]',
       icon: 'bell-ring',
-      iconColor: 'text-orange-400',
+      iconColor: 'text-[#A63A2B]',
     },
   };
 
   const theme = palette[variant] || palette.info;
   const toast = document.createElement('div');
-  toast.className = `pointer-events-auto toast-enter ${theme.bg} text-white border ${theme.border} rounded-2xl p-3.5 shadow-2xl flex items-start gap-3 backdrop-blur-md`;
+  toast.className = `pointer-events-auto toast-enter ${theme.bg} text-[#2C1E16] border ${theme.border} rounded-lg p-3.5 shadow-md flex items-start gap-3 backdrop-blur-md vintage-hard-shadow-sm`;
   toast.innerHTML = `
     <i data-lucide="${theme.icon}" class="w-5 h-5 ${theme.iconColor} shrink-0 mt-0.5"></i>
     <div class="flex-1 min-w-0">
-      <div class="text-xs font-bold leading-snug text-white">${escapeHtml(title)}</div>
-      ${message ? `<div class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">${escapeHtml(message)}</div>` : ''}
+      <div class="text-xs font-bold leading-snug font-serif text-[#2C1E16]">${escapeHtml(title)}</div>
+      ${message ? `<div class="text-[11px] text-[#5C4332] mt-0.5 leading-relaxed font-serif italic">${escapeHtml(message)}</div>` : ''}
     </div>
   `;
 
@@ -508,13 +512,13 @@ function applyDbStatusUI({ connected, latencyMs, lastError, code }) {
     if (dom.dbEmergencyBanner) dom.dbEmergencyBanner.classList.add('hidden');
     if (dom.dbStatusBadge) {
       dom.dbStatusBadge.className =
-        'flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-emerald-500/30 text-emerald-300 text-xs font-semibold shadow-inner';
+        'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#EAEFEA] border border-[#8BA89B] text-[#2D4A3E] text-xs font-bold shadow-2xs';
     }
-    if (dom.dbStatusDot) dom.dbStatusDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 pulse-online';
+    if (dom.dbStatusDot) dom.dbStatusDot.className = 'w-2 h-2 rounded-full bg-[#4A7C59] pulse-moss';
     if (dom.dbStatusText) dom.dbStatusText.textContent = 'Máy chủ Trực tuyến';
     if (dom.dbLatencyBadge) {
       dom.dbLatencyBadge.className =
-        'font-mono-code text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800/50';
+        'font-mono-code text-[10px] px-1.5 py-0.5 rounded bg-[#D3E0D6] text-[#2D4A3E] font-bold';
       dom.dbLatencyBadge.textContent =
         latencyMs !== null && latencyMs !== undefined ? `${Math.round(Number(latencyMs))}ms` : 'OK';
     }
@@ -522,7 +526,7 @@ function applyDbStatusUI({ connected, latencyMs, lastError, code }) {
     if (!wasOnline) {
       showToast(
         'Hệ thống đã kết nối trở lại!',
-        'Bạn có thể tiếp tục chọn món và theo dõi đơn hàng bình thường.',
+        'Quý khách có thể tiếp tục chọn món và theo dõi đơn hàng bình thường.',
         'success'
       );
       loadAllInitialData({ silent: true });
@@ -537,13 +541,13 @@ function applyDbStatusUI({ connected, latencyMs, lastError, code }) {
 
     if (dom.dbStatusBadge) {
       dom.dbStatusBadge.className =
-        'flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-950/80 border border-rose-600/50 text-rose-300 text-xs font-bold';
+        'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FEE2E2] border border-[#DC2626] text-[#991B1B] text-xs font-bold';
     }
-    if (dom.dbStatusDot) dom.dbStatusDot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500 pulse-offline';
+    if (dom.dbStatusDot) dom.dbStatusDot.className = 'w-2 h-2 rounded-full bg-[#DC2626] pulse-crimson';
     if (dom.dbStatusText) dom.dbStatusText.textContent = 'Đang kết nối lại';
     if (dom.dbLatencyBadge) {
       dom.dbLatencyBadge.className =
-        'font-mono-code text-[10px] px-1.5 py-0.5 rounded bg-rose-900/80 text-rose-300';
+        'font-mono-code text-[10px] px-1.5 py-0.5 rounded bg-[#FCA5A5] text-[#7F1D1D] font-bold';
       dom.dbLatencyBadge.textContent = 'BUSY';
     }
 
@@ -704,56 +708,56 @@ const CSGO_RARITIES = {
   milspec: {
     key: 'milspec',
     name: 'Hạt dẻ',
-    color: '#38bdf8',
-    badgeClass: 'bg-sky-950 text-sky-400 border border-sky-800/80',
-    barColor: '#38bdf8',
-    glowColor: 'rgba(56, 189, 248, 0.4)',
-    cardBg: 'linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(56, 189, 248, 0.12) 100%)',
-    borderColor: 'rgba(56, 189, 248, 0.5)',
-    title: 'HẠT DẺ (TIẾT KIỆM)',
+    color: '#2D4A3E',
+    badgeClass: 'bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8]',
+    barColor: '#52886B',
+    glowColor: 'rgba(82, 136, 107, 0.4)',
+    cardBg: '#FFFDF9',
+    borderColor: '#D8CBB8',
+    title: 'HẠT DẺ (BÌNH DÂN)',
   },
   restricted: {
     key: 'restricted',
     name: 'Chuẩn vị',
-    color: '#a855f7',
-    badgeClass: 'bg-purple-950 text-purple-300 border border-purple-800/80',
-    barColor: '#a855f7',
-    glowColor: 'rgba(168, 85, 247, 0.4)',
-    cardBg: 'linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(168, 85, 247, 0.14) 100%)',
-    borderColor: 'rgba(168, 85, 247, 0.5)',
-    title: 'CHUẨN VỊ (ĐẬM ĐÀ)',
+    color: '#1E3A8A',
+    badgeClass: 'bg-[#FAF6EE] text-[#1E3A8A] border border-[#93C5FD]',
+    barColor: '#3B82F6',
+    glowColor: 'rgba(59, 130, 246, 0.4)',
+    cardBg: '#FFFDF9',
+    borderColor: '#93C5FD',
+    title: 'CHUẨN VỊ (GIA TRUYỀN)',
   },
   classified: {
     key: 'classified',
     name: 'No nê',
-    color: '#ec4899',
-    badgeClass: 'bg-pink-950 text-pink-300 border border-pink-800/80',
-    barColor: '#ec4899',
-    glowColor: 'rgba(236, 72, 153, 0.45)',
-    cardBg: 'linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(236, 72, 153, 0.16) 100%)',
-    borderColor: 'rgba(236, 72, 153, 0.6)',
-    title: 'NO NÊ (THƠM NGON)',
+    color: '#6B21A8',
+    badgeClass: 'bg-[#FAF6EE] text-[#6B21A8] border border-[#D8B4FE]',
+    barColor: '#9333EA',
+    glowColor: 'rgba(147, 51, 234, 0.4)',
+    cardBg: '#FFFDF9',
+    borderColor: '#D8B4FE',
+    title: 'NO NÊ (THỊNH SOẠN)',
   },
   covert: {
     key: 'covert',
     name: 'Thượng hạng',
-    color: '#f43f5e',
-    badgeClass: 'bg-rose-950 text-rose-300 border border-rose-800/80',
-    barColor: '#f43f5e',
-    glowColor: 'rgba(244, 63, 94, 0.55)',
-    cardBg: 'linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(244, 63, 94, 0.2) 100%)',
-    borderColor: 'rgba(244, 63, 94, 0.7)',
-    title: 'THƯỢNG HẠNG (CAO CẤP)',
+    color: '#A63A2B',
+    badgeClass: 'bg-[#FAF6EE] text-[#A63A2B] border border-[#FCA5A5]',
+    barColor: '#A63A2B',
+    glowColor: 'rgba(166, 58, 43, 0.4)',
+    cardBg: '#FFFDF9',
+    borderColor: '#FCA5A5',
+    title: 'THƯỢNG HẠNG (ĐẶC SẢN)',
   },
   special_rare: {
     key: 'special_rare',
     name: '★ Món Bếp Trưởng VIP ★',
-    color: '#fbbf24',
-    badgeClass: 'bg-amber-950 text-amber-300 border border-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.5)] font-black',
-    barColor: '#fbbf24',
-    glowColor: 'rgba(251, 191, 36, 0.75)',
-    cardBg: 'linear-gradient(180deg, rgba(25, 20, 10, 0.95) 0%, rgba(251, 191, 36, 0.25) 100%)',
-    borderColor: '#fbbf24',
+    color: '#8C6200',
+    badgeClass: 'bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] font-bold',
+    barColor: '#D4AF37',
+    glowColor: 'rgba(212, 175, 55, 0.6)',
+    cardBg: '#FAF6EE',
+    borderColor: '#C5A059',
     title: '★ MÓN BẾP TRƯỞNG VIP ★',
   },
 };
@@ -841,14 +845,14 @@ function buildRouletteStrip(designatedWinner = null) {
       return `
         <div
           data-strip-index="${idx}"
-          class="roulette-card shrink-0 flex flex-col justify-between rounded-xl overflow-hidden select-none border border-slate-800 transition-all duration-300 relative group"
-          style="width: 160px; height: 172px; margin-right: 8px; background: ${rarity.cardBg}; border-bottom: 4px solid ${rarity.barColor};"
+          class="roulette-card shrink-0 flex flex-col justify-between rounded-lg overflow-hidden select-none border border-[#D8CBB8] transition-all duration-300 relative group bg-[#FFFDF9]"
+          style="width: 160px; height: 172px; margin-right: 8px; border-bottom: 4px solid ${rarity.barColor}; box-shadow: 2px 2px 0px #2C1E16;"
         >
           <div class="px-2 pt-2 flex items-center justify-between">
-            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${rarity.badgeClass} truncate max-w-[95px]">
+            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${rarity.badgeClass} truncate max-w-[95px] font-serif">
               ${rarity.name}
             </span>
-            <span class="text-[10px] font-mono-code font-bold text-orange-300">
+            <span class="text-[10px] font-mono-code font-bold text-[#A63A2B]">
               ${formatVND(food.price)}
             </span>
           </div>
@@ -857,22 +861,22 @@ function buildRouletteStrip(designatedWinner = null) {
             <img
               src="${escapeHtml(img)}"
               alt="${escapeHtml(food.name)}"
-              class="max-h-20 max-w-full object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform"
+              class="max-h-20 max-w-full object-contain filter sepia-[8%] drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group-hover:scale-105 transition-transform"
               onerror="this.src='${FALLBACK_FOOD_IMG}'"
               loading="lazy"
             />
           </div>
 
-          <div class="px-2 pb-2 bg-slate-950/70 border-t border-slate-800/50">
-            <span class="text-[9px] text-slate-400 font-extrabold truncate block uppercase tracking-wider">
+          <div class="px-2 pb-2 bg-[#FAF6EE] border-t border-[#D8CBB8]">
+            <span class="text-[9px] text-[#7A6E65] font-bold truncate block uppercase tracking-wider font-serif">
               ${escapeHtml(food.category_name || 'Món ngon')}
             </span>
-            <h5 class="text-[11px] font-extrabold text-white truncate leading-tight mt-0.5" title="${escapeHtml(food.name)}">
+            <h5 class="text-[11px] font-bold text-[#2C1E16] truncate leading-tight mt-0.5 font-serif" title="${escapeHtml(food.name)}">
               ${escapeHtml(food.name)}
             </h5>
           </div>
 
-          <div class="h-1 w-full" style="background: ${rarity.barColor}; box-shadow: 0 0 8px ${rarity.glowColor};"></div>
+          <div class="h-1 w-full" style="background: ${rarity.barColor};"></div>
         </div>
       `;
     })
@@ -954,7 +958,7 @@ function spinRoulette() {
 
     const winnerCard = dom.rouletteStrip.querySelector(`[data-strip-index="${WIN_INDEX}"]`);
     if (winnerCard) {
-      winnerCard.classList.add('ring-4', 'ring-amber-400', 'shadow-[0_0_25px_rgba(251,191,36,0.9)]', 'scale-105', 'z-20');
+      winnerCard.classList.add('ring-3', 'ring-[#C5A059]', 'shadow-[0_0_20px_rgba(197,160,89,0.9)]', 'scale-105', 'z-20');
     }
 
     const rarityKey = getFoodRarity(winner);
@@ -972,8 +976,8 @@ function spinRoulette() {
         dom.btnSpinRoulette.disabled = false;
         dom.btnSpinRoulette.classList.remove('opacity-50', 'cursor-not-allowed');
         dom.btnSpinRoulette.innerHTML = `
-          <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
-          <span>QUAY MÓN NGAY ⚡</span>
+          <i data-lucide="sparkles" class="w-4 h-4 text-[#D4AF37]"></i>
+          <span>QUAY MÓN NGAY ✦</span>
         `;
         refreshIcons();
       }
@@ -993,7 +997,7 @@ function openRouletteWinnerModal(winner) {
   }
   if (dom.rouletteWinnerCard) {
     dom.rouletteWinnerCard.style.borderColor = rarity.barColor;
-    dom.rouletteWinnerCard.style.boxShadow = `0 0 50px ${rarity.glowColor}`;
+    dom.rouletteWinnerCard.style.boxShadow = `0 4px 20px ${rarity.glowColor}`;
   }
   if (dom.winnerFoodImg) {
     dom.winnerFoodImg.src = winner.image_url || FALLBACK_FOOD_IMG;
@@ -1064,11 +1068,11 @@ function bindRouletteEvents() {
         if (state.roulette.isSpinning) return;
         const budget = btn.dataset.rouletteBudget;
         dom.rouletteBudgetPills.querySelectorAll('[data-roulette-budget]').forEach((b) => {
-          b.classList.remove('active', 'bg-gradient-to-r', 'from-orange-500', 'to-rose-500', 'text-white', 'shadow-md', 'shadow-orange-500/30', 'font-extrabold');
-          b.classList.add('text-slate-300', 'font-bold');
+          b.classList.remove('active', 'bg-[#A63A2B]', 'text-[#FFFDF9]', 'shadow-sm', 'font-bold');
+          b.classList.add('text-[#D8CBB8]', 'font-bold');
         });
-        btn.classList.add('active', 'bg-gradient-to-r', 'from-orange-500', 'to-rose-500', 'text-white', 'shadow-md', 'shadow-orange-500/30', 'font-extrabold');
-        btn.classList.remove('text-slate-300');
+        btn.classList.add('active', 'bg-[#A63A2B]', 'text-[#FFFDF9]', 'shadow-sm', 'font-bold');
+        btn.classList.remove('text-[#D8CBB8]');
 
         playChimeSound(600, 900);
         await loadRouletteCandidates(budget);
@@ -1154,16 +1158,16 @@ function renderCategoriesPills() {
     .map((pill) => {
       const active = String(state.selectedCategoryId) === String(pill.id);
       const cls = active
-        ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white border-transparent shadow-lg shadow-orange-500/30'
-        : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-slate-700/80';
+        ? 'bg-[#A63A2B] text-[#FFFDF9] border-[#8C2D19] shadow-xs'
+        : 'bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] border-[#D8CBB8] shadow-2xs';
       return `
         <button
           type="button"
           data-cat-id="${escapeHtml(pill.id)}"
-          class="cat-pill-btn shrink-0 px-4 py-2 rounded-2xl border text-xs font-bold flex items-center gap-2 transition duration-200 cursor-pointer ${cls}"
+          class="cat-pill-btn shrink-0 px-3.5 py-1.5 rounded-md border text-xs font-bold font-serif flex items-center gap-2 transition duration-200 cursor-pointer ${cls}"
         >
           <span>${escapeHtml(pill.name)}</span>
-          <span class="px-2 py-0.5 rounded-full text-[10px] ${active ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'}">
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-mono-code ${active ? 'bg-white/25 text-white' : 'bg-[#FAF6EE] text-[#7A6E65]'}">
             ${pill.count}
           </span>
         </button>
@@ -1187,12 +1191,12 @@ function renderFoodsGrid(highlightFoodId = null) {
 
   if (!filtered.length) {
     dom.foodsGrid.innerHTML = `
-      <div class="col-span-full cyber-card rounded-3xl p-10 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-slate-900 text-slate-500 flex items-center justify-center mx-auto mb-3">
+      <div class="col-span-full bg-[#FFFDF9] rounded-xl p-10 text-center border border-[#D8CBB8] shadow-2xs">
+        <div class="w-14 h-14 rounded-lg bg-[#FAF6EE] text-[#7A6E65] border border-[#D8CBB8] flex items-center justify-center mx-auto mb-3">
           <i data-lucide="search-x" class="w-7 h-7"></i>
         </div>
-        <p class="text-sm font-bold text-slate-200">Không tìm thấy món ăn phù hợp</p>
-        <p class="text-xs text-slate-400 mt-1">Thử đổi từ khóa tìm kiếm hoặc chọn danh mục khác nhé.</p>
+        <p class="text-sm font-bold text-[#2C1E16] font-serif">Không tìm thấy món ăn phù hợp</p>
+        <p class="text-xs text-[#7A6E65] mt-1 font-serif italic">Thử đổi từ khóa tìm kiếm hoặc chọn danh mục khác nhé.</p>
       </div>
     `;
     refreshIcons();
@@ -1214,48 +1218,47 @@ function renderFoodsGrid(highlightFoodId = null) {
       return `
         <article
           id="food-card-${food.id}"
-          class="cyber-card rounded-3xl overflow-hidden flex flex-col justify-between group transition duration-300"
+          class="food-card-vintage overflow-hidden flex flex-col justify-between group transition duration-300"
         >
           <div>
             <!-- Food Image Container -->
-            <div class="relative h-44 w-full overflow-hidden bg-slate-900">
+            <div class="relative h-44 w-full overflow-hidden bg-[#FAF6EE] border-b border-[#D8CBB8]">
               <img
                 src="${escapeHtml(imageUrl)}"
                 alt="${escapeHtml(food.name)}"
                 loading="lazy"
-                class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ${!orderable ? 'grayscale opacity-60' : ''}"
+                class="w-full h-full object-cover food-card-img-filter group-hover:scale-105 transition-transform duration-500 ${!orderable ? 'grayscale opacity-60' : ''}"
                 onerror="this.src='${FALLBACK_FOOD_IMG}'"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/20"></div>
 
               <!-- Top Floating Badges -->
-              <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 pointer-events-none">
-                <span class="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-slate-950/80 backdrop-blur-md text-slate-200 border border-white/10 shadow-lg">
+              <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2 pointer-events-none">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#FFFDF9]/95 text-[#2C1E16] border border-[#D8CBB8] shadow-2xs font-serif">
                   ${escapeHtml(categoryName)}
                 </span>
                 
                 ${!orderable
           ? `
-                      <span class="px-2.5 py-1 rounded-xl text-[10px] font-bold bg-rose-950/90 text-rose-300 border border-rose-700/60 shadow">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FEF2F2] text-[#991B1B] border border-[#DC2626]">
                         Hết món
                       </span>
                     `
           : isHot
             ? `
-                        <span class="cyber-flash-badge px-2.5 py-1 rounded-xl text-[10px] font-black text-white shadow-md flex items-center gap-1">
-                          <span class="w-1.5 h-1.5 rounded-full bg-white blink-dot"></span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#A63A2B] text-white shadow-2xs flex items-center gap-1 font-serif">
+                          <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
                           <span>BÁN CHẠY</span>
                         </span>
                       `
             : stock <= 5
               ? `
-                          <span class="px-2.5 py-1 rounded-xl text-[10px] font-bold bg-amber-500/90 text-slate-950 shadow flex items-center gap-1">
+                          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] shadow-2xs flex items-center gap-1 font-serif">
                             <span>Sắp hết</span>
                           </span>
                         `
               : `
-                          <span class="px-2.5 py-1 rounded-xl text-[10px] font-bold bg-emerald-950/90 text-emerald-300 border border-emerald-700/60 shadow flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink-dot"></span>
+                          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] shadow-2xs flex items-center gap-1 font-serif">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
                             <span>Còn ${stock} phần</span>
                           </span>
                         `
@@ -1264,42 +1267,42 @@ function renderFoodsGrid(highlightFoodId = null) {
             </div>
 
             <!-- Content Body -->
-            <div class="p-4 sm:p-5">
-              <h3 class="font-black text-base text-white leading-snug group-hover:text-orange-400 transition" title="${escapeHtml(food.name)}">
+            <div class="p-4 sm:p-4.5">
+              <h3 class="font-serif-bistro font-bold text-base text-[#2C1E16] leading-snug group-hover:text-[#A63A2B] transition" title="${escapeHtml(food.name)}">
                 ${escapeHtml(food.name)}
               </h3>
-              <p class="text-xs text-slate-400 mt-1.5 line-clamp-2 leading-relaxed min-h-[34px]">
-                ${escapeHtml(food.description || 'Món ăn nấu sốt nóng hổi từ nguyên liệu tươi sạch chuẩn vị trong ngày.')}
+              <p class="text-xs text-[#5C4332] font-serif italic mt-1.5 line-clamp-2 leading-relaxed min-h-[34px]">
+                ${escapeHtml(food.description || 'Món ăn chế biến nóng hổi chuẩn vị Pháp từ nguyên liệu tuyển chọn trong ngày.')}
               </p>
             </div>
           </div>
 
           <!-- Price & Action Footer -->
-          <div class="px-4 sm:px-5 pb-5 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-3">
+          <div class="px-4 sm:px-4.5 pb-4 pt-3 border-t border-[#D8CBB8] flex items-center justify-between gap-2 bg-[#FAF6EE]/50">
             <div>
-              <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Giá món</span>
-              <span class="text-lg font-black text-orange-400 neon-text-glow">${formatVND(food.price)}</span>
+              <span class="text-[9.5px] uppercase font-bold text-[#7A6E65] block tracking-wider font-serif">Đơn giá</span>
+              <span class="text-base sm:text-lg font-bold text-[#A63A2B] font-mono-code">${formatVND(food.price)}</span>
             </div>
 
             ${!orderable
           ? `
-                  <button type="button" disabled class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed">
+                  <button type="button" disabled class="px-3 py-1.5 rounded bg-[#FAF6EE] border border-[#D8CBB8] text-[#8C7E72] text-xs font-bold font-serif cursor-not-allowed">
                     Tạm hết món
                   </button>
                 `
           : inCartQty > 0
             ? `
-                    <div class="flex items-center gap-1.5 bg-slate-900 border border-orange-500/50 rounded-2xl p-1 shadow-md">
-                      <button type="button" data-food-dec="${food.id}" class="w-7 h-7 rounded-xl bg-slate-800 hover:bg-orange-500 text-white font-black text-sm flex items-center justify-center transition">−</button>
-                      <span class="w-6 text-center text-xs font-black text-orange-400 font-mono-code">${inCartQty}</span>
-                      <button type="button" data-food-inc="${food.id}" class="w-7 h-7 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-sm flex items-center justify-center shadow transition">+</button>
+                    <div class="flex items-center gap-1 bg-[#FAF6EE] border border-[#D8CBB8] rounded p-0.5 shadow-2xs">
+                      <button type="button" data-food-dec="${food.id}" class="w-6 h-6 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] font-bold text-sm flex items-center justify-center transition border border-[#D8CBB8]">−</button>
+                      <span class="w-5 text-center text-xs font-bold text-[#2C1E16] font-mono-code">${inCartQty}</span>
+                      <button type="button" data-food-inc="${food.id}" class="w-6 h-6 rounded bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] font-bold text-sm flex items-center justify-center shadow-2xs transition">+</button>
                     </div>
                   `
             : `
                     <button
                       type="button"
                       data-food-add="${food.id}"
-                      class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs font-black flex items-center gap-1.5 shadow-lg shadow-orange-500/25 transition duration-200 cursor-pointer"
+                      class="px-3.5 py-2 rounded-md bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] text-xs font-bold font-serif flex items-center gap-1.5 shadow-2xs transition duration-200 cursor-pointer border border-[#8C2D19]"
                     >
                       <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                       <span>Chọn món</span>
@@ -1497,41 +1500,41 @@ function renderCart() {
       finalTotal += lineTotal;
 
       return `
-        <div class="bg-slate-900 rounded-2xl p-3 border ${item.isFlashSale ? 'border-amber-500/60 shadow-lg shadow-amber-500/10' : (isDiscounted ? 'border-amber-500/30 bg-gradient-to-b from-slate-900 to-amber-950/20' : 'border-slate-800')} space-y-2">
+        <div class="bg-[#FFFDF9] rounded-md p-3 border ${item.isFlashSale ? 'border-[#A63A2B] bg-[#FFF5F4]' : (isDiscounted ? 'border-[#C5A059] bg-[#FAF6EE]' : 'border-[#D8CBB8]')} shadow-2xs space-y-1.5">
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
               <div class="flex items-center gap-1.5">
-                <h4 class="font-bold text-xs text-white truncate">${escapeHtml(food.name)}</h4>
-                ${item.isFlashSale ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-rose-600 text-white shrink-0">⚡ 1K</span>' : (isDiscounted ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">🎁 -10%</span>' : '')}
+                <h4 class="font-bold text-xs text-[#2C1E16] truncate font-serif">${escapeHtml(food.name)}</h4>
+                ${item.isFlashSale ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-[#A63A2B] text-white shrink-0">⚡ 1K</span>' : (isDiscounted ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] shrink-0 font-serif">🎁 -10%</span>' : '')}
               </div>
-              <span class="text-[11px] ${item.isFlashSale ? 'text-amber-300 font-black' : (isDiscounted ? 'text-amber-300 font-extrabold' : 'text-orange-400 font-extrabold')}">
+              <span class="text-[11px] text-[#A63A2B] font-bold font-mono-code">
                 ${formatVND(effectiveUnitPrice)}
-                ${item.isFlashSale ? `<span class="line-through text-slate-500 text-[10px] ml-1">${formatVND(food.price)}</span>` : (isDiscounted ? `<span class="line-through text-slate-500 text-[10px] ml-1">${formatVND(basePrice)}</span>` : '')}
+                ${item.isFlashSale ? `<span class="line-through text-[#8C7E72] text-[10px] ml-1">${formatVND(food.price)}</span>` : (isDiscounted ? `<span class="line-through text-[#8C7E72] text-[10px] ml-1">${formatVND(basePrice)}</span>` : '')}
               </span>
             </div>
 
             <!-- Qty Counter -->
-            <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 rounded-xl p-0.5">
+            <div class="flex items-center gap-1 bg-[#FAF6EE] border border-[#D8CBB8] rounded p-0.5">
               ${item.isFlashSale
-          ? `<button type="button" data-cart-dec="${food.id}" class="w-6 h-6 rounded-lg bg-slate-800 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center transition" title="Xóa món 1K">✕</button>
-                     <span class="w-5 text-center text-xs font-bold text-amber-300 font-mono-code">1</span>
-                     <button type="button" disabled class="w-6 h-6 rounded-lg bg-slate-800 text-slate-600 text-xs font-bold flex items-center justify-center cursor-not-allowed" title="Mỗi món 1K tối đa 1 suất">+</button>`
-          : `<button type="button" data-cart-dec="${food.id}" class="w-6 h-6 rounded-lg bg-slate-800 hover:bg-orange-500 text-white text-xs font-bold flex items-center justify-center transition">−</button>
-                     <span class="w-5 text-center text-xs font-bold text-white font-mono-code">${item.quantity}</span>
-                     <button type="button" data-cart-inc="${food.id}" class="w-6 h-6 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold flex items-center justify-center shadow transition">+</button>`
+          ? `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#A63A2B] hover:text-white text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]" title="Xóa món 1K">✕</button>
+             <span class="w-5 text-center text-xs font-bold text-[#A63A2B] font-mono-code">1</span>
+             <button type="button" disabled class="w-5 h-5 rounded bg-[#FAF6EE] text-[#D8CBB8] text-xs font-bold flex items-center justify-center cursor-not-allowed" title="Mỗi món 1K tối đa 1 suất">+</button>`
+          : `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]">−</button>
+             <span class="w-5 text-center text-xs font-bold text-[#2C1E16] font-mono-code">${item.quantity}</span>
+             <button type="button" data-cart-inc="${food.id}" class="w-5 h-5 rounded bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] text-xs font-bold flex items-center justify-center shadow-2xs transition">+</button>`
         }
             </div>
           </div>
 
-          <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-800/60 text-[11px]">
+          <div class="flex items-center justify-between gap-2 pt-1 border-t border-dashed border-[#D8CBB8] text-[11px]">
             <input
               type="text"
               data-cart-note="${food.id}"
               value="${escapeHtml(item.note || '')}"
               placeholder="Ghi chú vị (ít đá, cay...)"
-              class="flex-1 bg-transparent text-[11px] text-slate-300 placeholder-slate-600 focus:outline-none"
+              class="flex-1 bg-transparent text-[11px] text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none font-serif italic"
             />
-            <span class="font-extrabold ${item.isFlashSale ? 'text-amber-300' : (isDiscounted ? 'text-amber-300' : 'text-orange-400')} font-mono-code">${formatVND(lineTotal)}</span>
+            <span class="font-bold text-[#A63A2B] font-mono-code">${formatVND(lineTotal)}</span>
           </div>
         </div>
       `;
@@ -1810,7 +1813,7 @@ function renderDeliveryMap(status, order) {
       dom.mapShipperMarker.style.top = '24%';
     }
     if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Chờ điều xe';
-    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2.5 py-0.5 text-[10px] font-black rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1';
+    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] flex items-center gap-1 font-serif';
     if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Nhà hàng đã xác nhận món ăn. Hệ thống đang kết nối tài xế gần quán nhất...';
     if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đang nhận đơn • 0 km/h';
     if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
@@ -1822,7 +1825,7 @@ function renderDeliveryMap(status, order) {
       dom.mapShipperMarker.style.top = '28%';
     }
     if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Tài xế đã tới quán';
-    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2.5 py-0.5 text-[10px] font-black rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1';
+    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#EFF6FF] text-[#1E3A8A] border border-[#93C5FD] flex items-center gap-1 font-serif';
     if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Tài xế đã có mặt tại bếp, đang chờ đầu bếp hoàn tất đóng hộp món ăn nóng hổi...';
     if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Chờ lấy món • 0 km/h';
     if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
@@ -1834,8 +1837,8 @@ function renderDeliveryMap(status, order) {
       dom.mapShipperMarker.style.top = '44%';
     }
     if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Tài xế đang giao tới bạn';
-    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2.5 py-0.5 text-[10px] font-black rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1';
-    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Tài xế đang chạy xe trên đường giao món. Bạn chú ý điện thoại nhé!';
+    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] flex items-center gap-1 font-serif';
+    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Tài xế đang chạy xe trên đường giao món. Quý khách chú ý điện thoại nhé!';
     if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đang giao hàng • 35 km/h';
     if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 35 km/h';
     if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'Cách bạn: ~450m';
@@ -1846,8 +1849,8 @@ function renderDeliveryMap(status, order) {
       dom.mapShipperMarker.style.top = '62%';
     }
     if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Đã giao thành công';
-    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2.5 py-0.5 text-[10px] font-black rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1';
-    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Món ăn đã được giao tận tay bạn. Chúc bạn dùng bữa thật ngon miệng!';
+    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#FDF2F2] text-[#A63A2B] border border-[#A63A2B] flex items-center gap-1 font-serif';
+    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Món ăn đã được giao tận tay quý khách. Kính chúc quý khách dùng bữa thật ngon miệng!';
     if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đã giao tới nơi 🎉';
     if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
     if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'Cách bạn: 0m';
@@ -1858,7 +1861,7 @@ function renderDeliveryMap(status, order) {
       dom.mapShipperMarker.style.top = '24%';
     }
     if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Đơn đã hủy';
-    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2.5 py-0.5 text-[10px] font-black rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center gap-1';
+    if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#FEF2F2] text-[#991B1B] border border-[#DC2626] flex items-center gap-1 font-serif';
     if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Đơn hàng này đã kết thúc lộ trình giao.';
     if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đã hủy chuyến';
     if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
@@ -1924,25 +1927,25 @@ function renderOrderTracker(animateStep = false) {
     const isDone = !isCancelled && currentIdx > idx;
     const isActive = !isCancelled && currentIdx === idx;
 
-    let circleCls = 'bg-slate-900 text-slate-500 border-slate-800';
-    let titleCls = 'text-slate-400';
+    let circleCls = 'bg-[#FAF6EE] text-[#7A6E65] border-[#D8CBB8]';
+    let titleCls = 'text-[#7A6E65]';
     if (isDone) {
-      circleCls = 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-lg shadow-emerald-500/30';
-      titleCls = 'text-emerald-400 font-bold';
+      circleCls = 'bg-[#4A7C59] text-white border-[#3B5249] shadow-2xs';
+      titleCls = 'text-[#2D4A3E] font-bold font-serif';
     } else if (isActive) {
-      circleCls = `bg-gradient-to-tr from-orange-500 to-amber-400 text-slate-950 border-amber-300 ring-4 ring-orange-500/25 shadow-xl shadow-orange-500/40 ${animateStep ? 'step-active-bounce' : ''}`;
-      titleCls = 'text-orange-400 font-black';
+      circleCls = `bg-[#A63A2B] text-white border-[#8C2D19] ring-3 ring-[#A63A2B]/20 shadow-xs ${animateStep ? 'step-active-bounce' : ''}`;
+      titleCls = 'text-[#A63A2B] font-bold font-serif';
     }
 
     return `
-      <div class="flex flex-col items-center text-center p-3 rounded-2xl bg-slate-900/60 sm:bg-transparent border sm:border-0 border-slate-800/60">
-        <div class="w-11 h-11 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 ${circleCls}">
-          <i data-lucide="${isDone ? 'check' : step.icon}" class="w-5 h-5"></i>
+      <div class="flex flex-col items-center text-center p-3 rounded-lg bg-[#FAF6EE] sm:bg-transparent border sm:border-0 border-[#D8CBB8]">
+        <div class="w-10 h-10 rounded-lg border flex items-center justify-center transition-all duration-300 ${circleCls}">
+          <i data-lucide="${isDone ? 'check' : step.icon}" class="w-4 h-4"></i>
         </div>
-        <div class="mt-2.5 text-xs ${titleCls}">
+        <div class="mt-2 text-xs ${titleCls}">
           ${idx + 1}. ${escapeHtml(step.viTitle)}
         </div>
-        <div class="text-[11px] text-slate-400 hidden sm:block mt-0.5 leading-snug">
+        <div class="text-[11px] text-[#7A6E65] hidden sm:block mt-0.5 leading-snug font-serif italic">
           ${escapeHtml(step.viDesc)}
         </div>
       </div>
@@ -1960,22 +1963,22 @@ function renderOrderTracker(animateStep = false) {
         const foodName = it.food_name || it.name || foodFallback?.name || `Món #${it.food_id}`;
         const lineTotal = Number(it.quantity) * Number(it.unit_price);
         return `
-            <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 flex items-start justify-between gap-2 text-xs">
+            <div class="bg-[#FFFDF9] rounded-md p-2.5 border border-[#D8CBB8] flex items-start justify-between gap-2 text-xs shadow-2xs">
               <div class="min-w-0">
-                <div class="font-bold text-white truncate">
-                  <span class="text-orange-400 font-black mr-1">${it.quantity}x</span>${escapeHtml(foodName)}
+                <div class="font-bold text-[#2C1E16] truncate font-serif">
+                  <span class="text-[#A63A2B] font-bold mr-1 font-mono-code">${it.quantity}x</span>${escapeHtml(foodName)}
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5">
+                <div class="text-[11px] text-[#7A6E65] mt-0.5 font-mono-code">
                   Đơn giá: ${formatVND(it.unit_price)}
-                  ${it.item_note ? ` • <span class="text-amber-300 font-medium">${escapeHtml(it.item_note)}</span>` : ''}
+                  ${it.item_note ? ` • <span class="text-[#8C6200] font-serif italic">${escapeHtml(it.item_note)}</span>` : ''}
                 </div>
               </div>
-              <span class="font-black text-orange-400 shrink-0 font-mono-code">${formatVND(lineTotal)}</span>
+              <span class="font-bold text-[#A63A2B] shrink-0 font-mono-code">${formatVND(lineTotal)}</span>
             </div>
           `;
       })
       .join('')
-    : `<p class="text-xs text-slate-400 py-4 text-center">Chưa có món ăn nào.</p>`;
+    : `<p class="text-xs text-[#7A6E65] py-4 text-center font-serif">Chưa có món ăn nào.</p>`;
 
   // Render Delivery Journey Timeline (Pure Customer Friendly)
   const timelineDesc = [...historyList].reverse();
@@ -1992,21 +1995,21 @@ function renderOrderTracker(animateStep = false) {
         const friendlyMessage = statusTextMap[h.new_status] || `Đơn hàng chuyển sang: ${h.new_status}`;
 
         return `
-            <li class="relative ${i === 0 ? 'bg-slate-950/80 p-3 rounded-2xl border border-cyan-500/30 shadow-lg' : 'py-1.5'}">
-              <span class="absolute -left-[21px] top-3.5 w-3 h-3 rounded-full ${i === 0 ? 'bg-cyan-400 ring-4 ring-cyan-500/20' : 'bg-slate-700'}"></span>
+            <li class="relative ${i === 0 ? 'bg-[#FFFDF9] p-3 rounded-lg border border-[#D8CBB8] shadow-2xs' : 'py-1'}">
+              <span class="absolute -left-[21px] top-3.5 w-2.5 h-2.5 rounded-full ${i === 0 ? 'bg-[#A63A2B] ring-3 ring-[#A63A2B]/20' : 'bg-[#D8CBB8]'}"></span>
               <div class="flex flex-wrap items-center justify-between gap-1 text-[11px]">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                  ${i === 0 ? '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 blink-dot"></span>' : ''}
+                <div class="font-bold text-[#2C1E16] flex items-center gap-1.5 font-serif">
+                  ${i === 0 ? '<span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>' : ''}
                   <span>${escapeHtml(friendlyMessage)}</span>
                 </div>
-                <span class="font-mono-code text-[10px] text-slate-400">${escapeHtml(formatDateTime(h.changed_at))}</span>
+                <span class="font-mono-code text-[10px] text-[#7A6E65]">${escapeHtml(formatDateTime(h.changed_at))}</span>
               </div>
-              ${h.note ? `<div class="text-[11px] text-slate-400 mt-1 italic">"${escapeHtml(h.note)}"</div>` : ''}
+              ${h.note ? `<div class="text-[11px] text-[#7A6E65] mt-1 italic font-serif">"${escapeHtml(h.note)}"</div>` : ''}
             </li>
           `;
       })
       .join('')
-    : `<li class="text-xs text-slate-400 py-3">Đang cập nhật hành trình đơn...</li>`;
+    : `<li class="text-xs text-[#7A6E65] py-3 font-serif">Đang cập nhật hành trình đơn...</li>`;
 
   refreshIcons();
 }

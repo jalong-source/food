@@ -3,46 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chế độ Trình chiếu Đôi — JalongFood & DB Live Inspector | jalong.io.vn</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Chế độ Trình chiếu Đôi — JaLong Bistro & DB Live Inspector | jalong.io.vn</title>
+  
+  <!-- Parisian Typography & Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'Consolas', 'monospace'],
+          },
+          colors: {
+            bistro: {
+              bg: '#1E1510',
+              espresso: '#2C1E16',
+              border: '#3B2C24',
+              cream: '#F6F1E7',
+              paper: '#FFFDF9',
+              muted: '#D8CBB8',
+              brass: '#D4A373',
+              crimson: '#A63A2B',
+              crimsonDark: '#8C2D19',
+              moss: '#3B5249',
+              mossLight: '#4A7C59',
+            }
+          }
+        }
+      }
+    };
+  </script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/vintage-theme.css" />
 </head>
-<body class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden flex flex-col select-none">
+<body class="bg-[#1A120D] text-[#F6F1E7] h-screen w-screen overflow-hidden flex flex-col select-none font-sans">
 
-  <!-- Top Presentation Control Bar -->
-  <header class="h-14 bg-slate-900 border-b border-slate-800 px-4 flex items-center justify-between gap-3 shrink-0 z-30">
+  <!-- Top Presentation Control Bar (Espresso Background with Coffee Border) -->
+  <header class="h-14 bg-[#2C1E16] border-b border-[#3B2C24] px-4 flex items-center justify-between gap-3 shrink-0 z-30 shadow-md">
     <!-- Left: Branding & Presentation Mode Title -->
     <div class="flex items-center gap-3 min-w-0">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-600 flex items-center justify-center shadow-lg shadow-orange-500/20 shrink-0">
-        <i data-lucide="columns-2" class="w-5 h-5 text-white"></i>
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#A63A2B] to-[#781D14] border border-[#D4A373]/30 flex items-center justify-center shadow-md shadow-[#1E1510]/50 shrink-0">
+        <i data-lucide="columns-2" class="w-5 h-5 text-[#FFFDF9]"></i>
       </div>
       <div class="truncate">
         <div class="flex items-center gap-2">
-          <span class="font-extrabold tracking-tight text-white text-sm sm:text-base">JaLong CyberFood</span>
-          <span class="text-xs text-orange-400 font-semibold hidden sm:inline">• jalong.io.vn</span>
-          <span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-            Báo cáo Đồ án Thiết kế CSDL
+          <span class="font-serif font-bold tracking-normal text-[#FFFDF9] text-sm sm:text-base">JaLong Bistro</span>
+          <span class="text-xs text-[#D4A373] font-semibold hidden sm:inline">• Trình Chiếu Kép CSDL</span>
+          <span class="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-[#A63A2B]/20 text-[#E6A196] border border-[#A63A2B]/40 hidden md:inline-flex">
+            Báo cáo Đồ án Chuẩn 3NF
           </span>
         </div>
-        <p class="text-[11px] text-slate-400 truncate hidden md:block">
-          Trình chiếu Đồng bộ Thời gian thực 2 Chiều: Khách hàng Cyberpunk (Trái) ⇄ Giảng viên DB Live Inspector (Phải)
+        <p class="text-[11px] text-[#D8CBB8]/90 truncate hidden md:block font-normal">
+          Thực đơn Khách hàng (Trái) ⇄ Sổ Cái DB Live Inspector (Phải)
         </p>
       </div>
     </div>
 
     <!-- Center: Live Sync Monitor Badge -->
-    <div class="hidden xl:flex items-center gap-2.5 bg-slate-950/90 border border-slate-800 rounded-xl px-3 py-1.5">
-      <span id="splitDbDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-online"></span>
-      <span id="splitDbLabel" class="text-xs font-semibold text-emerald-400">PostgreSQL ONLINE</span>
-      <span class="text-slate-700">|</span>
-      <span id="splitEventTicker" class="text-xs font-mono-code text-slate-300 max-w-[260px] truncate">
+    <div class="hidden xl:flex items-center gap-2.5 bg-[#1E1510] border border-[#3B2C24] rounded-xl px-3.5 py-1.5 shadow-inner">
+      <span id="splitDbDot" class="w-2.5 h-2.5 rounded-full bg-[#3B5249] ring-2 ring-[#4A7C59]/40 pulse-moss"></span>
+      <span id="splitDbLabel" class="text-xs font-semibold text-[#8FD5A6]">PostgreSQL ONLINE</span>
+      <span class="text-[#3B2C24]">|</span>
+      <span id="splitEventTicker" class="text-xs font-mono-code text-[#F6F1E7] max-w-[280px] truncate">
         Sẵn sàng đồng bộ SSE / WebSocket...
       </span>
-      <span id="splitEventCount" class="px-1.5 py-0.5 text-[10px] font-mono-code rounded bg-slate-800 text-amber-300">
+      <span id="splitEventCount" class="px-2 py-0.5 text-[10px] font-mono-code font-bold rounded bg-[#2C1E16] text-[#D4A373] border border-[#3B2C24]">
         0 events
       </span>
     </div>
@@ -50,118 +83,259 @@
     <!-- Right: Ratio Controls, Demo Guide & Navigation -->
     <div class="flex items-center gap-2 shrink-0">
       <!-- Ratio Presets -->
-      <div class="hidden lg:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5 text-xs">
-        <button data-ratio="50" class="ratio-btn px-2.5 py-1 rounded-md font-medium bg-indigo-600 text-white transition">
+      <div class="hidden lg:flex items-center bg-[#1E1510] border border-[#3B2C24] rounded-lg p-0.5 text-xs">
+        <button data-ratio="50" class="ratio-btn px-3 py-1 rounded-md font-semibold bg-[#A63A2B] text-[#FFFDF9] border border-[#C25443] shadow-sm transition">
           50 : 50
         </button>
-        <button data-ratio="42" class="ratio-btn px-2.5 py-1 rounded-md font-medium text-slate-400 hover:text-white transition" title="Mở rộng khung DB Inspector cho Giảng viên">
+        <button data-ratio="42" class="ratio-btn px-3 py-1 rounded-md font-medium text-[#D8CBB8] hover:text-[#FFFDF9] hover:bg-[#3B2C24]/60 border border-transparent transition" title="Mở rộng khung DB Inspector cho Giảng viên">
           42 : 58 (Ưu tiên DB)
         </button>
-        <button data-ratio="58" class="ratio-btn px-2.5 py-1 rounded-md font-medium text-slate-400 hover:text-white transition" title="Mở rộng khung Khách hàng">
+        <button data-ratio="58" class="ratio-btn px-3 py-1 rounded-md font-medium text-[#D8CBB8] hover:text-[#FFFDF9] hover:bg-[#3B2C24]/60 border border-transparent transition" title="Mở rộng khung Khách hàng">
           58 : 42
         </button>
       </div>
 
-      <!-- Demo Script Guide Toggle -->
-      <button id="btnToggleGuide" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-semibold transition">
-        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+      <!-- Demo Script Guide Toggle (Vintage Booklet Button) -->
+      <button id="btnToggleGuide" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#A63A2B]/20 hover:bg-[#A63A2B]/35 text-[#F6F1E7] border border-[#A63A2B]/50 text-xs font-semibold shadow-sm transition">
+        <i data-lucide="book-open" class="w-3.5 h-3.5 text-[#D4A373]"></i>
         <span>Kịch bản Demo 5 Bước</span>
       </button>
 
       <!-- Reload Both Frames -->
-      <button id="btnReloadBoth" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition" title="Làm mới cả 2 khung hình">
+      <button id="btnReloadBoth" class="p-1.5 rounded-lg bg-[#1E1510] hover:bg-[#3B2C24] text-[#D8CBB8] hover:text-[#FFFDF9] border border-[#3B2C24] transition shadow-sm" title="Làm mới cả 2 khung hình">
         <i data-lucide="refresh-cw" class="w-4 h-4"></i>
       </button>
 
       <!-- Individual Fullscreen Links -->
-      <a href="/" target="_blank" class="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 transition">
-        <i data-lucide="utensils" class="w-3.5 h-3.5 text-orange-400"></i>
+      <a href="/" target="_blank" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#1E1510] hover:bg-[#3B2C24] text-xs font-medium text-[#D8CBB8] hover:text-[#FFFDF9] border border-[#3B2C24] transition">
+        <i data-lucide="utensils" class="w-3.5 h-3.5 text-[#D4A373]"></i>
         <span>Khách</span>
-        <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+        <i data-lucide="external-link" class="w-3 h-3 text-[#D8CBB8]/60"></i>
       </a>
-      <a href="/inspector.html" target="_blank" class="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white transition">
+      <a href="/inspector.html" target="_blank" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#A63A2B] hover:bg-[#8C2D19] text-xs font-semibold text-[#FFFDF9] border border-[#C25443] transition shadow-sm">
         <i data-lucide="database" class="w-3.5 h-3.5"></i>
         <span>Inspector</span>
-        <i data-lucide="external-link" class="w-3 h-3 text-indigo-200"></i>
+        <i data-lucide="external-link" class="w-3 h-3 text-[#FFFDF9]/70"></i>
       </a>
     </div>
   </header>
 
-  <!-- Emergency Offline Sync Banner (Appears automatically if Lecturer disconnects DB) -->
-  <div id="splitOfflineBanner" class="hidden db-offline-banner text-white px-4 py-1.5 text-xs font-semibold flex items-center justify-center gap-2 shadow-lg z-20">
-    <i data-lucide="triangle-alert" class="w-4 h-4 shrink-0"></i>
+  <!-- Emergency Offline Sync Banner (Vintage Deep Crimson Alert) -->
+  <div id="splitOfflineBanner" class="hidden bg-[#781D14] text-[#FFFDF9] px-4 py-2 text-xs font-semibold flex items-center justify-center gap-2 shadow-lg border-b border-[#D8CBB8]/30 z-20">
+    <i data-lucide="triangle-alert" class="w-4 h-4 shrink-0 text-[#E6C280]"></i>
     <span>CẢNH BÁO MẤT KẾT NỐI POSTGRESQL — Đang phát tín hiệu sự cố tức thời tới toàn bộ phiên Khách hàng & Giảng viên!</span>
   </div>
 
-  <!-- Collapsible Presentation Guide Drawer -->
-  <div id="demoGuidePanel" class="hidden bg-slate-900/95 border-b border-indigo-500/30 px-5 py-3.5 z-20">
-    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 w-full text-xs">
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-          <div class="font-bold text-orange-400 mb-1">1. Đặt đơn (`sp_create_order`)</div>
-          <p class="text-slate-400 leading-relaxed">Chọn món bên <b>Khung Trái</b> & Đặt hàng → Khung Phải nhận đơn tức thì & trừ `stock_quantity` an toàn Transaction.</p>
+  <!-- Collapsible Presentation Guide Modal / Booklet Drawer -->
+  <div id="demoGuidePanel" class="hidden fixed inset-0 z-50 bg-[#1A120D]/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <!-- Vintage Booklet / Menu Insert Modal Card -->
+    <div id="guideModal" class="relative w-full max-w-5xl bg-[#FFFDF9] border-[3px] border-double border-[#D8CBB8] rounded-2xl shadow-2xl overflow-hidden p-6 sm:p-8 text-[#2C1E16] animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Vintage Corner Ornaments -->
+      <div class="absolute top-2 left-2 text-[#D8CBB8] text-xs select-none">❖</div>
+      <div class="absolute top-2 right-2 text-[#D8CBB8] text-xs select-none">❖</div>
+      <div class="absolute bottom-2 left-2 text-[#D8CBB8] text-xs select-none">❖</div>
+      <div class="absolute bottom-2 right-2 text-[#D8CBB8] text-xs select-none">❖</div>
+
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between gap-4 border-b border-[#D8CBB8]/60 pb-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-[#2C1E16] text-[#FFFDF9]">
+              Cẩm Nang Thao Diễn
+            </span>
+            <span class="text-xs font-serif italic text-[#A63A2B]">Parisian Bistro Presentation Mode</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-serif font-bold text-[#2C1E16]">
+            Kịch Bản Trình Chiếu Đồ Án CSDL 5 Bước
+          </h2>
+          <p class="text-xs text-[#6B5548] mt-0.5">
+            Dẫn dắt Hội đồng Chấm thi kiểm tra tính toàn vẹn 3NF, Trigger Audit, Transaction ACID và Khả năng chịu lỗi Chaos
+          </p>
         </div>
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-          <div class="font-bold text-emerald-400 mb-1">2. Kiểm chứng Trigger Audit</div>
-          <p class="text-slate-400 leading-relaxed">Bấm duyệt đơn bên <b>Khung Phải</b> → Trigger `trg_order_status_audit` tự ghi lịch sử & thanh tiến trình bên Trái nhảy bước!</p>
+        <button id="btnCloseGuide" class="text-[#8C6D58] hover:text-[#2C1E16] p-1.5 rounded-lg hover:bg-[#F4EBD9] transition shrink-0" title="Đóng cẩm nang (Esc)">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Ornamental Ribbon Divider -->
+      <div class="flex items-center justify-center my-4 gap-3">
+        <span class="h-px bg-[#D8CBB8] flex-1"></span>
+        <span class="text-[11px] uppercase tracking-widest text-[#A63A2B] font-serif font-semibold">
+          ❦ Quy Trình Thao Tác Trình Diễn Chi Tiết ❦
+        </span>
+        <span class="h-px bg-[#D8CBB8] flex-1"></span>
+      </div>
+
+      <!-- 5 Step Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3.5 my-2">
+        <!-- Step 1 -->
+        <div class="bg-[#FBF7EE] border border-[#D8CBB8] rounded-xl p-3.5 flex flex-col justify-between shadow-sm hover:border-[#A63A2B]/50 transition">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-[#A63A2B] text-[#FFFDF9]">BƯỚC 1</span>
+              <i data-lucide="shopping-bag" class="w-4 h-4 text-[#A63A2B]"></i>
+            </div>
+            <div class="font-serif font-bold text-sm text-[#2C1E16] mb-1">
+              Đặt món Thực đơn
+            </div>
+            <div class="font-mono-code text-[11px] text-[#A63A2B] font-semibold mb-2">
+              sp_create_order
+            </div>
+            <p class="text-xs text-[#5C4033] leading-relaxed">
+              Chọn món bên <b>Khung Trái</b> & Đặt hàng → Khung Phải nhận đơn tức thì, trừ <code class="font-mono-code text-[10px] bg-[#EFE6D8] px-1 py-0.5 rounded">stock_quantity</code> an toàn Transaction.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-[#D8CBB8]/40 text-[10px] text-[#8C6D58] italic">
+            Kiểm chứng ACID Isolation
+          </div>
         </div>
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-          <div class="font-bold text-sky-400 mb-1">3. CRUD Thực đơn Live</div>
-          <p class="text-slate-400 leading-relaxed">Thêm/Sửa giá hoặc ngừng bán món bên <b>Khung Phải</b> → Thực đơn Khách hàng cập nhật ngay không cần F5.</p>
+
+        <!-- Step 2 -->
+        <div class="bg-[#FBF7EE] border border-[#D8CBB8] rounded-xl p-3.5 flex flex-col justify-between shadow-sm hover:border-[#3B5249]/60 transition">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-[#3B5249] text-[#FFFDF9]">BƯỚC 2</span>
+              <i data-lucide="check-check" class="w-4 h-4 text-[#3B5249]"></i>
+            </div>
+            <div class="font-serif font-bold text-sm text-[#2C1E16] mb-1">
+              Trigger Audit Sổ Cái
+            </div>
+            <div class="font-mono-code text-[11px] text-[#3B5249] font-semibold mb-2">
+              trg_order_status_audit
+            </div>
+            <p class="text-xs text-[#5C4033] leading-relaxed">
+              Bấm duyệt đơn bên <b>Khung Phải</b> → Trigger tự động ghi Sổ cái lịch sử & thanh tiến trình Trái cập nhật tức thì.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-[#D8CBB8]/40 text-[10px] text-[#8C6D58] italic">
+            Kiểm chứng Database Trigger
+          </div>
         </div>
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-          <div class="font-bold text-amber-400 mb-1">4. Test Khóa ngoại 3NF</div>
-          <p class="text-slate-400 leading-relaxed">Bấm <b>"Xóa cứng (Test FK)"</b> món đã đặt → PostgreSQL chặn xóa với mã `23503` (`ON DELETE RESTRICT`).</p>
+
+        <!-- Step 3 -->
+        <div class="bg-[#FBF7EE] border border-[#D8CBB8] rounded-xl p-3.5 flex flex-col justify-between shadow-sm hover:border-[#D4A373]/60 transition">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-[#8C6D58] text-[#FFFDF9]">BƯỚC 3</span>
+              <i data-lucide="refresh-cw" class="w-4 h-4 text-[#8C6D58]"></i>
+            </div>
+            <div class="font-serif font-bold text-sm text-[#2C1E16] mb-1">
+              CRUD Thực đơn Live
+            </div>
+            <div class="font-mono-code text-[11px] text-[#8C6D58] font-semibold mb-2">
+              LISTEN / NOTIFY
+            </div>
+            <p class="text-xs text-[#5C4033] leading-relaxed">
+              Thêm/Sửa giá hoặc ngừng bán món bên <b>Khung Phải</b> → Thực đơn Khách hàng cập nhật ngay mà không cần F5.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-[#D8CBB8]/40 text-[10px] text-[#8C6D58] italic">
+            Đồng bộ SSE thời gian thực
+          </div>
         </div>
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-          <div class="font-bold text-rose-400 mb-1">5. Chaos & Connection String</div>
-          <p class="text-slate-400 leading-relaxed">Ngắt kết nối DB hoặc đổi Connection String sai → Cả 2 khung báo Đỏ tức thì & tự xanh lại khi khôi phục!</p>
+
+        <!-- Step 4 -->
+        <div class="bg-[#FBF7EE] border border-[#D8CBB8] rounded-xl p-3.5 flex flex-col justify-between shadow-sm hover:border-[#A63A2B]/50 transition">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-[#A63A2B] text-[#FFFDF9]">BƯỚC 4</span>
+              <i data-lucide="shield-alert" class="w-4 h-4 text-[#A63A2B]"></i>
+            </div>
+            <div class="font-serif font-bold text-sm text-[#2C1E16] mb-1">
+              Khóa ngoại Toàn vẹn
+            </div>
+            <div class="font-mono-code text-[11px] text-[#A63A2B] font-semibold mb-2">
+              RESTRICT (23503)
+            </div>
+            <p class="text-xs text-[#5C4033] leading-relaxed">
+              Bấm <b>"Xóa cứng (Test FK)"</b> món đã phát sinh đơn → PostgreSQL chặn xóa với mã lỗi vi phạm chuẩn <code class="font-mono-code text-[10px] bg-[#EFE6D8] px-1 py-0.5 rounded">23503</code>.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-[#D8CBB8]/40 text-[10px] text-[#8C6D58] italic">
+            Chuẩn hóa 3NF Toàn vẹn
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="bg-[#FBF7EE] border border-[#D8CBB8] rounded-xl p-3.5 flex flex-col justify-between shadow-sm hover:border-[#781D14]/60 transition">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-[#781D14] text-[#FFFDF9]">BƯỚC 5</span>
+              <i data-lucide="zap-off" class="w-4 h-4 text-[#781D14]"></i>
+            </div>
+            <div class="font-serif font-bold text-sm text-[#2C1E16] mb-1">
+              Chaos & Phục hồi
+            </div>
+            <div class="font-mono-code text-[11px] text-[#781D14] font-semibold mb-2">
+              Auto-Recovery Lab
+            </div>
+            <p class="text-xs text-[#5C4033] leading-relaxed">
+              Ngắt kết nối DB hoặc đổi Connection String sai bên Phải → Cả 2 khung hình báo Đỏ tức thời & tự xanh lại khi khôi phục!
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-[#D8CBB8]/40 text-[10px] text-[#8C6D58] italic">
+            Kiểm tra Sức chịu tải & Dự phòng
+          </div>
         </div>
       </div>
-      <button id="btnCloseGuide" class="text-slate-400 hover:text-white p-1 self-end lg:self-center">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
+
+      <!-- Modal Footer -->
+      <div class="mt-5 pt-3.5 border-t border-[#D8CBB8]/60 flex flex-wrap items-center justify-between gap-3 text-xs text-[#5C4033]">
+        <div class="flex items-center gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-[#A63A2B]"></i>
+          <span><b>Gợi ý:</b> Sử dụng tỷ lệ <b>42:58 (Ưu tiên DB)</b> ở góc trên bên phải khi cần thuyết minh chi tiết câu lệnh SQL & đồ thị hiệu năng.</span>
+        </div>
+        <button onclick="document.getElementById('demoGuidePanel').classList.add('hidden')" class="px-4 py-1.5 rounded-lg bg-[#2C1E16] hover:bg-[#3B2C24] text-[#FFFDF9] font-semibold transition border border-[#3B2C24] shadow-sm">
+          Đã hiểu • Bắt đầu Trình chiếu
+        </button>
+      </div>
+
     </div>
   </div>
 
   <!-- Split View Container -->
-  <main id="splitContainer" class="flex-1 flex relative overflow-hidden bg-slate-950">
+  <main id="splitContainer" class="flex-1 flex relative overflow-hidden bg-[#1A120D]">
     <!-- Drag Shield Overlay (prevents iframe pointer capture while resizing) -->
     <div id="dragOverlay" class="hidden fixed inset-0 z-40 cursor-col-resize"></div>
 
     <!-- Left Pane: Customer App (/) -->
-    <section id="leftPane" style="width: 50%;" class="h-full flex flex-col min-w-[300px] border-r border-slate-800">
-      <div class="h-8 bg-slate-900/90 border-b border-slate-800 px-3 flex items-center justify-between text-[11px]">
-        <div class="flex items-center gap-2 font-semibold text-orange-400">
-          <span class="w-2 h-2 rounded-full bg-orange-400"></span>
-          <span>GIAO DIỆN 1: KHÁCH HÀNG — CYBERFOOD & REAL-TIME TRACKING</span>
+    <section id="leftPane" style="width: 50%;" class="h-full flex flex-col min-w-[300px] border-r border-[#3B2C24]">
+      <div class="h-8 bg-[#241912] border-b border-[#3B2C24] px-3 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-2 font-semibold text-[#D4A373]">
+          <span class="w-2 h-2 rounded-full bg-[#D4A373]"></span>
+          <span class="tracking-wide">GIAO DIỆN 1: KHÁCH HÀNG — THỰC ĐƠN BISTRO & THEO DÕI ĐƠN HÀNG REAL-TIME</span>
         </div>
-        <button id="reloadLeft" class="text-slate-400 hover:text-white flex items-center gap-1 transition" title="Tải lại khung Khách hàng">
+        <button id="reloadLeft" class="text-[#D8CBB8] hover:text-[#FFFDF9] flex items-center gap-1 transition" title="Tải lại khung Khách hàng">
           <i data-lucide="rotate-cw" class="w-3 h-3"></i>
           <span>Tải lại</span>
         </button>
       </div>
-      <iframe id="customerFrame" src="/" title="JalongFood Customer App" class="flex-1 w-full bg-slate-950 border-0"></iframe>
+      <iframe id="customerFrame" src="/" title="JalongFood Customer App" class="flex-1 w-full bg-[#1A120D] border-0"></iframe>
     </section>
 
-    <!-- Draggable Divider Handle -->
-    <div id="splitterHandle" class="w-2 bg-slate-800 hover:bg-indigo-500 active:bg-indigo-400 cursor-col-resize flex items-center justify-center transition-colors z-30 shrink-0" title="Kéo để thay đổi tỷ lệ khung hình">
-      <div class="w-0.5 h-10 bg-slate-500 rounded-full"></div>
+    <!-- Draggable Divider Handle (Espresso Wood with Antique Brass Grip) -->
+    <div id="splitterHandle" class="w-3 bg-[#2C1E16] hover:bg-[#A63A2B] active:bg-[#8C2D19] cursor-col-resize flex items-center justify-center transition-colors z-30 shrink-0 border-x border-[#3B2C24] group" title="Kéo để thay đổi tỷ lệ khung hình">
+      <div class="w-1.5 h-12 bg-[#D8CBB8] group-hover:bg-[#FFFDF9] rounded-full shadow flex flex-col justify-center items-center gap-1 transition-colors">
+        <span class="w-0.5 h-1 bg-[#2C1E16] rounded-full"></span>
+        <span class="w-0.5 h-1 bg-[#2C1E16] rounded-full"></span>
+        <span class="w-0.5 h-1 bg-[#2C1E16] rounded-full"></span>
+      </div>
     </div>
 
     <!-- Right Pane: Lecturer DB Live Inspector (/inspector.html) -->
     <section id="rightPane" style="width: 50%;" class="h-full flex-1 flex flex-col min-w-[340px]">
-      <div class="h-8 bg-slate-900/90 border-b border-slate-800 px-3 flex items-center justify-between text-[11px]">
-        <div class="flex items-center gap-2 font-semibold text-indigo-400">
-          <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
-          <span>GIAO DIỆN 2: GIẢNG VIÊN — DB LIVE INSPECTOR & CHAOS LAB (<code>/inspector.html</code>)</span>
+      <div class="h-8 bg-[#241912] border-b border-[#3B2C24] px-3 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-2 font-semibold text-[#E6A196]">
+          <span class="w-2 h-2 rounded-full bg-[#A63A2B]"></span>
+          <span class="tracking-wide">GIAO DIỆN 2: GIẢNG VIÊN — SỔ CÁI DB LIVE INSPECTOR & CHAOS LAB (<code>/inspector.html</code>)</span>
         </div>
-        <button id="reloadRight" class="text-slate-400 hover:text-white flex items-center gap-1 transition" title="Tải lại khung DB Inspector">
+        <button id="reloadRight" class="text-[#D8CBB8] hover:text-[#FFFDF9] flex items-center gap-1 transition" title="Tải lại khung DB Inspector">
           <i data-lucide="rotate-cw" class="w-3 h-3"></i>
           <span>Tải lại</span>
         </button>
       </div>
-      <iframe id="inspectorFrame" src="/inspector.html" title="DB Live Inspector" class="flex-1 w-full bg-slate-950 border-0"></iframe>
+      <iframe id="inspectorFrame" src="/inspector.html" title="DB Live Inspector" class="flex-1 w-full bg-[#1A120D] border-0"></iframe>
     </section>
   </main>
 
@@ -186,8 +360,8 @@
       ratioButtons.forEach((btn) => {
         const isMatch = Number(btn.dataset.ratio) === Math.round(clamped);
         btn.className = isMatch
-          ? 'ratio-btn px-2.5 py-1 rounded-md font-medium bg-indigo-600 text-white transition'
-          : 'ratio-btn px-2.5 py-1 rounded-md font-medium text-slate-400 hover:text-white transition';
+          ? 'ratio-btn px-3 py-1 rounded-md font-semibold bg-[#A63A2B] text-[#FFFDF9] border border-[#C25443] shadow-sm transition'
+          : 'ratio-btn px-3 py-1 rounded-md font-medium text-[#D8CBB8] hover:text-[#FFFDF9] hover:bg-[#3B2C24]/60 border border-transparent transition';
       });
     }
 
@@ -224,6 +398,19 @@
       guidePanel.classList.add('hidden');
     });
 
+    // Close guide on outside backdrop click or ESC key
+    guidePanel.addEventListener('click', (e) => {
+      if (e.target === guidePanel) {
+        guidePanel.classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !guidePanel.classList.contains('hidden')) {
+        guidePanel.classList.add('hidden');
+      }
+    });
+
     const customerFrame = document.getElementById('customerFrame');
     const inspectorFrame = document.getElementById('inspectorFrame');
 
@@ -238,7 +425,7 @@
       inspectorFrame.contentWindow.location.reload();
     });
 
-    // Connect Top Bar Monitor using Sub-Agent 3's RealtimeClient / createRealtimeClient
+    // Connect Top Bar Monitor using RealtimeClient / createRealtimeClient
     const splitDbDot = document.getElementById('splitDbDot');
     const splitDbLabel = document.getElementById('splitDbLabel');
     const splitEventTicker = document.getElementById('splitEventTicker');
@@ -249,13 +436,13 @@
 
     function updateTopBarDbState(isOnline, latencyMs) {
       if (isOnline) {
-        splitDbDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-online';
-        splitDbLabel.className = 'text-xs font-semibold text-emerald-400';
+        splitDbDot.className = 'w-2.5 h-2.5 rounded-full bg-[#3B5249] ring-2 ring-[#4A7C59]/40 pulse-moss';
+        splitDbLabel.className = 'text-xs font-semibold text-[#8FD5A6]';
         splitDbLabel.textContent = latencyMs != null ? `PostgreSQL ONLINE (${latencyMs}ms)` : 'PostgreSQL ONLINE';
         splitOfflineBanner.classList.add('hidden');
       } else {
-        splitDbDot.className = 'w-2.5 h-2.5 rounded-full bg-red-500 pulse-offline';
-        splitDbLabel.className = 'text-xs font-semibold text-red-400';
+        splitDbDot.className = 'w-2.5 h-2.5 rounded-full bg-[#A63A2B] ring-2 ring-[#C25443]/40 pulse-crimson';
+        splitDbLabel.className = 'text-xs font-semibold text-[#F08080]';
         splitDbLabel.textContent = 'PostgreSQL OFFLINE';
         splitOfflineBanner.classList.remove('hidden');
       }
