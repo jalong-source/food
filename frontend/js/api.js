@@ -509,12 +509,12 @@ export async function getFoodRevenueReport() {
 }
 
 export async function calculateOrderTotal(orderId) {
-  const res = await apiRequest(/api/inspector/order-total/);
+  const res = await apiRequest(`/api/inspector/order-total/${encodeURIComponent(orderId)}`);
   return unwrapObject(res);
 }
 
 export async function getCustomerTier(userId) {
-  const res = await apiRequest(/api/inspector/customer-tier/);
+  const res = await apiRequest(`/api/inspector/customer-tier/${encodeURIComponent(userId)}`);
   return unwrapObject(res);
 }
 
