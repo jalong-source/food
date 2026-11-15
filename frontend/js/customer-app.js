@@ -499,42 +499,46 @@ function showToast(title, message = '', variant = 'info') {
   const palette = {
     success: {
       border: 'border-[#4A7C59]',
-      bg: 'bg-[#FFFDF9]',
-      text: 'text-[#2C1E16]',
+      bg: 'bg-[#2C1E16]',
+      text: 'text-[#F6F1E7]',
+      subtext: 'text-[#D8CBB8]',
       icon: 'check-circle-2',
-      iconColor: 'text-[#4A7C59]',
+      iconColor: 'text-[#8FD5A6]',
     },
     warning: {
       border: 'border-[#C5A059]',
-      bg: 'bg-[#FFFDF9]',
-      text: 'text-[#2C1E16]',
+      bg: 'bg-[#2C1E16]',
+      text: 'text-[#F6F1E7]',
+      subtext: 'text-[#D8CBB8]',
       icon: 'alert-triangle',
-      iconColor: 'text-[#8C6200]',
+      iconColor: 'text-[#F3D282]',
     },
     error: {
       border: 'border-[#A63A2B]',
-      bg: 'bg-[#FFFDF9]',
-      text: 'text-[#2C1E16]',
+      bg: 'bg-[#2C1E16]',
+      text: 'text-[#F6F1E7]',
+      subtext: 'text-[#D8CBB8]',
       icon: 'alert-octagon',
-      iconColor: 'text-[#A63A2B]',
+      iconColor: 'text-[#E6A196]',
     },
     info: {
-      border: 'border-[#D8CBB8]',
-      bg: 'bg-[#FFFDF9]',
-      text: 'text-[#2C1E16]',
+      border: 'border-[#D4A373]',
+      bg: 'bg-[#2C1E16]',
+      text: 'text-[#F6F1E7]',
+      subtext: 'text-[#D8CBB8]',
       icon: 'bell-ring',
-      iconColor: 'text-[#A63A2B]',
+      iconColor: 'text-[#D4A373]',
     },
   };
 
   const theme = palette[variant] || palette.info;
   const toast = document.createElement('div');
-  toast.className = `pointer-events-auto toast-enter ${theme.bg} text-[#2C1E16] border ${theme.border} rounded-lg p-3.5 shadow-md flex items-start gap-3 backdrop-blur-md vintage-hard-shadow-sm`;
+  toast.className = `pointer-events-auto toast-enter vintage-toast ${theme.bg} ${theme.text} border-2 ${theme.border} rounded-xl p-3.5 shadow-2xl flex items-start gap-3`;
   toast.innerHTML = `
     <i data-lucide="${theme.icon}" class="w-5 h-5 ${theme.iconColor} shrink-0 mt-0.5"></i>
     <div class="flex-1 min-w-0">
-      <div class="text-xs font-bold leading-snug font-serif text-[#2C1E16]">${escapeHtml(title)}</div>
-      ${message ? `<div class="text-[11px] text-[#5C4332] mt-0.5 leading-relaxed font-serif italic">${escapeHtml(message)}</div>` : ''}
+      <div class="text-xs font-bold leading-snug font-serif ${theme.text}">${escapeHtml(title)}</div>
+      ${message ? `<div class="text-[11px] ${theme.subtext} mt-0.5 leading-relaxed font-sans">${escapeHtml(message)}</div>` : ''}
     </div>
   `;
 
@@ -1129,9 +1133,11 @@ function renderUsersDropdown() {
 function applySelectedUserAddress(force = false) {
   const user = getUserById(state.selectedUserId);
   if (!user) return;
-  if (force || !state.addressTouched || !dom.deliveryAddressInput.value.trim()) {
-    dom.deliveryAddressInput.value = user.default_address || 'Số 12 Phố Cổ, Hà Nội';
-    state.addressTouched = false;
+  if (dom.deliveryAddressInput) {
+    if (force || !state.addressTouched || !dom.deliveryAddressInput.value?.trim()) {
+      dom.deliveryAddressInput.value = user.default_address || 'Số 12 Phố Cổ, Hà Nội';
+      state.addressTouched = false;
+    }
   }
   syncCustomerNameUI();
 }
@@ -1576,6 +1582,7 @@ function getFilteredFoods() {
 }
 
 function renderCategoriesPills() {
+  if (!dom.categoryPillsContainer) return;
   const totalCount = state.foods.length;
   const pills = [
     {
@@ -1622,8 +1629,11 @@ function renderCategoriesPills() {
 }
 
 function renderFoodsGrid(highlightFoodId = null) {
+  if (!dom.foodsGrid) return;
   const filtered = getFilteredFoods();
-  dom.liveMenuCountBadge.textContent = `${filtered.length} món`;
+  if (dom.liveMenuCountBadge) {
+    dom.liveMenuCountBadge.textContent = `${filtered.length} món`;
+  }
 
   if (!filtered.length) {
     dom.foodsGrid.innerHTML = `
@@ -1906,126 +1916,132 @@ function changeCartQty(foodId, delta) {
 function updateCheckoutButtonState() {
   const hasItems = state.cart.length > 0;
   const canOrder = hasItems && state.dbOnline;
-  dom.btnSubmitOrder.disabled = !canOrder;
+  if (dom.btnSubmitOrder) {
+    dom.btnSubmitOrder.disabled = !canOrder;
+  }
 }
 
 function renderCart() {
   reconcileCartWithLiveMenu();
 
   const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-  dom.cartCountBadge.textContent = String(totalItems);
+  if (dom.cartCountBadge) dom.cartCountBadge.textContent = String(totalItems);
 
   if (totalItems > 0) {
-    dom.btnClearCart.classList.remove('hidden');
-    dom.cartEmptyState.classList.add('hidden');
-    dom.cartItemsContainer.classList.remove('hidden');
+    if (dom.btnClearCart) dom.btnClearCart.classList.remove('hidden');
+    if (dom.cartEmptyState) dom.cartEmptyState.classList.add('hidden');
+    if (dom.cartItemsContainer) dom.cartItemsContainer.classList.remove('hidden');
   } else {
-    dom.btnClearCart.classList.add('hidden');
-    dom.cartEmptyState.classList.remove('hidden');
-    dom.cartItemsContainer.classList.add('hidden');
+    if (dom.btnClearCart) dom.btnClearCart.classList.add('hidden');
+    if (dom.cartEmptyState) dom.cartEmptyState.classList.remove('hidden');
+    if (dom.cartItemsContainer) dom.cartItemsContainer.classList.add('hidden');
   }
 
-  dom.cartTotalPortions.textContent = `${totalItems} phần`;
+  if (dom.cartTotalPortions) dom.cartTotalPortions.textContent = `${totalItems} phần`;
 
   let subtotal = 0;
   let finalTotal = 0;
 
-  dom.cartItemsContainer.innerHTML = state.cart
-    .map((item) => {
-      const food = state.foods.find((f) => Number(f.id) === Number(item.foodId));
-      if (!food) return '';
-      const basePrice = Number(food.price);
-      const isDiscounted = state.isReturningCustomer && !item.isFlashSale;
-      const effectiveUnitPrice = item.isFlashSale ? 1000 : (isDiscounted ? Math.round(basePrice * 0.90) : basePrice);
-      const lineTotal = effectiveUnitPrice * item.quantity;
-      const catalogLineTotal = (item.isFlashSale ? 1000 : basePrice) * item.quantity;
+  if (dom.cartItemsContainer) {
+    dom.cartItemsContainer.innerHTML = state.cart
+      .map((item) => {
+        const food = state.foods.find((f) => Number(f.id) === Number(item.foodId));
+        if (!food) return '';
+        const basePrice = Number(food.price);
+        const isDiscounted = state.isReturningCustomer && !item.isFlashSale;
+        const effectiveUnitPrice = item.isFlashSale ? 1000 : (isDiscounted ? Math.round(basePrice * 0.90) : basePrice);
+        const lineTotal = effectiveUnitPrice * item.quantity;
+        const catalogLineTotal = (item.isFlashSale ? 1000 : basePrice) * item.quantity;
 
-      subtotal += catalogLineTotal;
-      finalTotal += lineTotal;
+        subtotal += catalogLineTotal;
+        finalTotal += lineTotal;
 
-      return `
-        <div class="bg-[#FFFDF9] rounded-md p-3 border ${item.isFlashSale ? 'border-[#A63A2B] bg-[#FFF5F4]' : (isDiscounted ? 'border-[#C5A059] bg-[#FAF6EE]' : 'border-[#D8CBB8]')} shadow-2xs space-y-1.5">
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0">
-              <div class="flex items-center gap-1.5">
-                <h4 class="font-bold text-xs text-[#2C1E16] truncate font-serif">${escapeHtml(food.name)}</h4>
-                ${item.isFlashSale ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-[#A63A2B] text-white shrink-0">⚡ 1K</span>' : (isDiscounted ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] shrink-0 font-serif">🎁 -10%</span>' : '')}
+        return `
+          <div class="bg-[#FFFDF9] rounded-md p-3 border ${item.isFlashSale ? 'border-[#A63A2B] bg-[#FFF5F4]' : (isDiscounted ? 'border-[#C5A059] bg-[#FAF6EE]' : 'border-[#D8CBB8]')} shadow-2xs space-y-1.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="font-bold text-xs text-[#2C1E16] truncate font-serif">${escapeHtml(food.name)}</h4>
+                  ${item.isFlashSale ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-[#A63A2B] text-white shrink-0">⚡ 1K</span>' : (isDiscounted ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] shrink-0 font-serif">🎁 -10%</span>' : '')}
+                </div>
+                <span class="text-[11px] text-[#A63A2B] font-bold font-mono-code">
+                  ${formatVND(effectiveUnitPrice)}
+                  ${item.isFlashSale ? `<span class="line-through text-[#8C7E72] text-[10px] ml-1">${formatVND(food.price)}</span>` : (isDiscounted ? `<span class="line-through text-[#8C7E72] text-[10px] ml-1">${formatVND(basePrice)}</span>` : '')}
+                </span>
               </div>
-              <span class="text-[11px] text-[#A63A2B] font-bold font-mono-code">
-                ${formatVND(effectiveUnitPrice)}
-                ${item.isFlashSale ? `<span class="line-through text-[#8C7E72] text-[10px] ml-1">${formatVND(food.price)}</span>` : (isDiscounted ? `<span class="line-through text-[#8C7E72] text-[10px] ml-1">${formatVND(basePrice)}</span>` : '')}
-              </span>
+
+              <!-- Qty Counter -->
+              <div class="flex items-center gap-1 bg-[#FAF6EE] border border-[#D8CBB8] rounded p-0.5">
+                ${item.isFlashSale
+            ? `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#A63A2B] hover:text-white text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]" title="Xóa món 1K">✕</button>
+               <span class="w-5 text-center text-xs font-bold text-[#A63A2B] font-mono-code">1</span>
+               <button type="button" disabled class="w-5 h-5 rounded bg-[#FAF6EE] text-[#D8CBB8] text-xs font-bold flex items-center justify-center cursor-not-allowed" title="Mỗi món 1K tối đa 1 suất">+</button>`
+            : `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]">−</button>
+               <span class="w-5 text-center text-xs font-bold text-[#2C1E16] font-mono-code">${item.quantity}</span>
+               <button type="button" data-cart-inc="${food.id}" class="w-5 h-5 rounded bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] text-xs font-bold flex items-center justify-center shadow-2xs transition">+</button>`
+          }
+              </div>
             </div>
 
-            <!-- Qty Counter -->
-            <div class="flex items-center gap-1 bg-[#FAF6EE] border border-[#D8CBB8] rounded p-0.5">
-              ${item.isFlashSale
-          ? `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#A63A2B] hover:text-white text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]" title="Xóa món 1K">✕</button>
-             <span class="w-5 text-center text-xs font-bold text-[#A63A2B] font-mono-code">1</span>
-             <button type="button" disabled class="w-5 h-5 rounded bg-[#FAF6EE] text-[#D8CBB8] text-xs font-bold flex items-center justify-center cursor-not-allowed" title="Mỗi món 1K tối đa 1 suất">+</button>`
-          : `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]">−</button>
-             <span class="w-5 text-center text-xs font-bold text-[#2C1E16] font-mono-code">${item.quantity}</span>
-             <button type="button" data-cart-inc="${food.id}" class="w-5 h-5 rounded bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] text-xs font-bold flex items-center justify-center shadow-2xs transition">+</button>`
-        }
+            <div class="flex items-center justify-between gap-2 pt-1 border-t border-dashed border-[#D8CBB8] text-[11px]">
+              <input
+                type="text"
+                data-cart-note="${food.id}"
+                value="${escapeHtml(item.note || '')}"
+                placeholder="Ghi chú vị (ít đá, cay...)"
+                class="flex-1 bg-transparent text-[11px] text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none font-serif italic"
+              />
+              <span class="font-bold text-[#A63A2B] font-mono-code">${formatVND(lineTotal)}</span>
             </div>
           </div>
+        `;
+      })
+      .join('');
 
-          <div class="flex items-center justify-between gap-2 pt-1 border-t border-dashed border-[#D8CBB8] text-[11px]">
-            <input
-              type="text"
-              data-cart-note="${food.id}"
-              value="${escapeHtml(item.note || '')}"
-              placeholder="Ghi chú vị (ít đá, cay...)"
-              class="flex-1 bg-transparent text-[11px] text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none font-serif italic"
-            />
-            <span class="font-bold text-[#A63A2B] font-mono-code">${formatVND(lineTotal)}</span>
-          </div>
-        </div>
-      `;
-    })
-    .join('');
+    if (state.isReturningCustomer && subtotal > 0 && subtotal > finalTotal) {
+      const discountAmount = subtotal - finalTotal;
 
-  if (state.isReturningCustomer && subtotal > 0 && subtotal > finalTotal) {
-    const discountAmount = subtotal - finalTotal;
-
-    if (dom.cartDiscountBanner) dom.cartDiscountBanner.classList.remove('hidden');
-    if (dom.cartSubtotalRow) {
-      dom.cartSubtotalRow.classList.remove('hidden');
-      if (dom.cartSubtotalPrice) dom.cartSubtotalPrice.textContent = formatVND(subtotal);
-    }
-    if (dom.cartDiscountRow) {
-      dom.cartDiscountRow.classList.remove('hidden');
-      if (dom.cartDiscountAmount) dom.cartDiscountAmount.textContent = `-${formatVND(discountAmount)}`;
-    }
-  } else {
-    if (dom.cartDiscountBanner) dom.cartDiscountBanner.classList.add('hidden');
-    if (dom.cartSubtotalRow) dom.cartSubtotalRow.classList.add('hidden');
-    if (dom.cartDiscountRow) dom.cartDiscountRow.classList.add('hidden');
-  }
-
-  dom.cartTotalPrice.textContent = formatVND(finalTotal);
-
-  dom.cartItemsContainer.querySelectorAll('[data-cart-dec]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      playChimeSound(600, 450);
-      changeCartQty(Number(btn.dataset.cartDec), -1);
-    });
-  });
-  dom.cartItemsContainer.querySelectorAll('[data-cart-inc]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      playChimeSound(700, 1000);
-      changeCartQty(Number(btn.dataset.cartInc), 1);
-    });
-  });
-  dom.cartItemsContainer.querySelectorAll('[data-cart-note]').forEach((inp) => {
-    inp.addEventListener('input', () => {
-      const target = state.cart.find((c) => Number(c.foodId) === Number(inp.dataset.cartNote));
-      if (target) {
-        target.note = inp.value;
-        saveCartToStorage();
+      if (dom.cartDiscountBanner) dom.cartDiscountBanner.classList.remove('hidden');
+      if (dom.cartSubtotalRow) {
+        dom.cartSubtotalRow.classList.remove('hidden');
+        if (dom.cartSubtotalPrice) dom.cartSubtotalPrice.textContent = formatVND(subtotal);
       }
+      if (dom.cartDiscountRow) {
+        dom.cartDiscountRow.classList.remove('hidden');
+        if (dom.cartDiscountAmount) dom.cartDiscountAmount.textContent = `-${formatVND(discountAmount)}`;
+      }
+    } else {
+      if (dom.cartDiscountBanner) dom.cartDiscountBanner.classList.add('hidden');
+      if (dom.cartSubtotalRow) dom.cartSubtotalRow.classList.add('hidden');
+      if (dom.cartDiscountRow) dom.cartDiscountRow.classList.add('hidden');
+    }
+
+    if (dom.cartTotalPrice) dom.cartTotalPrice.textContent = formatVND(finalTotal);
+
+    dom.cartItemsContainer.querySelectorAll('[data-cart-dec]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        playChimeSound(600, 450);
+        changeCartQty(Number(btn.dataset.cartDec), -1);
+      });
     });
-  });
+    dom.cartItemsContainer.querySelectorAll('[data-cart-inc]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        playChimeSound(700, 1000);
+        changeCartQty(Number(btn.dataset.cartInc), 1);
+      });
+    });
+    dom.cartItemsContainer.querySelectorAll('[data-cart-note]').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const target = state.cart.find((c) => Number(c.foodId) === Number(inp.dataset.cartNote));
+        if (target) {
+          target.note = inp.value;
+          saveCartToStorage();
+        }
+      });
+    });
+  } else {
+    if (dom.cartTotalPrice) dom.cartTotalPrice.textContent = formatVND(finalTotal);
+  }
 
   updateCheckoutButtonState();
 }
@@ -2531,16 +2547,16 @@ async function loadAllInitialData({ silent = false } = {}) {
       applyAuthUserUI(null);
     }
 
-    renderUsersDropdown();
+    try { renderUsersDropdown(); } catch (e) { console.warn('[CustomerApp] renderUsersDropdown error:', e); }
     if (authUser) {
-      applyAuthUserUI(authUser);
+      try { applyAuthUserUI(authUser); } catch (e) { console.warn('[CustomerApp] applyAuthUserUI error:', e); }
     } else {
-      applySelectedUserAddress(false);
+      try { applySelectedUserAddress(false); } catch (e) { console.warn('[CustomerApp] applySelectedUserAddress error:', e); }
     }
-    renderCategoriesPills();
-    renderFoodsGrid();
-    renderCart();
-    await loadRouletteCandidates('all');
+    try { renderCategoriesPills(); } catch (e) { console.warn('[CustomerApp] renderCategoriesPills error:', e); }
+    try { renderFoodsGrid(); } catch (e) { console.warn('[CustomerApp] renderFoodsGrid error:', e); }
+    try { renderCart(); } catch (e) { console.warn('[CustomerApp] renderCart error:', e); }
+    try { await loadRouletteCandidates('all'); } catch (e) { console.warn('[CustomerApp] loadRouletteCandidates error:', e); }
 
     // Quản lý hiển thị Order Tracker theo trạng thái đăng nhập
     if (authUser) {
@@ -2777,9 +2793,11 @@ function bindUiEvents() {
     });
   }
 
-  dom.deliveryAddressInput.addEventListener('input', () => {
-    state.addressTouched = true;
-  });
+  if (dom.deliveryAddressInput) {
+    dom.deliveryAddressInput.addEventListener('input', () => {
+      state.addressTouched = true;
+    });
+  }
 
   if (dom.customerNameInput) {
     dom.customerNameInput.addEventListener('input', () => {
@@ -2823,45 +2841,61 @@ function bindUiEvents() {
     });
   }
 
-  dom.menuSearchInput.addEventListener('input', () => {
-    state.searchQuery = dom.menuSearchInput.value;
-    dom.btnClearSearch.classList.toggle('hidden', !state.searchQuery);
-    renderFoodsGrid();
-  });
+  if (dom.menuSearchInput) {
+    dom.menuSearchInput.addEventListener('input', () => {
+      state.searchQuery = dom.menuSearchInput.value;
+      if (dom.btnClearSearch) dom.btnClearSearch.classList.toggle('hidden', !state.searchQuery);
+      renderFoodsGrid();
+    });
+  }
 
-  dom.btnClearSearch.addEventListener('click', () => {
-    state.searchQuery = '';
-    dom.menuSearchInput.value = '';
-    dom.btnClearSearch.classList.add('hidden');
-    renderFoodsGrid();
-  });
+  if (dom.btnClearSearch) {
+    dom.btnClearSearch.addEventListener('click', () => {
+      state.searchQuery = '';
+      if (dom.menuSearchInput) dom.menuSearchInput.value = '';
+      dom.btnClearSearch.classList.add('hidden');
+      renderFoodsGrid();
+    });
+  }
 
-  dom.chkOnlyAvailable.addEventListener('change', () => {
-    state.onlyAvailable = dom.chkOnlyAvailable.checked;
-    renderFoodsGrid();
-  });
+  if (dom.chkOnlyAvailable) {
+    dom.chkOnlyAvailable.addEventListener('change', () => {
+      state.onlyAvailable = dom.chkOnlyAvailable.checked;
+      renderFoodsGrid();
+    });
+  }
 
-  dom.btnClearCart.addEventListener('click', () => {
-    state.cart = [];
-    saveCartToStorage();
-    renderCart();
-    renderFoodsGrid();
-  });
+  if (dom.btnClearCart) {
+    dom.btnClearCart.addEventListener('click', () => {
+      state.cart = [];
+      saveCartToStorage();
+      renderCart();
+      renderFoodsGrid();
+    });
+  }
 
-  dom.checkoutForm.addEventListener('submit', handleCheckoutSubmit);
+  if (dom.checkoutForm) {
+    dom.checkoutForm.addEventListener('submit', handleCheckoutSubmit);
+  }
 
-  dom.activeOrderSelect.addEventListener('change', async () => {
-    state.activeOrderId = Number(dom.activeOrderSelect.value) || null;
-    await loadActiveOrderDetail(state.activeOrderId);
-  });
+  if (dom.activeOrderSelect) {
+    dom.activeOrderSelect.addEventListener('change', async () => {
+      state.activeOrderId = Number(dom.activeOrderSelect.value) || null;
+      await loadActiveOrderDetail(state.activeOrderId);
+    });
+  }
 
-  dom.btnRefreshTracker.addEventListener('click', () => {
-    loadOrdersForSelectedUser(state.activeOrderId);
-  });
+  if (dom.btnRefreshTracker) {
+    dom.btnRefreshTracker.addEventListener('click', () => {
+      loadOrdersForSelectedUser(state.activeOrderId);
+    });
+  }
 
-  dom.btnToggleTrackerBody.addEventListener('click', () => {
-    toggleTrackerCollapse();
-  });
+  if (dom.btnToggleTrackerBody) {
+    dom.btnToggleTrackerBody.addEventListener('click', () => {
+      toggleTrackerCollapse();
+    });
+  }
 }
 
 async function initCustomerApp() {

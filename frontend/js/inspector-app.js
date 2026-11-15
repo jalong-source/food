@@ -290,21 +290,22 @@ function refreshIcons() {
 }
 
 function showToast(title, message = '', variant = 'info') {
+  if (!dom.toastContainer) return;
   const styles = {
-    success: { border: 'border-[#52886B]', icon: 'check-circle-2', color: 'text-[#6BBF8C]' },
-    warning: { border: 'border-[#DFC27D]', icon: 'shield-alert', color: 'text-[#E5A93C]' },
-    error: { border: 'border-[#DB988F]', icon: 'octagon-alert', color: 'text-[#E07A5F]' },
-    info: { border: 'border-[#8C6D46]', icon: 'terminal', color: 'text-[#C5A059]' },
+    success: { border: 'border-[#4A7C59]', icon: 'check-circle-2', color: 'text-[#8FD5A6]' },
+    warning: { border: 'border-[#C5A059]', icon: 'shield-alert', color: 'text-[#F3D282]' },
+    error: { border: 'border-[#A63A2B]', icon: 'octagon-alert', color: 'text-[#E6A196]' },
+    info: { border: 'border-[#D4A373]', icon: 'terminal', color: 'text-[#D4A373]' },
   };
   const st = styles[variant] || styles.info;
 
   const el = document.createElement('div');
-  el.className = `pointer-events-auto toast-enter vintage-toast border ${st.border} p-3.5 shadow-2xl flex items-start gap-3`;
+  el.className = `pointer-events-auto toast-enter vintage-toast bg-[#2C1E16] text-[#F6F1E7] border-2 ${st.border} rounded-xl p-3.5 shadow-2xl flex items-start gap-3`;
   el.innerHTML = `
     <i data-lucide="${st.icon}" class="w-5 h-5 ${st.color} shrink-0 mt-0.5"></i>
     <div class="min-w-0 flex-1">
-      <div class="text-xs font-bold font-playfair text-[#F6F1E7] leading-snug">${escapeHtml(title)}</div>
-      ${message ? `<div class="text-[11px] text-[#D8CBB8] mt-1 leading-relaxed">${escapeHtml(message)}</div>` : ''}
+      <div class="text-xs font-bold font-serif text-[#F6F1E7] leading-snug">${escapeHtml(title)}</div>
+      ${message ? `<div class="text-[11px] text-[#D8CBB8] mt-1 leading-relaxed font-sans">${escapeHtml(message)}</div>` : ''}
     </div>
   `;
   dom.toastContainer.appendChild(el);
@@ -798,12 +799,13 @@ function renderFoodsCrudTable(highlightId = null) {
                 : `<span class="badge-vintage-brick">Ngừng bán</span>`
             }
           </td>
-          <td class="py-2.5 px-3 text-right whitespace-nowrap">
-            <div class="inline-flex items-center gap-1.5">
+          <td class="py-2 px-2.5 text-right whitespace-nowrap">
+            <div class="inline-flex items-center justify-end gap-1">
               <button
                 type="button"
                 data-edit-food="${food.id}"
-                class="px-2.5 py-1 rounded-lg bg-[#3A2A1E] hover:bg-[#4A3528] border border-[#5C4332] text-[#E0C788] hover:text-[#FFFDF9] text-xs font-semibold transition"
+                class="px-2 py-1 rounded bg-[#3A2A1E] hover:bg-[#4A3528] border border-[#5C4332] text-[#E0C788] hover:text-[#FFFDF9] text-[11px] font-semibold transition"
+                title="Sửa thông tin món ăn"
               >
                 Sửa
               </button>
@@ -813,29 +815,30 @@ function renderFoodsCrudTable(highlightId = null) {
                     <button
                       type="button"
                       data-soft-del-food="${food.id}"
-                      class="px-2.5 py-1 rounded-lg badge-vintage-mustard text-xs font-semibold hover:brightness-95 transition"
+                      class="px-2 py-1 rounded badge-vintage-mustard text-[11px] font-semibold hover:brightness-95 transition"
                       title="Soft Delete (?mode=soft): Đặt is_available = false an toàn chuẩn 3NF"
                     >
-                      Ngừng bán (Soft)
+                      Ngừng bán
                     </button>
                   `
                   : `
                     <button
                       type="button"
                       data-reopen-food="${food.id}"
-                      class="px-2.5 py-1 rounded-lg badge-vintage-moss text-xs font-semibold hover:brightness-95 transition"
+                      class="px-2 py-1 rounded badge-vintage-moss text-[11px] font-semibold hover:brightness-95 transition"
+                      title="Mở bán lại món ăn"
                     >
-                      Mở bán lại
+                      Mở bán
                     </button>
                   `
               }
               <button
                 type="button"
                 data-hard-del-food="${food.id}"
-                class="px-2.5 py-1 rounded-lg badge-vintage-brick text-xs font-bold hover:brightness-95 transition"
-                title="Gọi DELETE /api/foods/:id để kiểm chứng Khóa ngoại ON DELETE RESTRICT (SQLSTATE 23503)"
+                class="px-2 py-1 rounded badge-vintage-brick text-[11px] font-bold hover:brightness-95 transition"
+                title="DELETE /api/foods/:id: Kiểm chứng Khóa ngoại ON DELETE RESTRICT (SQLSTATE 23503)"
               >
-                Xóa cứng (Test FK)
+                Xóa cứng
               </button>
             </div>
           </td>
