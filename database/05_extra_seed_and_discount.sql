@@ -43,6 +43,13 @@ BEGIN
             USING ERRCODE = '22023';
     END IF;
 
+    -- Tự động cập nhật địa chỉ giao hàng mặc định cho khách hàng
+    UPDATE users
+    SET default_address = v_final_address,
+        updated_at = NOW()
+    WHERE id = p_user_id
+      AND (default_address IS DISTINCT FROM v_final_address);
+
     -- 2. Kiểm tra cấu trúc mảng JSONB `p_items`
     IF p_items IS NULL OR jsonb_typeof(p_items) <> 'array' OR jsonb_array_length(p_items) = 0 THEN
         RAISE EXCEPTION 'Danh sách món đặt hàng (p_items) phải là mảng JSON không rỗng.'

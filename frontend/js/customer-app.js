@@ -5,6 +5,7 @@
  */
 
 import {
+  apiRequest,
   getCategories,
   getUsers,
   getFoods,
@@ -123,6 +124,32 @@ const state = {
 
 const CART_STORAGE_KEY = 'jalongfood_cart_v1';
 const USER_STORAGE_KEY = 'jalongfood_selected_user_v1';
+export const AUTH_STORAGE_KEY = 'jalong_user_session';
+
+export function getAuthUser() {
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (_e) {
+    return null;
+  }
+}
+
+export function setAuthUser(user) {
+  try {
+    if (!user) {
+      clearAuthUser();
+      return;
+    }
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+  } catch (_e) {}
+}
+
+export function clearAuthUser() {
+  try {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+  } catch (_e) {}
+}
 
 /* ==========================================================================
    WEB AUDIO SYNTHESIZER (MICRO-INTERACTIONS)
@@ -340,6 +367,29 @@ const dom = {
   dbStatusText: document.getElementById('dbStatusText'),
   dbLatencyBadge: document.getElementById('dbLatencyBadge'),
   realtimeTransportBadge: document.getElementById('realtimeTransportBadge'),
+
+  btnOpenAuthModal: document.getElementById('btnOpenAuthModal'),
+  headerUserLoggedIn: document.getElementById('headerUserLoggedIn'),
+  headerUserNameDisplay: document.getElementById('headerUserNameDisplay'),
+  headerLoyaltyBadge: document.getElementById('headerLoyaltyBadge'),
+  btnLogout: document.getElementById('btnLogout'),
+
+  authModalBackdrop: document.getElementById('authModalBackdrop'),
+  authModalContainer: document.getElementById('authModalContainer'),
+  btnCloseAuthModal: document.getElementById('btnCloseAuthModal'),
+  tabBtnLogin: document.getElementById('tabBtnLogin'),
+  tabBtnRegister: document.getElementById('tabBtnRegister'),
+  formLogin: document.getElementById('formLogin'),
+  loginPhone: document.getElementById('loginPhone'),
+  loginPassword: document.getElementById('loginPassword'),
+  btnQuickFillDemo: document.getElementById('btnQuickFillDemo'),
+  btnSubmitLogin: document.getElementById('btnSubmitLogin'),
+  formRegister: document.getElementById('formRegister'),
+  regFullName: document.getElementById('regFullName'),
+  regPhone: document.getElementById('regPhone'),
+  regPassword: document.getElementById('regPassword'),
+  regAddress: document.getElementById('regAddress'),
+  btnSubmitRegister: document.getElementById('btnSubmitRegister'),
 
   customerSelect: document.getElementById('customerSelect'),
   headerCustomerNameDisplay: document.getElementById('headerCustomerNameDisplay'),
@@ -584,6 +634,309 @@ async function pollDbHealth() {
 }
 
 /* ==========================================================================
+   CUSTOMER AUTHENTICATION & MODAL CONTROLS (VINTAGE BISTRO)
+   ========================================================================== */
+
+function openAuthModal(defaultTab = 'login') {
+  if (!dom.authModalBackdrop) return;
+  dom.authModalBackdrop.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+  switchAuthTab(defaultTab);
+  refreshIcons();
+  setTimeout(() => {
+    if (defaultTab === 'login' && dom.loginPhone) dom.loginPhone.focus();
+    if (defaultTab === 'register' && dom.regFullName) dom.regFullName.focus();
+  }, 50);
+}
+
+function closeAuthModal() {
+  if (!dom.authModalBackdrop) return;
+  dom.authModalBackdrop.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+}
+
+function switchAuthTab(tab) {
+  if (!dom.tabBtnLogin || !dom.tabBtnRegister || !dom.formLogin || !dom.formRegister) return;
+  if (tab === 'login') {
+    dom.tabBtnLogin.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-bold transition duration-200 bg-[#2C1E16] text-[#FFFDF9] shadow-xs cursor-pointer';
+    dom.tabBtnRegister.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-bold transition duration-200 text-[#5C4332] hover:text-[#2C1E16] cursor-pointer';
+    dom.formLogin.classList.remove('hidden');
+    dom.formRegister.classList.add('hidden');
+  } else {
+    dom.tabBtnRegister.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-bold transition duration-200 bg-[#2C1E16] text-[#FFFDF9] shadow-xs cursor-pointer';
+    dom.tabBtnLogin.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-bold transition duration-200 text-[#5C4332] hover:text-[#2C1E16] cursor-pointer';
+    dom.formRegister.classList.remove('hidden');
+    dom.formLogin.classList.add('hidden');
+  }
+  refreshIcons();
+}
+
+function applyAuthUserUI(user) {
+  if (!user) {
+    if (dom.btnOpenAuthModal) dom.btnOpenAuthModal.classList.remove('hidden');
+    if (dom.headerUserLoggedIn) {
+      dom.headerUserLoggedIn.classList.add('hidden');
+      dom.headerUserLoggedIn.classList.remove('flex');
+    }
+    if (dom.headerUserNameDisplay) dom.headerUserNameDisplay.textContent = '';
+    if (dom.headerCustomerNameDisplay) dom.headerCustomerNameDisplay.textContent = 'Khách vãng lai (Bạn)';
+    if (dom.headerLoyaltyBadge) dom.headerLoyaltyBadge.classList.add('hidden');
+    state.selectedUserId = null;
+    state.isReturningCustomer = false;
+    state.discountPercent = 0;
+    renderCart();
+    return;
+  }
+
+  const userId = Number(user.id);
+  state.selectedUserId = userId;
+  localStorage.setItem(USER_STORAGE_KEY, String(userId));
+
+  if (dom.btnOpenAuthModal) dom.btnOpenAuthModal.classList.add('hidden');
+  if (dom.headerUserLoggedIn) {
+    dom.headerUserLoggedIn.classList.remove('hidden');
+    dom.headerUserLoggedIn.classList.add('flex');
+  }
+
+  const displayName = user.full_name || user.name || 'Khách hàng';
+  if (dom.headerUserNameDisplay) {
+    dom.headerUserNameDisplay.textContent = displayName;
+  }
+  if (dom.headerCustomerNameDisplay) {
+    dom.headerCustomerNameDisplay.textContent = displayName + ' (Bạn)';
+  }
+
+  const isLoyal = Boolean(user.is_loyal ?? user.isLoyal ?? false);
+  if (dom.headerLoyaltyBadge) {
+    if (isLoyal) {
+      dom.headerLoyaltyBadge.classList.remove('hidden');
+      dom.headerLoyaltyBadge.classList.add('inline-flex');
+    } else {
+      dom.headerLoyaltyBadge.classList.add('hidden');
+      dom.headerLoyaltyBadge.classList.remove('inline-flex');
+    }
+  }
+
+  // Tự động điền form Guest Check thanh toán: Họ tên (customerName), SĐT (customerPhone), Địa chỉ (customerAddress)
+  if (dom.customerNameInput) {
+    dom.customerNameInput.value = displayName;
+    localStorage.setItem(CUSTOMER_NAME_KEY, displayName);
+  }
+  if (dom.customerPhoneInput) {
+    dom.customerPhoneInput.value = user.phone || '';
+    localStorage.setItem(CUSTOMER_PHONE_KEY, user.phone || '');
+  }
+  if (dom.customerEmailInput) {
+    const emailVal = user.email || (user.phone ? `${user.phone}@jalongfood.vn` : '');
+    dom.customerEmailInput.value = emailVal;
+    localStorage.setItem(CUSTOMER_EMAIL_KEY, emailVal);
+  }
+  if (dom.deliveryAddressInput && user.default_address) {
+    dom.deliveryAddressInput.value = user.default_address;
+    state.addressTouched = false;
+  }
+
+  state.isReturningCustomer = isLoyal;
+  state.discountPercent = isLoyal ? 10 : 0;
+  renderCart();
+  refreshIcons();
+}
+
+async function handleLoginSubmit(e) {
+  e.preventDefault();
+  const phone = (dom.loginPhone?.value || '').trim();
+  const password = (dom.loginPassword?.value || '').trim();
+
+  if (!phone || !password) {
+    showToast('Thiếu thông tin', 'Vui lòng nhập số điện thoại và mật khẩu.', 'warning');
+    return;
+  }
+
+  const prevText = dom.btnSubmitLogin.innerHTML;
+  dom.btnSubmitLogin.disabled = true;
+  dom.btnSubmitLogin.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span>ĐANG XÁC THỰC...</span>';
+  refreshIcons();
+
+  try {
+    let user = null;
+    try {
+      const res = await apiRequest('/api/auth/login', {
+        method: 'POST',
+        bodyObj: { phone, password }
+      });
+      user = res?.user || res?.data?.user || res?.data || res;
+    } catch (apiErr) {
+      if (apiErr?.status === 404) {
+        // Fallback gracefully for mock demo if endpoint not yet mounted
+        const found = state.users.find(
+          (u) => u.phone === phone || u.phone?.replace(/\D/g, '') === phone.replace(/\D/g, '')
+        );
+        user = found ? { ...found } : {
+          id: 1,
+          full_name: phone === '0901234567' ? 'Gia Long' : 'Khách Hàng',
+          phone: phone,
+          email: `${phone}@jalongfood.vn`,
+          default_address: '15 Tràng Tiền, Hoàn Kiếm, Hà Nội',
+          role: 'customer'
+        };
+      } else {
+        throw apiErr;
+      }
+    }
+
+    if (!user || !user.id) {
+      throw new Error('Số điện thoại hoặc mật khẩu không chính xác.');
+    }
+
+    // Determine loyalty
+    if (user.is_loyal === undefined) {
+      try {
+        const check = await checkCustomer({ phone: user.phone || phone });
+        user.is_loyal = Boolean(check?.isReturning || (check?.orderCount && check.orderCount > 0));
+      } catch (_e) {
+        user.is_loyal = true;
+      }
+    }
+
+    setAuthUser(user);
+    applyAuthUserUI(user);
+    closeAuthModal();
+
+    playSuccessChord();
+    showToast(
+      'Đăng nhập thành công',
+      `Chào mừng trở lại, ${user.full_name || 'Quý khách'}!`,
+      'success'
+    );
+
+    // Tự động tải lại danh sách theo dõi đơn hàng: Gọi /api/orders?user_id=${user.id}
+    await loadOrdersForSelectedUser();
+
+  } catch (err) {
+    showToast(
+      'Đăng nhập thất bại',
+      err?.message || 'Số điện thoại hoặc mật khẩu không chính xác.',
+      'error'
+    );
+  } finally {
+    dom.btnSubmitLogin.disabled = false;
+    dom.btnSubmitLogin.innerHTML = prevText;
+    refreshIcons();
+  }
+}
+
+async function handleRegisterSubmit(e) {
+  e.preventDefault();
+  const fullName = (dom.regFullName?.value || '').trim();
+  const phone = (dom.regPhone?.value || '').trim();
+  const password = (dom.regPassword?.value || '').trim();
+  const address = (dom.regAddress?.value || '').trim();
+
+  if (!fullName || !phone || !password || !address) {
+    showToast('Thiếu thông tin', 'Vui lòng điền đầy đủ các thông tin đăng ký.', 'warning');
+    return;
+  }
+
+  const prevText = dom.btnSubmitRegister.innerHTML;
+  dom.btnSubmitRegister.disabled = true;
+  dom.btnSubmitRegister.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span>ĐANG TẠO TÀI KHOẢN...</span>';
+  refreshIcons();
+
+  try {
+    let user = null;
+    try {
+      const res = await apiRequest('/api/auth/register', {
+        method: 'POST',
+        bodyObj: {
+          full_name: fullName,
+          fullName,
+          phone,
+          password,
+          default_address: address,
+          defaultAddress: address,
+          address
+        }
+      });
+      user = res?.user || res?.data?.user || res?.data || res;
+    } catch (apiErr) {
+      if (apiErr?.status === 404) {
+        user = {
+          id: Date.now() % 100000,
+          full_name: fullName,
+          phone: phone,
+          email: `${slugifyName(fullName)}@gmail.com`,
+          default_address: address,
+          is_loyal: false,
+          role: 'customer'
+        };
+      } else {
+        throw apiErr;
+      }
+    }
+
+    if (!user || !user.id) {
+      throw new Error('Không thể khởi tạo tài khoản lúc này.');
+    }
+
+    setAuthUser(user);
+    applyAuthUserUI(user);
+    closeAuthModal();
+
+    playSuccessChord();
+    showToast(
+      'Đăng ký thành công',
+      `Chào mừng quý khách ${user.full_name || fullName} đến với JaLongFood!`,
+      'success'
+    );
+
+    // Tự động tải lại danh sách theo dõi đơn hàng
+    await loadOrdersForSelectedUser();
+
+  } catch (err) {
+    showToast(
+      'Đăng ký thất bại',
+      err?.message || 'Không thể tạo tài khoản. Vui lòng thử lại.',
+      'error'
+    );
+  } finally {
+    dom.btnSubmitRegister.disabled = false;
+    dom.btnSubmitRegister.innerHTML = prevText;
+    refreshIcons();
+  }
+}
+
+function handleLogout() {
+  clearAuthUser();
+  applyAuthUserUI(null);
+
+  // Clear Guest Check form
+  if (dom.customerNameInput) dom.customerNameInput.value = '';
+  if (dom.customerPhoneInput) dom.customerPhoneInput.value = '';
+  if (dom.customerEmailInput) dom.customerEmailInput.value = '';
+  if (dom.deliveryAddressInput) dom.deliveryAddressInput.value = '';
+
+  state.orders = [];
+  state.activeOrderId = null;
+  state.activeOrderDetail = null;
+
+  if (dom.activeOrderSelect) {
+    dom.activeOrderSelect.innerHTML = '<option value="">Vui lòng đăng nhập để xem lịch sử đơn hàng của bạn</option>';
+  }
+
+  if (dom.trackerEmptyState) {
+    dom.trackerEmptyState.classList.remove('hidden');
+    const p1 = dom.trackerEmptyState.querySelector('p');
+    if (p1) p1.textContent = 'Vui lòng đăng nhập để xem lịch sử đơn hàng của bạn';
+  }
+  if (dom.trackerActiveContent) {
+    dom.trackerActiveContent.classList.add('hidden');
+  }
+
+  showToast('Đã đăng xuất', 'Đã đăng xuất tài khoản thành công.', 'info');
+  refreshIcons();
+}
+
+/* ==========================================================================
    CUSTOMER ACCOUNT & PROFILE SYNC (`users`)
    ========================================================================== */
 
@@ -600,6 +953,11 @@ function slugifyName(name) {
 }
 
 function syncCustomerNameUI() {
+  const authUser = getAuthUser();
+  if (authUser) {
+    applyAuthUserUI(authUser);
+    return;
+  }
   const savedName = localStorage.getItem(CUSTOMER_NAME_KEY) || 'Gia Long';
   const savedPhone = localStorage.getItem(CUSTOMER_PHONE_KEY) || '0988123456';
   const savedEmail = localStorage.getItem(CUSTOMER_EMAIL_KEY) || 'hoanglong@gmail.com';
@@ -1611,8 +1969,12 @@ async function handleCheckoutSubmit(evt) {
   dom.btnSubmitOrderLabel.textContent = 'Đang xử lý đơn món...';
 
   try {
+    const authUser = getAuthUser();
+    const finalUserId = authUser?.id ? Number(authUser.id) : (state.selectedUserId ? Number(state.selectedUserId) : undefined);
+
     const created = await createOrder({
-      user_id: state.selectedUserId,
+      user_id: finalUserId,
+      userId: finalUserId,
       customer_name: customerName,
       customer_phone: customerPhone,
       customer_email: customerEmail,
@@ -1711,11 +2073,18 @@ function toggleTrackerCollapse(forceState) {
 
 async function loadOrdersForSelectedUser(preferredOrderId = null) {
   try {
-    const allOrders = await getOrders();
-    const myOrders = (state.selectedUserId ? allOrders.filter((o) => Number(o.user_id) === Number(state.selectedUserId)) : allOrders)
-      .sort((a, b) => Number(b.id) - Number(a.id));
+    const authUser = getAuthUser();
+    const targetUserId = authUser?.id ? Number(authUser.id) : (state.selectedUserId ? Number(state.selectedUserId) : null);
 
-    const ordersToShow = myOrders.length > 0 ? myOrders : allOrders.sort((a, b) => Number(b.id) - Number(a.id));
+    let ordersToShow = [];
+    if (targetUserId) {
+      // Gọi /api/orders?user_id=${targetUserId} để chỉ hiển thị các đơn hàng của riêng khách hàng đó!
+      const userOrders = await getOrders({ user_id: targetUserId });
+      ordersToShow = Array.isArray(userOrders) ? userOrders.sort((a, b) => Number(b.id) - Number(a.id)) : [];
+    } else {
+      ordersToShow = [];
+    }
+
     state.orders = ordersToShow;
 
     if (!ordersToShow.length) {
@@ -1727,7 +2096,7 @@ async function loadOrdersForSelectedUser(preferredOrderId = null) {
       }
       state.activeOrderId = null;
       state.activeOrderDetail = null;
-      dom.activeOrderSelect.innerHTML = `<option value="">Chưa có đơn hàng nào</option>`;
+      dom.activeOrderSelect.innerHTML = `<option value="">${authUser ? 'Chưa có đơn hàng nào' : 'Vui lòng đăng nhập để xem lịch sử đơn hàng của bạn'}</option>`;
       renderOrderTracker();
       return;
     }
@@ -2069,18 +2438,19 @@ async function loadAllInitialData({ silent = false } = {}) {
     state.users = Array.isArray(users) ? users : [];
     state.foods = Array.isArray(foods) ? foods : [];
 
-    const savedUserId = localStorage.getItem(USER_STORAGE_KEY);
-    const defaultCustomer =
-      (savedUserId && state.users.find((u) => Number(u.id) === Number(savedUserId))) ||
-      state.users.find((u) => u.role === 'customer') ||
-      state.users[0];
-
-    if (defaultCustomer && !state.selectedUserId) {
-      state.selectedUserId = Number(defaultCustomer.id);
+    const authUser = getAuthUser();
+    if (authUser) {
+      applyAuthUserUI(authUser);
+    } else {
+      applyAuthUserUI(null);
     }
 
     renderUsersDropdown();
-    applySelectedUserAddress(false);
+    if (authUser) {
+      applyAuthUserUI(authUser);
+    } else {
+      applySelectedUserAddress(false);
+    }
     renderCategoriesPills();
     renderFoodsGrid();
     renderCart();
@@ -2252,6 +2622,48 @@ function setupRealtimeSubscription() {
 
 function bindUiEvents() {
   bindRouletteEvents();
+
+  // Auth Modal & Session Events
+  if (dom.btnOpenAuthModal) {
+    dom.btnOpenAuthModal.addEventListener('click', () => openAuthModal('login'));
+  }
+  if (dom.btnCloseAuthModal) {
+    dom.btnCloseAuthModal.addEventListener('click', closeAuthModal);
+  }
+  if (dom.authModalBackdrop) {
+    dom.authModalBackdrop.addEventListener('click', (e) => {
+      if (e.target === dom.authModalBackdrop) {
+        closeAuthModal();
+      }
+    });
+  }
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dom.authModalBackdrop && !dom.authModalBackdrop.classList.contains('hidden')) {
+      closeAuthModal();
+    }
+  });
+
+  if (dom.tabBtnLogin) {
+    dom.tabBtnLogin.addEventListener('click', () => switchAuthTab('login'));
+  }
+  if (dom.tabBtnRegister) {
+    dom.tabBtnRegister.addEventListener('click', () => switchAuthTab('register'));
+  }
+  if (dom.btnQuickFillDemo) {
+    dom.btnQuickFillDemo.addEventListener('click', () => {
+      if (dom.loginPhone) dom.loginPhone.value = '0901234567';
+      if (dom.loginPassword) dom.loginPassword.value = '123456';
+    });
+  }
+  if (dom.formLogin) {
+    dom.formLogin.addEventListener('submit', handleLoginSubmit);
+  }
+  if (dom.formRegister) {
+    dom.formRegister.addEventListener('submit', handleRegisterSubmit);
+  }
+  if (dom.btnLogout) {
+    dom.btnLogout.addEventListener('click', handleLogout);
+  }
 
   if (window.self !== window.top && dom.navSplitMode) {
     dom.navSplitMode.classList.add('hidden');

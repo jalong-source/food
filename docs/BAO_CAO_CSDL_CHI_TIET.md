@@ -118,7 +118,7 @@ Tách quan hệ $R_{\text{1NF}}$ thành 3 quan hệ con dựa theo các vế tr�
    - Trạng thái đơn hàng biến thiên liên tục theo chu trình FSM. Để lưu vết kiểm toán mà không vi phạm nguyên tử tính, bảng **`order_status_history`** được tạo độc lập để lưu vết từng bước chuyển trạng thái kèm định danh người thực hiện (`changed_by`).
 
 #### Kết quả cuối cùng: Hệ thống 6 bảng đạt chuẩn 3NF (và BCNF):
-1. **`users`**$(\underline{\text{id}}, \text{full\_name}, \text{email}, \text{phone}, \text{role}, \text{default\_address}, \text{created\_at}, \text{updated\_at})$
+1. **`users`**$(\underline{\text{id}}, \text{full\_name}, \text{email}, \text{phone}, \text{password\_hash}, \text{role}, \text{default\_address}, \text{created\_at}, \text{updated\_at})$
 2. **`categories`**$(\underline{\text{id}}, \text{name}, \text{slug}, \text{description}, \text{display\_order}, \text{created\_at})$
 3. **`foods`**$(\underline{\text{id}}, \text{category\_id}, \text{name}, \text{description}, \text{price}, \text{image\_url}, \text{is\_available}, \text{stock\_quantity}, \text{created\_at}, \text{updated\_at})$
 4. **`orders`**$(\underline{\text{id}}, \text{user\_id}, \text{delivery\_address}, \text{customer\_note}, \text{status}, \text{created\_at}, \text{updated\_at})$
@@ -184,6 +184,7 @@ Trong nhiều hệ thống thực tế hoặc đồ án non tay, lập trình vi
 | `full_name` | `VARCHAR(100)` | `NOT NULL` | *Không* | Họ và tên đầy đủ của người dùng. |
 | `email` | `VARCHAR(150)` | `UNIQUE, NOT NULL` | *Không* | Địa chỉ email đăng nhập / nhận thông báo hóa đơn điện tử. |
 | `phone` | `VARCHAR(20)` | `UNIQUE, NOT NULL` | *Không* | Số điện thoại liên lạc để tài xế gọi khi giao hàng. |
+| `password_hash` | `VARCHAR(255)` | `NULLABLE` | `NULL` | Mật khẩu được băm an toàn chuẩn mật mã học (`scrypt` với muối cố định) phục vụ xác thực người dùng. |
 | `role` | `VARCHAR(20)` | `NOT NULL, CHECK (role IN ('customer', 'admin', 'shipper', 'lecturer'))` | `'customer'` | Vai trò phân quyền trong hệ thống. |
 | `default_address` | `TEXT` | `NULLABLE` | `NULL` | Địa chỉ mặc định lưu trong hồ sơ cá nhân. |
 | `created_at` | `TIMESTAMPTZ` | `NOT NULL` | `NOW()` | Dấu thời gian tạo tài khoản (có múi giờ ISO-8601). |
@@ -616,6 +617,36 @@ EXECUTE FUNCTION fn_order_status_audit();
 #### Luận giải kiến trúc sự kiện thời gian thực (Transactional Event Architecture):
 - **Cơ chế truyền ngữ cảnh phiên (`Session Settings`):** Hàm `set_config('app.changed_by', ..., true)` với tham số thứ ba là `is_local = true` chỉ có hiệu lực trong phạm vi giao dịch hiện tại, ngăn ngừa rò rỉ ID nhân viên giữa các Connection Pool.
 - **Tính chất Transactional của `pg_notify`:** Trong PostgreSQL, thông điệp `pg_notify` chỉ thực sự được phát ra ngoài socket khi và chỉ khi Transaction chứa nó thực hiện `COMMIT` thành công. Nếu câu lệnh bị `ROLLBACK` (do lỗi thiếu hàng, vi phạm ràng buộc...), thông điệp sẽ bị hủy tự động, **ngăn chặn hoàn toàn hiện tượng báo động giả (Phantom Events)** lên giao diện Web Frontend!
+
+---
+
+### 3.6. Cơ chế Xác thực & Quản lý Phiên Người dùng (Authentication & Session Management)
+
+Nhằm đáp ứng yêu cầu vận hành thực tế của một nền tảng thương mại điện tử ẩm thực, hệ thống đã mở rộng và chuẩn hóa tính năng tài khoản cá nhân cho từng khách hàng:
+
+#### 1. Kiến trúc Băm Mật khẩu & Bảo mật Tầng CSDL:
+- Thuộc tính `password_hash VARCHAR(255)` được tích hợp trực tiếp vào bảng `users`.
+- Quy trình băm mật khẩu sử dụng thuật toán chuẩn mật mã học **`scrypt`** (`crypto.scryptSync(password, salt, 64)`) với khóa muối an toàn `jalong_vintage_salt_2026`. Mật khẩu dạng plain text tuyệt đối không lưu trong cơ sở dữ liệu.
+- Tài khoản mẫu khởi tạo sẵn trong `03_seed_data.sql`:
+  - Khách hàng VIP: **Gia Long** (`0901234567` / Mật khẩu: `123456` $\rightarrow$ đã có 1 đơn hàng hoàn tất $\rightarrow$ tự động kích hoạt ưu đãi **Khách quen 10%**).
+  - Giảng viên chấm thi: **Giảng Viên Test** (`0909999999` / Mật khẩu: `123456` $\rightarrow$ vai trò `lecturer`).
+
+#### 2. Xử lý Nghiệp vụ Tự động Hóa tại Stored Procedure `sp_create_order`:
+- Khi khách hàng đặt món, Stored Procedure `sp_create_order(p_user_id, ...)` tiếp nhận `p_user_id` chính thức từ phiên người dùng đã đăng nhập.
+- **Tự động đồng bộ địa chỉ:** Nếu khách hàng nhập địa chỉ nhận hàng mới trong biểu mẫu thanh toán khác với `users.default_address`, thủ tục tự động cập nhật lại địa chỉ mới vào bảng `users`:
+  ```sql
+  IF p_delivery_address IS NOT NULL AND BTRIM(p_delivery_address) <> '' THEN
+      UPDATE users 
+      SET default_address = BTRIM(p_delivery_address),
+          updated_at = NOW()
+      WHERE id = p_user_id AND (default_address IS NULL OR default_address <> BTRIM(p_delivery_address));
+  END IF;
+  ```
+- **Tự động áp dụng chiết khấu 10% khách quen:** Kiểm tra điều kiện `COUNT(id) >= 1` với trạng thái `Completed` thuộc về đúng `p_user_id` để trừ 10% trực tiếp trên tổng hóa đơn.
+
+#### 3. Phân quyền & Phân lập Dữ liệu (Data Isolation):
+- **Phía Khách hàng (`index.html`):** Giao diện gọi API `GET /api/orders?user_id=${user.id}`, đảm bảo mỗi khách hàng chỉ theo dõi và tra cứu được lịch sử đơn hàng của chính tài khoản mình.
+- **Phía Giảng viên & Ban Quản trị (`inspector.html`):** Giao diện gọi `GET /api/orders` không truyền tham số lọc, cho phép thanh tra toàn bộ sổ cái đơn hàng của mọi tài khoản theo thời gian thực (Real-time Audit Ledger).
 
 ---
 

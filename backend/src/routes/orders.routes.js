@@ -175,7 +175,7 @@ router.get('/', async (req, res, next) => {
           error: {
             code: 'INVALID_USER_ID',
             sqlState: null,
-            message: 'Tham sá»‘ user_id pháº£i lÃ  sá»‘ nguyÃªn dÆ°Æ¡ng.',
+            message: 'Tham số user_id phải là số nguyên dương.',
             detail: null,
           },
         });
@@ -316,6 +316,75 @@ router.get('/check-customer', async (req, res, next) => {
 });
 
 /**
+ * GET /api/orders/my/:userId
+ * Lấy danh sách đơn hàng của riêng khách hàng theo userId.
+ * Tùy chọn lọc: ?status=..., ?limit=...
+ */
+router.get('/my/:userId', async (req, res, next) => {
+  try {
+    const rawUserId = req.params.userId;
+    const userId = parseInt(rawUserId, 10);
+    if (!Number.isInteger(userId) || userId <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'INVALID_USER_ID',
+          sqlState: null,
+          message: 'Tham số userId phải là số nguyên dương.',
+          detail: null,
+        },
+      });
+    }
+
+    const conditions = ['user_id = $1'];
+    const params = [userId];
+
+    const rawStatus = req.query.status;
+    if (
+      rawStatus !== undefined &&
+      rawStatus !== null &&
+      String(rawStatus).trim() !== '' &&
+      String(rawStatus).toLowerCase() !== 'all'
+    ) {
+      params.push(String(rawStatus).trim());
+      conditions.push(`status = $${params.length}`);
+    }
+
+    const rawLimit = parseInt(req.query.limit || '100', 10);
+    const limit = Number.isInteger(rawLimit) ? Math.max(1, Math.min(200, rawLimit)) : 100;
+    params.push(limit);
+
+    const whereClause = `WHERE ${conditions.join(' AND ')}`;
+
+    const summaryRes = await query(
+      `
+      SELECT *
+      FROM vw_orders_summary
+      ${whereClause}
+      ORDER BY created_at DESC, id DESC
+      LIMIT $${params.length}
+      `,
+      params,
+      { source: 'orders.byUser' }
+    );
+
+    const orders = await hydrateOrderRows(summaryRes.rows, {
+      silent: true,
+      sourcePrefix: 'orders.byUser',
+    });
+
+    return res.json({
+      success: true,
+      count: orders.length,
+      data: orders,
+      orders,
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/**
  * GET /api/orders/:id
  */
 router.get('/:id', async (req, res, next) => {
@@ -327,7 +396,7 @@ router.get('/:id', async (req, res, next) => {
         error: {
           code: 'INVALID_ORDER_ID',
           sqlState: null,
-          message: 'ID Ä‘Æ¡n hÃ ng khÃ´ng há»£p lá»‡.',
+          message: 'ID đơn hàng không hợp lệ.',
           detail: null,
         },
       });
@@ -340,7 +409,7 @@ router.get('/:id', async (req, res, next) => {
         error: {
           code: 'ORDER_NOT_FOUND',
           sqlState: 'P0002',
-          message: `KhÃ´ng tÃ¬m tháº¥y Ä‘Æ¡n hÃ ng #${orderId}.`,
+          message: `Không tìm thấy đơn hàng #${orderId}.`,
           detail: null,
         },
       });
@@ -428,6 +497,18 @@ router.post('/', async (req, res, next) => {
                updated_at = CURRENT_TIMESTAMP
            WHERE id = $5`,
           [customerName, customerPhone || matched.phone, customerEmail || matched.email, deliveryAddress || null, userId],
+          { source: 'orders.updateCustomerUser' }
+        );
+      } else if (Number.isInteger(userId) && userId > 0) {
+        await query(
+          `UPDATE users
+           SET full_name = COALESCE(NULLIF($1, ''), full_name),
+               phone = COALESCE(NULLIF($2, ''), phone),
+               email = COALESCE(NULLIF($3, ''), email),
+               default_address = COALESCE(NULLIF($4, ''), default_address),
+               updated_at = CURRENT_TIMESTAMP
+           WHERE id = $5`,
+          [customerName, customerPhone || null, customerEmail || null, deliveryAddress || null, userId],
           { source: 'orders.updateCustomerUser' }
         );
       } else {

@@ -30,45 +30,50 @@ RESTART IDENTITY CASCADE;
 -- ============================================================================
 -- 1. KHỞI TẠO 5 NGƯỜI DÙNG (`users` -> ID: 1..5)
 -- ============================================================================
-INSERT INTO users (full_name, email, phone, role, default_address)
+INSERT INTO users (full_name, email, phone, password_hash, role, default_address)
 VALUES
-    -- ID = 1: Giảng viên hội đồng đánh giá
+    -- ID = 1: Giảng viên chấm thi
     (
-        'TS. Nguyễn Văn Giảng',
-        'lecturer@fit.edu.vn',
-        '0901000001',
+        'Giảng Viên Test',
+        'lecturer.test@fit.edu.vn',
+        '0909999999',
+        '665fbcfe5ffdfc0984a281040d2d4763d5351ecb448179838013cce639b8226a',
         'lecturer',
-        'Phòng Hội thảo A201, Khoa CNTT, ĐH Bách Khoa, Quận 10, TP.HCM'
+        'Phòng Hội đồng A201, Khoa CNTT, ĐH Bách Khoa, Quận 10, TP.HCM'
     ),
     -- ID = 2: Quản trị viên cửa hàng / Bếp trưởng
     (
         'Trần Quản Trị',
-        'admin@vietfood.vn',
+        'admin@jalong.io.vn',
         '0901000002',
+        '665fbcfe5ffdfc0984a281040d2d4763d5351ecb448179838013cce639b8226a',
         'admin',
-        'Tầng 5, Tòa nhà VietFood, 65 Lê Lợi, Quận 1, TP.HCM'
+        'Tầng 5, Tòa nhà JaLongFood, 65 Lê Lợi, Quận 1, TP.HCM'
     ),
     -- ID = 3: Nhân viên giao hàng (Shipper)
     (
         'Lê Hoàng Giao Nhanh',
-        'shipper@vietfood.vn',
+        'shipper@jalong.io.vn',
         '0901000003',
+        '665fbcfe5ffdfc0984a281040d2d4763d5351ecb448179838013cce639b8226a',
         'shipper',
         'Trạm điều phối Quận 3, 120 Võ Văn Tần, TP.HCM'
     ),
-    -- ID = 4: Khách hàng sinh viên 1
+    -- ID = 4: Khách hàng chính
     (
-        'Phạm Minh Tuấn',
-        'minhtuan@student.edu.vn',
-        '0901000004',
+        'Gia Long',
+        'gialong@jalong.io.vn',
+        '0901234567',
+        '665fbcfe5ffdfc0984a281040d2d4763d5351ecb448179838013cce639b8226a',
         'customer',
-        'Tòa B4, Ký túc xá Khu A ĐHQG, TP. Thủ Đức, TP.HCM'
+        'Số 88 Đồng Khởi, Phường Bến Nghé, Quận 1, TP.HCM'
     ),
     -- ID = 5: Khách hàng 2
     (
         'Võ Thị Thanh Hà',
         'thanhha@gmail.com',
         '0901000005',
+        '665fbcfe5ffdfc0984a281040d2d4763d5351ecb448179838013cce639b8226a',
         'customer',
         '268 Lý Thường Kiệt, Phường 14, Quận 10, TP.HCM'
     );
@@ -225,14 +230,14 @@ CALL sp_upsert_food(
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- ĐƠN HÀNG #1: Khách hàng Phạm Minh Tuấn (user_id = 4) -> Hoàn tất (`Completed`)
+-- ĐƠN HÀNG #1: Khách hàng Gia Long (user_id = 4) -> Hoàn tất (`Completed`)
 -- Gồm: 2x Phở Bò (ID=1), 1x Bánh Mì (ID=5), 2x Cà Phê Sữa Đá (ID=7)
 -- Tổng tiền (3NF tính qua vw_orders_summary): 2*65000 + 1*35000 + 2*29000 = 223,000 VNĐ
 -- ----------------------------------------------------------------------------
 CALL sp_create_order(
     4,
-    'Tòa B4, Ký túc xá Khu A ĐHQG, TP. Thủ Đức, TP.HCM',
-    'Giao trước 12h trưa giúp mình, gọi điện khi tới cổng KTX',
+    'Số 88 Đồng Khởi, Phường Bến Nghé, Quận 1, TP.HCM',
+    'Giao trước 12h trưa giúp mình, gọi điện khi tới sảnh tòa nhà',
     '[
         {"food_id": 1, "quantity": 2, "item_note": "Nhiều hành lá, không giá"},
         {"food_id": 5, "quantity": 1, "item_note": "Ít ớt"},
@@ -253,7 +258,7 @@ CALL sp_update_order_status(
     1,
     'Delivering',
     3,
-    'Shipper Lê Hoàng đã nhận món tại bếp, đang di chuyển tới KTX Khu A',
+    'Shipper Lê Hoàng đã nhận món tại bếp, đang di chuyển giao hàng',
     FALSE
 );
 
@@ -261,18 +266,18 @@ CALL sp_update_order_status(
     1,
     'Completed',
     3,
-    'Khách hàng Phạm Minh Tuấn đã nhận đủ 5 món và thanh toán hoàn tất',
+    'Khách hàng Gia Long đã nhận đủ 5 món và thanh toán hoàn tất',
     FALSE
 );
 
 -- ----------------------------------------------------------------------------
--- ĐƠN HÀNG #2: Giảng viên TS. Nguyễn Văn Giảng (user_id = 1) -> Đang giao (`Delivering`)
+-- ĐƠN HÀNG #2: Giảng viên Giảng Viên Test (user_id = 1) -> Đang giao (`Delivering`)
 -- Gồm: 1x Bún Bò Huế (ID=2), 2x Cơm Tấm (ID=3), 3x Trà Đào Cam Sả (ID=8)
 -- Tổng tiền (3NF tính qua vw_orders_summary): 1*70000 + 2*60000 + 3*39000 = 307,000 VNĐ
 -- ----------------------------------------------------------------------------
 CALL sp_create_order(
     1,
-    'Phòng Hội thảo A201, Khoa CNTT, ĐH Bách Khoa, Quận 10, TP.HCM',
+    'Phòng Hội đồng A201, Khoa CNTT, ĐH Bách Khoa, Quận 10, TP.HCM',
     'Đặt phần ăn trưa cho hội đồng chấm đồ án Thiết kế Cơ sở dữ liệu',
     '[
         {"food_id": 2, "quantity": 1, "item_note": "Không huyết, để sa tế riêng"},

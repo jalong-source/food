@@ -128,15 +128,46 @@
           <span id="realtimeTransportBadge" class="px-1.5 py-0.5 rounded bg-[#3B5249] text-[10px] text-[#FFFDF9] font-black">LIVE</span>
         </div>
 
-        <!-- Customer Identity Pill -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#FFFDF9] border border-[#D8CBB8] shadow-2xs">
-          <div class="w-6 h-6 rounded-full bg-[#2C1E16] text-[#D4A373] flex items-center justify-center text-xs font-bold">
-            <i data-lucide="user" class="w-3.5 h-3.5 text-[#D4A373]"></i>
+        <!-- Header Auth Controls -->
+        <!-- Unauthenticated State (Default) -->
+        <button
+          id="btnOpenAuthModal"
+          type="button"
+          class="bg-[#2C1E16] text-[#F6F1E7] border border-[#D8CBB8] hover:bg-[#3B2C24] px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition cursor-pointer"
+        >
+          <i data-lucide="user" class="w-3.5 h-3.5"></i>
+          <span>Đăng nhập / Đăng ký</span>
+        </button>
+
+        <!-- Authenticated State (Hidden by default) -->
+        <div
+          id="headerUserLoggedIn"
+          class="hidden items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FFFDF9] border border-[#D8CBB8] shadow-2xs"
+        >
+          <div class="w-6 h-6 rounded-full bg-[#2C1E16] text-[#D4A373] flex items-center justify-center text-xs font-bold shrink-0">
+            <i data-lucide="user-check" class="w-3.5 h-3.5 text-[#D4A373]"></i>
           </div>
           <div class="text-left">
-            <div class="text-[9px] font-bold uppercase tracking-wider text-[#7A6E65] leading-none">QUÝ KHÁCH</div>
-            <div id="headerCustomerNameDisplay" class="text-xs font-bold text-[#2C1E16] leading-tight mt-0.5">Gia Long (Bạn)</div>
+            <div class="text-[9px] font-bold uppercase tracking-wider text-[#7A6E65] leading-none">TÀI KHOẢN</div>
+            <div id="headerUserNameDisplay" class="text-xs font-bold text-[#2C1E16] leading-tight mt-0.5">Khách hàng</div>
+            <span id="headerCustomerNameDisplay" class="hidden"></span>
           </div>
+          <span
+            id="headerLoyaltyBadge"
+            class="hidden px-2 py-0.5 rounded bg-[#FAF3E0] text-[#A63A2B] border border-[#D8CBB8] text-[10px] font-bold font-serif items-center gap-1 shadow-2xs"
+          >
+            <i data-lucide="sparkles" class="w-3 h-3 text-[#A63A2B]"></i>
+            <span>Khách quen (-10%)</span>
+          </span>
+          <button
+            id="btnLogout"
+            type="button"
+            class="ml-1 px-2.5 py-1 rounded-lg bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#A63A2B] border border-[#D8CBB8] text-[11px] font-bold transition flex items-center gap-1 cursor-pointer"
+            title="Đăng xuất khỏi tài khoản"
+          >
+            <i data-lucide="log-out" class="w-3 h-3"></i>
+            <span>Đăng xuất</span>
+          </button>
         </div>
 
         <!-- Hidden compatibility select for programmatic listeners -->
@@ -900,6 +931,189 @@
 
   <!-- Toast Notification Stack -->
   <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- ==================================================================
+       VINTAGE AUTHENTICATION MODAL (LOGIN / REGISTER)
+       ================================================================== -->
+  <div id="authModalBackdrop" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div id="authModalContainer" class="bg-[#FFFDF9] border-2 border-[#2C1E16] rounded-2xl max-w-md w-full p-6 shadow-[5px_5px_0px_#2C1E16] relative transition-all">
+      <!-- Close Button -->
+      <button
+        id="btnCloseAuthModal"
+        type="button"
+        class="absolute top-4 right-4 text-[#6B584C] hover:text-[#2C1E16] p-1.5 rounded-lg hover:bg-[#FAF6EE] transition cursor-pointer"
+        title="Đóng cửa sổ"
+      >
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FAF3E0] border border-[#C5A059] text-[#8C6200] text-[10px] font-black uppercase tracking-wider mb-2">
+          <span>✦ MAISON DE BISTRO ✦</span>
+        </div>
+        <h3 class="font-serif-bistro text-xl sm:text-2xl font-black text-[#2C1E16] tracking-tight">
+          JaLongFood • Tài Khoản Khách Hàng
+        </h3>
+        <p class="text-xs text-[#7A6E65] font-serif italic mt-1">
+          Thực đơn Đặc sản &amp; Hóa đơn Guest Check cá nhân
+        </p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="flex items-center p-1 bg-[#EFE8DA] rounded-xl mb-6 border border-[#D8CBB8]">
+        <button
+          id="tabBtnLogin"
+          type="button"
+          class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition duration-200 bg-[#2C1E16] text-[#FFFDF9] shadow-xs cursor-pointer"
+        >
+          ✦ ĐĂNG NHẬP
+        </button>
+        <button
+          id="tabBtnRegister"
+          type="button"
+          class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition duration-200 text-[#5C4332] hover:text-[#2C1E16] cursor-pointer"
+        >
+          ✦ ĐĂNG KÝ MỚI
+        </button>
+      </div>
+
+      <!-- Form Login -->
+      <form id="formLogin" class="space-y-4">
+        <div>
+          <label for="loginPhone" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+            <span>Số điện thoại <span class="text-[#A63A2B]">*</span></span>
+            <span class="text-[10px] text-[#7A6E65] font-sans">TEL</span>
+          </label>
+          <div class="relative">
+            <i data-lucide="phone" class="w-4 h-4 text-[#A63A2B] absolute left-3.5 top-3"></i>
+            <input
+              id="loginPhone"
+              type="tel"
+              required
+              placeholder="Nhập số điện thoại..."
+              class="w-full pl-10 pr-3 py-2.5 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-xl text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-2 focus:ring-[#2C1E16] transition"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="loginPassword" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+            <span>Mật khẩu <span class="text-[#A63A2B]">*</span></span>
+            <span class="text-[10px] text-[#7A6E65] font-sans">PASS</span>
+          </label>
+          <div class="relative">
+            <i data-lucide="lock" class="w-4 h-4 text-[#A63A2B] absolute left-3.5 top-3"></i>
+            <input
+              id="loginPassword"
+              type="password"
+              required
+              placeholder="Nhập mật khẩu..."
+              class="w-full pl-10 pr-3 py-2.5 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-xl text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-2 focus:ring-[#2C1E16] transition"
+            />
+          </div>
+        </div>
+
+        <!-- Quick Demo Fill Button -->
+        <button
+          id="btnQuickFillDemo"
+          type="button"
+          class="w-full py-2 px-3 rounded-xl bg-[#FAF6EE] hover:bg-[#F2EBD9] border border-dashed border-[#D8CBB8] text-[#2C1E16] text-[11px] font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <span>⚡ Điền nhanh TK Demo: Gia Long (0901234567)</span>
+        </button>
+
+        <!-- Submit Login -->
+        <button
+          id="btnSubmitLogin"
+          type="submit"
+          class="w-full py-3 px-4 rounded-xl bg-[#A63A2B] hover:bg-[#8C2D19] border border-[#C25443] text-[#FFFDF9] font-serif-bistro font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>XÁC NHẬN ĐĂNG NHẬP ✦</span>
+        </button>
+      </form>
+
+      <!-- Form Register (Hidden by default) -->
+      <form id="formRegister" class="hidden space-y-4">
+        <div>
+          <label for="regFullName" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+            <span>Họ và tên <span class="text-[#A63A2B]">*</span></span>
+            <span class="text-[10px] text-[#7A6E65] font-sans">NAME</span>
+          </label>
+          <div class="relative">
+            <i data-lucide="user" class="w-4 h-4 text-[#A63A2B] absolute left-3.5 top-3"></i>
+            <input
+              id="regFullName"
+              type="text"
+              required
+              placeholder="Họ và tên của bạn..."
+              class="w-full pl-10 pr-3 py-2.5 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-xl text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-2 focus:ring-[#2C1E16] transition"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="regPhone" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+            <span>Số điện thoại <span class="text-[#A63A2B]">*</span></span>
+            <span class="text-[10px] text-[#7A6E65] font-sans">TEL</span>
+          </label>
+          <div class="relative">
+            <i data-lucide="phone" class="w-4 h-4 text-[#A63A2B] absolute left-3.5 top-3"></i>
+            <input
+              id="regPhone"
+              type="tel"
+              required
+              placeholder="Số điện thoại di động..."
+              class="w-full pl-10 pr-3 py-2.5 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-xl text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-2 focus:ring-[#2C1E16] transition"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="regPassword" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+            <span>Mật khẩu <span class="text-[#A63A2B]">*</span></span>
+            <span class="text-[10px] text-[#7A6E65] font-sans">PASS</span>
+          </label>
+          <div class="relative">
+            <i data-lucide="lock" class="w-4 h-4 text-[#A63A2B] absolute left-3.5 top-3"></i>
+            <input
+              id="regPassword"
+              type="password"
+              required
+              placeholder="Tạo mật khẩu đăng nhập..."
+              class="w-full pl-10 pr-3 py-2.5 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-xl text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-2 focus:ring-[#2C1E16] transition"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="regAddress" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
+            <span>Địa chỉ nhận hàng mặc định <span class="text-[#A63A2B]">*</span></span>
+            <span class="text-[10px] text-[#7A6E65] font-sans">ADDRESS</span>
+          </label>
+          <div class="relative">
+            <i data-lucide="map-pin" class="w-4 h-4 text-[#A63A2B] absolute left-3.5 top-3"></i>
+            <input
+              id="regAddress"
+              type="text"
+              required
+              placeholder="Số nhà, tên đường, quận/huyện..."
+              class="w-full pl-10 pr-3 py-2.5 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-xl text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-2 focus:ring-[#2C1E16] transition"
+            />
+          </div>
+        </div>
+
+        <!-- Submit Register -->
+        <button
+          id="btnSubmitRegister"
+          type="submit"
+          class="w-full py-3 px-4 rounded-xl bg-[#A63A2B] hover:bg-[#8C2D19] border border-[#C25443] text-[#FFFDF9] font-serif-bistro font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>TẠO TÀI KHOẢN MỚI ✦</span>
+        </button>
+      </form>
+    </div>
+  </div>
 
   <script type="module" src="/js/customer-app.js?v=20261116_vintage_bistro"></script>
 </body>

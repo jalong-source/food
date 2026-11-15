@@ -38,6 +38,7 @@ CREATE TABLE users (
     full_name       VARCHAR(100)    NOT NULL,
     email           VARCHAR(150)    NOT NULL,
     phone           VARCHAR(20)     NOT NULL,
+    password_hash   VARCHAR(255),
     role            VARCHAR(20)     NOT NULL DEFAULT 'customer',
     default_address TEXT,
     created_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
@@ -49,6 +50,7 @@ CREATE TABLE users (
 );
 
 COMMENT ON TABLE users IS 'Bảng lưu trữ thông tin người dùng hệ thống (khách hàng, quản trị viên, tài xế giao hàng, giảng viên đánh giá).';
+COMMENT ON COLUMN users.password_hash IS 'Mã băm mật khẩu bảo mật (SHA-256) phục vụ xác thực người dùng.';
 COMMENT ON COLUMN users.default_address IS 'Địa chỉ mặc định của người dùng trong hồ sơ cá nhân; độc lập với địa chỉ giao hàng của từng đơn cụ thể.';
 
 -- ============================================================================

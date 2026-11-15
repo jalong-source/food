@@ -10,6 +10,7 @@ const ordersRoutes = require('./routes/orders.routes');
 const dbRoutes = require('./routes/db.routes');
 const metaRoutes = require('./routes/meta.routes');
 const flashSaleRoutes = require('./routes/flashSale.routes');
+const authRoutes = require('./routes/auth.routes');
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.get('/api/events/recent', (req, res) => {
 });
 
 // REST API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/foods', foodsRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/db', dbRoutes);
