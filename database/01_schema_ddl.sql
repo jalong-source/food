@@ -38,7 +38,7 @@ CREATE TABLE users (
     full_name       VARCHAR(100)    NOT NULL,
     email           VARCHAR(150)    NOT NULL,
     phone           VARCHAR(20)     NOT NULL,
-    password_hash   VARCHAR(255),
+    password_hash   VARCHAR(255)    DEFAULT '665fbcfe5ffdfc0984a281040d2d4763d5351ecb448179838013cce639b8226a',
     role            VARCHAR(20)     NOT NULL DEFAULT 'customer',
     default_address TEXT,
     created_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
