@@ -1,5 +1,5 @@
-/* ==========================================================================
-   JaLong Bistro • Classic Parisian Bistro & Vintage Paper Menu Design System
+﻿/* ==========================================================================
+   JaLong Bistro â€¢ Classic Parisian Bistro & Vintage Paper Menu Design System
    Course Project: Database Design (3NF, Stored Procedures, Triggers, Pool, SSE/WS)
    File: vintage-theme.css
    Style: Classic Parisian Bistro, Antique Paper Menu, Guest Check Receipts & Ledger
@@ -8,32 +8,32 @@
 /* --------------------------------------------------------------------------
    1. GOOGLE FONTS IMPORT
    -------------------------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&subset=vietnamese&display=swap');
 
 /* --------------------------------------------------------------------------
    2. DESIGN SYSTEM TOKENS & CSS VARIABLES (:root)
    -------------------------------------------------------------------------- */
 :root {
   /* Core Vintage Palette */
-  --vintage-bg: #F6F1E7;            /* Kem giấy cổ (Warm parchment / antique paper) */
-  --vintage-surface: #FFFDF9;       /* Trắng ngà thẻ & modal (Warm ivory surface) */
-  --vintage-text: #2C1E16;          /* Nâu cà phê Espresso đậm (Deep espresso brown) */
-  --vintage-subtext: #6B584C;       /* Nâu trầm mô tả phụ (Muted sepia brown) */
-  --vintage-border: #D8CBB8;        /* Đường kẻ phân cách giấy (Parchment border) */
-  --vintage-border-dark: #A89882;   /* Đường viền nhấn giấy đậm */
-  --vintage-accent: #A63A2B;        /* Đỏ gạch / Đỏ rượu vang (Terracotta / Wine red) */
-  --vintage-accent-hover: #8C2E21;  /* Đỏ gạch đậm khi hover */
-  --vintage-success: #3B5249;       /* Xanh rêu cổ (Antique forest moss) */
-  --vintage-success-hover: #2C3E37; /* Xanh rêu cổ đậm */
-  --vintage-warning: #B8860B;       /* Vàng mù tạt trầm (Muted Dijon mustard) */
-  --vintage-dark: #231A14;          /* Nâu gỗ tối cho Live SQL Console */
-  --vintage-line: #EFE8DA;          /* Dòng kẻ mờ sổ kế toán (Ledger rule line) */
+  --vintage-bg: #F6F1E7;            /* Kem giáº¥y cá»• (Warm parchment / antique paper) */
+  --vintage-surface: #FFFDF9;       /* Tráº¯ng ngÃ  tháº» & modal (Warm ivory surface) */
+  --vintage-text: #2C1E16;          /* NÃ¢u cÃ  phÃª Espresso Ä‘áº­m (Deep espresso brown) */
+  --vintage-subtext: #6B584C;       /* NÃ¢u tráº§m mÃ´ táº£ phá»¥ (Muted sepia brown) */
+  --vintage-border: #D8CBB8;        /* ÄÆ°á»ng káº» phÃ¢n cÃ¡ch giáº¥y (Parchment border) */
+  --vintage-border-dark: #A89882;   /* ÄÆ°á»ng viá»n nháº¥n giáº¥y Ä‘áº­m */
+  --vintage-accent: #A63A2B;        /* Äá» gáº¡ch / Äá» rÆ°á»£u vang (Terracotta / Wine red) */
+  --vintage-accent-hover: #8C2E21;  /* Äá» gáº¡ch Ä‘áº­m khi hover */
+  --vintage-success: #3B5249;       /* Xanh rÃªu cá»• (Antique forest moss) */
+  --vintage-success-hover: #2C3E37; /* Xanh rÃªu cá»• Ä‘áº­m */
+  --vintage-warning: #B8860B;       /* VÃ ng mÃ¹ táº¡t tráº§m (Muted Dijon mustard) */
+  --vintage-dark: #231A14;          /* NÃ¢u gá»— tá»‘i cho Live SQL Console */
+  --vintage-line: #EFE8DA;          /* DÃ²ng káº» má» sá»• káº¿ toÃ¡n (Ledger rule line) */
 
   /* Extra Bistro Accent Hues */
-  --vintage-gold: #C5A059;          /* Vàng kim loại đồng cổ / Antique Brass */
+  --vintage-gold: #C5A059;          /* VÃ ng kim loáº¡i Ä‘á»“ng cá»• / Antique Brass */
   --vintage-gold-hover: #AD8840;    
-  --vintage-paper-crease: #ECE3D2;  /* Nếp gấp giấy */
-  --vintage-stamp-ink: #A63A2B;     /* Màu mực dấu mộc */
+  --vintage-paper-crease: #ECE3D2;  /* Náº¿p gáº¥p giáº¥y */
+  --vintage-stamp-ink: #A63A2B;     /* MÃ u má»±c dáº¥u má»™c */
 
   /* Typography Families */
   --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -748,7 +748,7 @@ h3.vintage-subheading,
 .vintage-console .sql-error { color: #E07A5F; }
 
 /* --------------------------------------------------------------------------
-   10. BẢNG DỮ LIỆU 3NF KIỂU SỔ CÁI / LEDGER (.vintage-table)
+   10. Báº¢NG Dá»® LIá»†U 3NF KIá»‚U Sá»” CÃI / LEDGER (.vintage-table)
    -------------------------------------------------------------------------- */
 .vintage-table-container {
   width: 100%;
@@ -821,7 +821,7 @@ h3.vintage-subheading,
 }
 
 /* --------------------------------------------------------------------------
-   11. HIỆU ỨNG NHỊP ĐẬP TRẠNG THÁI (PULSE ANIMATIONS)
+   11. HIá»†U á»¨NG NHá»ŠP Äáº¬P TRáº NG THÃI (PULSE ANIMATIONS)
    -------------------------------------------------------------------------- */
 @keyframes vintagePulseRingOnline {
   0% {
@@ -1152,4 +1152,182 @@ h3.vintage-subheading,
 
 .vintage-flash {
   animation: vintageFlashHighlight 1.8s ease-out;
+}
+
+/* --------------------------------------------------------------------------
+   18. DB LIVE INSPECTOR COMPONENT SYSTEM
+   -------------------------------------------------------------------------- */
+body.vintage-admin-body {
+  background-color: #F6F1E7 !important;
+  color: #2C1E16 !important;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  background-image: radial-gradient(rgba(44, 30, 22, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.vintage-header {
+  background: #2C1E16 !important;
+  color: #F6F1E7 !important;
+  border-bottom: 2px solid #3B2C24 !important;
+  box-shadow: 0 4px 15px rgba(44, 30, 22, 0.25) !important;
+}
+
+.vintage-panel {
+  background: #FFFDF9 !important;
+  border: 1px solid #D8CBB8 !important;
+  border-radius: 10px !important;
+  box-shadow: 2px 2px 0px rgba(44, 30, 22, 0.12) !important;
+  color: #2C1E16 !important;
+}
+
+.vintage-panel-header {
+  border-bottom: 1px solid #EFE8DA !important;
+  padding-bottom: 0.85rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.vintage-panel-tag {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  background: #2C1E16 !important;
+  color: #FFFDF9 !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.vintage-gauge-card {
+  background: #FDFBF7 !important;
+  border: 1px solid #D8CBB8 !important;
+  border-radius: 8px !important;
+  box-shadow: 1px 1px 0px rgba(44, 30, 22, 0.08) !important;
+}
+
+.vintage-bezel-box {
+  background: #231A14 !important;
+  border: 1px solid #3B2C24 !important;
+  border-radius: 6px !important;
+  color: #FFFDF9 !important;
+}
+
+.vintage-btn-brass {
+  background: #A63A2B !important;
+  color: #FFFDF9 !important;
+  font-weight: 700 !important;
+  border: 1px solid #C25443 !important;
+  box-shadow: 2px 2px 0px #1E1510 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+.vintage-btn-brass:hover {
+  background: #8C2E21 !important;
+  color: #FFFFFF !important;
+}
+
+.vintage-seal-btn {
+  background: #A63A2B !important;
+  color: #FFFDF9 !important;
+  font-weight: 700 !important;
+  border: 1px solid #C25443 !important;
+  box-shadow: 2px 2px 0px #1E1510 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+.vintage-seal-btn:hover {
+  background: #8C2E21 !important;
+  color: #FFFFFF !important;
+}
+
+.vintage-seal-restore-btn {
+  background: #3B5249 !important;
+  color: #FFFDF9 !important;
+  font-weight: 700 !important;
+  border: 1px solid #6BBF8C !important;
+  box-shadow: 2px 2px 0px #1E1510 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+.vintage-seal-restore-btn:hover {
+  background: #2C3E37 !important;
+  color: #FFFFFF !important;
+}
+
+.vintage-ledger-container {
+  background: #FFFDF9 !important;
+  border: 1px solid #D8CBB8 !important;
+  border-radius: 8px !important;
+}
+
+.vintage-ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 12px;
+  color: #2C1E16 !important;
+}
+
+.vintage-ledger-table thead {
+  background-color: #EFE8DA !important;
+  border-bottom: 2px solid #D8CBB8 !important;
+}
+
+.vintage-ledger-table th {
+  color: #2C1E16 !important;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.vintage-ledger-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #EFE8DA;
+  color: #2C1E16 !important;
+}
+
+.vintage-ledger-table tbody tr:hover {
+  background-color: #F9F6F0 !important;
+}
+
+.vintage-order-dossier {
+  background: #FFFDF9;
+  border: 1px solid #D8CBB8;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 2px 2px 0px rgba(44, 30, 22, 0.08);
+  transition: all 0.15s ease;
+}
+.vintage-order-dossier:hover {
+  border-color: #2C1E16;
+  box-shadow: 3px 3px 0px #2C1E16;
+}
+.vintage-order-dossier.audit-selected {
+  border: 2px solid #A63A2B;
+  box-shadow: 3px 3px 0px #A63A2B;
+}
+
+.vintage-sql-entry {
+  background: #1B130E;
+  border-left: 3px solid #3B2C24;
+  padding: 8px 10px;
+  border-radius: 0 6px 6px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+.ledger-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.ledger-scrollbar::-webkit-scrollbar-track {
+  background: #F6F1E7;
+}
+.ledger-scrollbar::-webkit-scrollbar-thumb {
+  background: #D8CBB8;
+  border-radius: 4px;
+}
+.ledger-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #A89882;
 }
