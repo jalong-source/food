@@ -1,5 +1,5 @@
-﻿/* ==========================================================================
-   JaLong Bistro â€¢ Classic Parisian Bistro & Vintage Paper Menu Design System
+/* ==========================================================================
+   JaLong Bistro • Classic Parisian Bistro & Vintage Paper Menu Design System
    Course Project: Database Design (3NF, Stored Procedures, Triggers, Pool, SSE/WS)
    File: vintage-theme.css
    Style: Classic Parisian Bistro, Antique Paper Menu, Guest Check Receipts & Ledger
@@ -15,25 +15,25 @@
    -------------------------------------------------------------------------- */
 :root {
   /* Core Vintage Palette */
-  --vintage-bg: #F6F1E7;            /* Kem giáº¥y cá»• (Warm parchment / antique paper) */
-  --vintage-surface: #FFFDF9;       /* Tráº¯ng ngÃ  tháº» & modal (Warm ivory surface) */
-  --vintage-text: #2C1E16;          /* NÃ¢u cÃ  phÃª Espresso Ä‘áº­m (Deep espresso brown) */
-  --vintage-subtext: #6B584C;       /* NÃ¢u tráº§m mÃ´ táº£ phá»¥ (Muted sepia brown) */
-  --vintage-border: #D8CBB8;        /* ÄÆ°á»ng káº» phÃ¢n cÃ¡ch giáº¥y (Parchment border) */
-  --vintage-border-dark: #A89882;   /* ÄÆ°á»ng viá»n nháº¥n giáº¥y Ä‘áº­m */
-  --vintage-accent: #A63A2B;        /* Äá» gáº¡ch / Äá» rÆ°á»£u vang (Terracotta / Wine red) */
-  --vintage-accent-hover: #8C2E21;  /* Äá» gáº¡ch Ä‘áº­m khi hover */
-  --vintage-success: #3B5249;       /* Xanh rÃªu cá»• (Antique forest moss) */
-  --vintage-success-hover: #2C3E37; /* Xanh rÃªu cá»• Ä‘áº­m */
-  --vintage-warning: #B8860B;       /* VÃ ng mÃ¹ táº¡t tráº§m (Muted Dijon mustard) */
-  --vintage-dark: #231A14;          /* NÃ¢u gá»— tá»‘i cho Live SQL Console */
-  --vintage-line: #EFE8DA;          /* DÃ²ng káº» má» sá»• káº¿ toÃ¡n (Ledger rule line) */
+  --vintage-bg: #F6F1E7;            /* Kem giấy cổ (Warm parchment / antique paper) */
+  --vintage-surface: #FFFDF9;       /* Trắng ngà thẻ & modal (Warm ivory surface) */
+  --vintage-text: #2C1E16;          /* Nâu cà phê Espresso đậm (Deep espresso brown) */
+  --vintage-subtext: #6B584C;       /* Nâu trầm mô tả phụ (Muted sepia brown) */
+  --vintage-border: #D8CBB8;        /* Đường kẻ phân cách giấy (Parchment border) */
+  --vintage-border-dark: #A89882;   /* Đường viền nhấn giấy đậm */
+  --vintage-accent: #A63A2B;        /* Đỏ gạch / Đỏ rượu vang (Terracotta / Wine red) */
+  --vintage-accent-hover: #8C2E21;  /* Đỏ gạch đậm khi hover */
+  --vintage-success: #3B5249;       /* Xanh rêu cổ (Antique forest moss) */
+  --vintage-success-hover: #2C3E37; /* Xanh rêu cổ đậm */
+  --vintage-warning: #B8860B;       /* Vàng mù tạt trầm (Muted Dijon mustard) */
+  --vintage-dark: #231A14;          /* Nâu gỗ tối cho Live SQL Console */
+  --vintage-line: #EFE8DA;          /* Dòng kẻ mờ sổ kế toán (Ledger rule line) */
 
   /* Extra Bistro Accent Hues */
-  --vintage-gold: #C5A059;          /* VÃ ng kim loáº¡i Ä‘á»“ng cá»• / Antique Brass */
+  --vintage-gold: #C5A059;          /* Vàng kim loại đồng cổ / Antique Brass */
   --vintage-gold-hover: #AD8840;    
-  --vintage-paper-crease: #ECE3D2;  /* Náº¿p gáº¥p giáº¥y */
-  --vintage-stamp-ink: #A63A2B;     /* MÃ u má»±c dáº¥u má»™c */
+  --vintage-paper-crease: #ECE3D2;  /* Nếp gấp giấy */
+  --vintage-stamp-ink: #A63A2B;     /* Màu mực dấu mộc */
 
   /* Typography Families */
   --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -748,7 +748,7 @@ h3.vintage-subheading,
 .vintage-console .sql-error { color: #E07A5F; }
 
 /* --------------------------------------------------------------------------
-   10. Báº¢NG Dá»® LIá»†U 3NF KIá»‚U Sá»” CÃI / LEDGER (.vintage-table)
+   10. BẢNG DỮ LIỆU 3NF KIỂU SỔ CÁI / LEDGER (.vintage-table)
    -------------------------------------------------------------------------- */
 .vintage-table-container {
   width: 100%;
@@ -821,7 +821,7 @@ h3.vintage-subheading,
 }
 
 /* --------------------------------------------------------------------------
-   11. HIá»†U á»¨NG NHá»ŠP Äáº¬P TRáº NG THÃI (PULSE ANIMATIONS)
+   11. HIỆU ỨNG NHỊP ĐẬP TRẠNG THÁI (PULSE ANIMATIONS)
    -------------------------------------------------------------------------- */
 @keyframes vintagePulseRingOnline {
   0% {
@@ -1153,6 +1153,7 @@ h3.vintage-subheading,
 .vintage-flash {
   animation: vintageFlashHighlight 1.8s ease-out;
 }
+
 
 /* --------------------------------------------------------------------------
    18. DB LIVE INSPECTOR COMPONENT SYSTEM

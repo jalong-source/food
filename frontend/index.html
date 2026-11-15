@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JaLongFood â€¢ Thá»±c ÄÆ¡n Äáº·c Sáº£n & Giao HÃ ng Táº­n NÆ¡i</title>
+  <title>JaLongFood • Thực Đơn Đặc Sản & Giao Hàng Tận Nơi</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -78,13 +78,13 @@
           <i data-lucide="wifi-off" class="w-4 h-4 text-white"></i>
         </span>
         <span id="dbEmergencyMessage">
-          Há»‡ thá»‘ng Ä‘ang Ä‘á»“ng bá»™ káº¿t ná»‘i dá»¯ liá»‡u. Xin quÃ½ khÃ¡ch vui lÃ²ng chá» trong giÃ¢y lÃ¡t...
+          Hệ thống đang đồng bộ kết nối dữ liệu. Xin quý khách vui lòng chờ trong giây lát...
         </span>
       </div>
       <div class="flex items-center gap-2">
-        <span id="dbEmergencyCode" class="font-mono-code text-[11px] bg-black/40 px-2 py-0.5 rounded text-amber-300">Äang Ä‘á»“ng bá»™</span>
+        <span id="dbEmergencyCode" class="font-mono-code text-[11px] bg-black/40 px-2 py-0.5 rounded text-amber-300">Đang đồng bộ</span>
         <button id="btnRetryHealth" class="px-3 py-1 rounded bg-[#FFFDF9] text-[#A63A2B] font-bold text-xs hover:bg-[#F2EBD9] transition shadow">
-          Káº¿t ná»‘i láº¡i
+          Kết nối lại
         </button>
       </div>
     </div>
@@ -108,12 +108,12 @@
               JaLong<span class="text-[#A63A2B]">Food</span>
             </span>
             <span class="border border-[#C5A059] bg-[#FAF3E0] text-[#8C6200] text-[9.5px] font-black uppercase px-2 py-0.5 rounded tracking-wider shadow-2xs">
-              âœ¦ PARIS EST. 2026 âœ¦
+              ✦ PARIS EST. 2026 ✦
             </span>
           </div>
           <p class="text-[11px] text-[#7A6E65] font-serif italic flex items-center gap-1.5 mt-0.5">
             <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
-            <span>Thá»±c Ä‘Æ¡n Äáº·c sáº£n & Giao hÃ ng Táº­n nÆ¡i</span>
+            <span>Thực đơn Đặc sản & Giao hàng Tận nơi</span>
           </p>
         </div>
       </a>
@@ -123,7 +123,7 @@
         <!-- Live Server Status Badge (Vintage Moss Stamp) -->
         <div id="dbStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#EAEFEA] border border-[#8BA89B] text-[#2D4A3E] text-xs font-bold shadow-2xs">
           <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-[#4A7C59]"></span>
-          <span id="dbStatusText">MÃ¡y chá»§ Trá»±c tuyáº¿n</span>
+          <span id="dbStatusText">Máy chủ Trực tuyến</span>
           <span id="dbLatencyBadge" class="px-1.5 py-0.5 rounded bg-[#D3E0D6] text-[10px] text-[#2D4A3E] font-mono-code font-bold">0ms</span>
           <span id="realtimeTransportBadge" class="px-1.5 py-0.5 rounded bg-[#3B5249] text-[10px] text-[#FFFDF9] font-black">LIVE</span>
         </div>
@@ -134,8 +134,8 @@
             <i data-lucide="user" class="w-3.5 h-3.5 text-[#D4A373]"></i>
           </div>
           <div class="text-left">
-            <div class="text-[9px] font-bold uppercase tracking-wider text-[#7A6E65] leading-none">QUÃ KHÃCH</div>
-            <div id="headerCustomerNameDisplay" class="text-xs font-bold text-[#2C1E16] leading-tight mt-0.5">HoÃ ng Long (Báº¡n)</div>
+            <div class="text-[9px] font-bold uppercase tracking-wider text-[#7A6E65] leading-none">QUÝ KHÁCH</div>
+            <div id="headerCustomerNameDisplay" class="text-xs font-bold text-[#2C1E16] leading-tight mt-0.5">Gia Long (Bạn)</div>
           </div>
         </div>
 
@@ -143,15 +143,15 @@
         <select id="customerSelect" class="hidden" style="display: none;"></select>
 
         <!-- Inspector Mode Quick Link -->
-        <a id="navInspector" href="/inspector.html" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] hover:text-[#A63A2B] border border-[#D8CBB8] text-xs font-semibold shadow-2xs transition" title="Báº£ng Ä‘iá»u khiá»ƒn Giáº£ng viÃªn (DB Live Inspector 3NF)">
+        <a id="navInspector" href="/inspector.html" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] hover:text-[#A63A2B] border border-[#D8CBB8] text-xs font-semibold shadow-2xs transition" title="Bảng điều khiển Giảng viên (DB Live Inspector 3NF)">
           <i data-lucide="settings-2" class="w-3.5 h-3.5 text-[#C5A059]"></i>
-          <span class="hidden md:inline font-serif">BÃ n Giáº£ng ViÃªn (Inspector)</span>
+          <span class="hidden md:inline font-serif">Bàn Giảng Viên (Inspector)</span>
         </a>
 
         <!-- Split Screen Mode Quick Link -->
-        <a id="navSplitMode" href="/split" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#2C1E16] border border-[#D8CBB8] text-xs font-semibold transition" title="Chia Ä‘Ã´i mÃ n hÃ¬nh thuyáº¿t trÃ¬nh">
+        <a id="navSplitMode" href="/split" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#2C1E16] border border-[#D8CBB8] text-xs font-semibold transition" title="Chia đôi màn hình thuyết trình">
           <i data-lucide="columns-2" class="w-3.5 h-3.5 text-[#A63A2B]"></i>
-          <span class="font-serif">Chia Ä‘Ã´i MÃ n hÃ¬nh</span>
+          <span class="font-serif">Chia đôi Màn hình</span>
         </a>
       </div>
     </div>
@@ -169,38 +169,38 @@
 
       <div class="relative z-10 max-w-3xl mx-auto text-center space-y-3.5">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded bg-[#FAF3E0] border border-[#C5A059] text-[#8C6200] text-[11px] font-black uppercase tracking-widest mx-auto">
-          <span>âšœ MAISON DE GASTRONOMIE â€¢ THá»°C ÄÆ N Äáº¶C BIá»†T HÃ”M NAY âšœ</span>
+          <span>⚜ MAISON DE GASTRONOMIE • THỰC ĐƠN ĐẶC BIỆT HÔM NAY ⚜</span>
         </div>
 
         <h1 class="font-serif-bistro text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#2C1E16] leading-tight">
-          NÃ©t áº¨m Thá»±c Cá»• Äiá»ƒn &amp; TÆ°Æ¡i Ngon<br />
-          <span class="italic text-[#A63A2B] font-normal">Giao NÃ³ng Há»•i Táº­n Cá»­a Trong 15 PhÃºt</span>
+          Nét Ẩm Thực Cổ Điển &amp; Tươi Ngon<br />
+          <span class="italic text-[#A63A2B] font-normal">Giao Nóng Hổi Tận Cửa Trong 15 Phút</span>
         </h1>
 
         <p class="text-xs sm:text-sm text-[#5C4332] font-serif leading-relaxed max-w-2xl mx-auto italic">
-          "KÃ­nh má»i quÃ½ khÃ¡ch thÆ°á»Ÿng thá»©c nhá»¯ng mÃ³n Äƒn Ä‘áº·c sáº£n Ä‘Æ°á»£c chuáº©n bá»‹ cÃ´ng phu tá»« nguyÃªn liá»‡u tÆ°Æ¡i má»›i trong ngÃ y, báº¿p trÆ°á»Ÿng cháº¿ biáº¿n tá»©c thÃ¬ vÃ  giao hÃ ng siÃªu tá»‘c."
+          "Kính mời quý khách thưởng thức những món ăn đặc sản được chuẩn bị công phu từ nguyên liệu tươi mới trong ngày, bếp trưởng chế biến tức thì và giao hàng siêu tốc."
         </p>
 
-        <!-- Bistro Commitments (Con dáº¥u má»™c cam káº¿t) -->
+        <!-- Bistro Commitments (Con dấu mộc cam kết) -->
         <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2 text-xs font-bold text-[#2C1E16]">
           <div class="flex items-center gap-1.5 bg-[#FAF6EE] px-3.5 py-1.5 rounded border border-[#D8CBB8] shadow-2xs">
             <i data-lucide="clock" class="w-4 h-4 text-[#A63A2B]"></i>
-            <span>Giao siÃªu tá»‘c 15 phÃºt</span>
+            <span>Giao siêu tốc 15 phút</span>
           </div>
           <div class="flex items-center gap-1.5 bg-[#FAF6EE] px-3.5 py-1.5 rounded border border-[#D8CBB8] shadow-2xs">
             <i data-lucide="sparkles" class="w-4 h-4 text-[#4A7C59]"></i>
-            <span>TÆ°Æ¡i sáº¡ch 100% trong ngÃ y</span>
+            <span>Tươi sạch 100% trong ngày</span>
           </div>
           <div class="flex items-center gap-1.5 bg-[#FAF6EE] px-3.5 py-1.5 rounded border border-[#D8CBB8] shadow-2xs">
             <i data-lucide="award" class="w-4 h-4 text-[#C5A059]"></i>
-            <span>CÃ´ng thá»©c chuáº©n vá»‹ Bistro</span>
+            <span>Công thức chuẩn vị Bistro</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==================================================================
-         SECTION: Báº¢NG Gá»¢I Ã MÃ“N Ä‚N HÃ”M NAY / VÃ’NG QUAY MAY Máº®N Cá»” ÄIá»‚N
+         SECTION: BẢNG GỢI Ý MÓN ĂN HÔM NAY / VÒNG QUAY MAY MẮN CỔ ĐIỂN
          (Antique Brass & Wood Frame / Vintage Parisian Food Lottery)
          ================================================================== -->
     <section id="foodRouletteSection" class="relative overflow-hidden rounded-xl p-5 sm:p-6 bg-[#2C1E16] text-[#F6F1E7] border-2 border-[#5C4332] shadow-xl">
@@ -209,25 +209,25 @@
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#A63A2B] text-[#FFFDF9] text-[10.5px] font-black uppercase tracking-wider shadow-sm shrink-0 font-serif">
-              <span>âœ¦ Báº¢NG Gá»¢I Ã MÃ“N Ä‚N TRONG NGÃ€Y âœ¦</span>
+              <span>✦ BẢNG GỢI Ý MÓN ĂN TRONG NGÀY ✦</span>
             </span>
             <span id="rouletteStatusBadge" class="inline-flex items-center gap-1 px-3 py-1 rounded bg-[#FAF3E0] border border-[#C5A059] text-xs font-bold text-[#8C6200] shadow-2xs">
-              Sáºµn sÃ ng quay mÃ³n
+              Sẵn sàng quay món
             </span>
           </div>
           <h2 class="font-serif-bistro text-xl sm:text-2xl font-bold text-[#FFFDF9] tracking-tight flex items-center gap-2">
-            <span>BÄƒn KhoÄƒn "HÃ´m Nay Ä‚n GÃ¬ ?" â€” Thá»­ Váº­n May Cá»• Äiá»ƒn!</span>
+            <span>Băn Khoăn "Hôm Nay Ăn Gì ?" — Thử Vận May Cổ Điển!</span>
           </h2>
           <p class="text-xs text-[#D8CBB8] mt-1 max-w-2xl leading-relaxed">
-            ChÆ°a quyáº¿t Ä‘á»‹nh Ä‘Æ°á»£c mÃ³n cho bá»¯a Äƒn hÃ´m nay? QuÃ½ khÃ¡ch hÃ£y chá»n má»‘c ngÃ¢n sÃ¡ch vÃ  báº¥m nÃºt quay â€” vÃ²ng quay may máº¯n sáº½ tÃ¬m mÃ³n ngon tÃ¢m Ä‘áº¯c nháº¥t!
+            Chưa quyết định được món cho bữa ăn hôm nay? Quý khách hãy chọn mốc ngân sách và bấm nút quay — vòng quay may mắn sẽ tìm món ngon tâm đắc nhất!
           </p>
         </div>
 
-        <!-- Budget Tier Selector (Tháº» tab giáº¥y cá»• Ä‘iá»ƒn) -->
+        <!-- Budget Tier Selector (Thẻ tab giấy cổ điển) -->
         <div class="flex items-center gap-2.5 w-full lg:w-auto shrink-0 flex-nowrap overflow-x-auto no-scrollbar py-1">
           <span class="text-xs uppercase font-bold text-[#D8CBB8] whitespace-nowrap flex items-center gap-1.5 shrink-0 font-serif">
             <i data-lucide="coins" class="w-4 h-4 text-[#D4A373]"></i>
-            <span>Má»©c ngÃ¢n sÃ¡ch:</span>
+            <span>Mức ngân sách:</span>
           </span>
           <div id="rouletteBudgetPills" class="flex items-center gap-1.5 p-1 bg-[#1E1510] rounded-lg border border-[#4D382B] shrink-0">
             <button
@@ -235,28 +235,28 @@
               data-roulette-budget="all"
               class="budget-pill-btn active px-3.5 py-1.5 rounded text-xs font-bold transition cursor-pointer bg-[#A63A2B] text-[#FFFDF9] shadow-sm whitespace-nowrap"
             >
-              Táº¥t cáº£ mÃ³n
+              Tất cả món
             </button>
             <button
               type="button"
               data-roulette-budget="under40k"
               class="budget-pill-btn px-3.5 py-1.5 rounded text-xs font-bold text-[#D8CBB8] hover:text-[#FFFDF9] transition cursor-pointer whitespace-nowrap"
             >
-              Háº¡t dáº» (&lt; 40k)
+              Hạt dẻ (&lt; 40k)
             </button>
             <button
               type="button"
               data-roulette-budget="40k-65k"
               class="budget-pill-btn px-3.5 py-1.5 rounded text-xs font-bold text-[#D8CBB8] hover:text-[#FFFDF9] transition cursor-pointer whitespace-nowrap"
             >
-              Chuáº©n bá»¯a (40k-65k)
+              Chuẩn bữa (40k-65k)
             </button>
             <button
               type="button"
               data-roulette-budget="over65k"
               class="budget-pill-btn px-3.5 py-1.5 rounded text-xs font-bold text-[#D8CBB8] hover:text-[#FFFDF9] transition cursor-pointer whitespace-nowrap"
             >
-              Ä‚n sang (&gt; 65k)
+              Ăn sang (&gt; 65k)
             </button>
           </div>
         </div>
@@ -284,7 +284,7 @@
             style="transform: translateX(0px);"
           >
             <div class="p-8 text-center text-xs text-[#D8CBB8] w-full font-serif italic">
-              Äang chuáº©n bá»‹ thá»±c Ä‘Æ¡n thÆ¡m ngon...
+              Đang chuẩn bị thực đơn thơm ngon...
             </div>
           </div>
         </div>
@@ -294,21 +294,21 @@
       <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
         <!-- Bistro Rarity Legend -->
         <div class="flex flex-wrap items-center gap-2 text-[10.5px] text-[#D8CBB8]">
-          <span class="font-bold uppercase tracking-wider text-[#A69584] font-serif">Pháº©m cáº¥p:</span>
+          <span class="font-bold uppercase tracking-wider text-[#A69584] font-serif">Phẩm cấp:</span>
           <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#52886B]"></span> Háº¡t dáº»
+            <span class="w-1.5 h-1.5 rounded-full bg-[#52886B]"></span> Hạt dẻ
           </span>
           <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#1E3A8A] border border-[#93C5FD] font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#3B82F6]"></span> Chuáº©n vá»‹
+            <span class="w-1.5 h-1.5 rounded-full bg-[#3B82F6]"></span> Chuẩn vị
           </span>
           <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#6B21A8] border border-[#D8B4FE] font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#9333EA]"></span> No nÃª
+            <span class="w-1.5 h-1.5 rounded-full bg-[#9333EA]"></span> No nê
           </span>
           <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF6EE] text-[#A63A2B] border border-[#FCA5A5] font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#A63A2B]"></span> ThÆ°á»£ng háº¡ng
+            <span class="w-1.5 h-1.5 rounded-full bg-[#A63A2B]"></span> Thượng hạng
           </span>
           <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] font-bold">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span> â˜… MÃ³n Báº¿p TrÆ°á»Ÿng VIP â˜…
+            <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span> ★ Món Bếp Trưởng VIP ★
           </span>
         </div>
 
@@ -320,7 +320,7 @@
             class="w-full sm:w-auto px-7 py-3 rounded-lg bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] font-serif-bistro font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all hover:translate-y-[-1px] active:translate-y-[1px] cursor-pointer border border-[#8C2D19]"
           >
             <i data-lucide="sparkles" class="w-4 h-4 text-[#D4AF37]"></i>
-            <span>QUAY MÃ“N NGAY âœ¦</span>
+            <span>QUAY MÓN NGAY ✦</span>
           </button>
         </div>
       </div>
@@ -340,12 +340,12 @@
         <!-- Inspect / Recommendation Badge -->
         <div class="relative z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#FAF3E0] border border-[#C5A059] text-[#8C6200] text-xs font-black uppercase tracking-wider font-serif">
           <i data-lucide="award" class="w-3.5 h-3.5 text-[#C5A059]"></i>
-          <span id="winnerRarityLabel">â˜… MÃ“N NGON Gá»¢I Ã Äáº¶C BIá»†T â˜…</span>
+          <span id="winnerRarityLabel">★ MÓN NGON GỢI Ý ĐẶC BIỆT ★</span>
         </div>
 
         <!-- Food Image with Warm Filter -->
         <div class="relative z-10 w-44 h-44 mx-auto my-2 rounded-lg overflow-hidden border-2 border-[#D8CBB8] shadow-sm bg-[#FAF6EE] group">
-          <img id="winnerFoodImg" src="" alt="MÃ³n trÃºng" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\' viewBox=\'0 0 400 400\'><rect width=\'400\' height=\'400\' fill=\'%23FAF6EE\'/><text x=\'200\' y=\'210\' font-size=\'60\' text-anchor=\'middle\'>ðŸ²</text></svg>';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 filter sepia-[8%]" />
+          <img id="winnerFoodImg" src="" alt="Món trúng" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\' viewBox=\'0 0 400 400\'><rect width=\'400\' height=\'400\' fill=\'%23FAF6EE\'/><text x=\'200\' y=\'210\' font-size=\'60\' text-anchor=\'middle\'>🍲</text></svg>';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 filter sepia-[8%]" />
         </div>
 
         <div class="relative z-10">
@@ -353,7 +353,7 @@
           <h3 id="winnerFoodName" class="font-serif-bistro text-2xl font-black text-[#2C1E16] mt-1 leading-snug"></h3>
           <p id="winnerFoodDesc" class="text-xs text-[#5C4332] font-serif italic mt-1 line-clamp-2 leading-relaxed px-2"></p>
           <div class="mt-3">
-            <span class="text-[11px] text-[#7A6E65] block font-serif">GiÃ¡ niÃªm yáº¿t</span>
+            <span class="text-[11px] text-[#7A6E65] block font-serif">Giá niêm yết</span>
             <span id="winnerFoodPrice" class="text-2xl font-bold text-[#A63A2B] font-mono-code"></span>
           </div>
         </div>
@@ -366,7 +366,7 @@
             class="w-full py-3 px-4 rounded-lg bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] font-serif-bistro font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition cursor-pointer border border-[#8C2D19]"
           >
             <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-            <span>CHá»T MÃ“N NÃ€Y (THÃŠM VÃ€O PHIáº¾U) âœ¦</span>
+            <span>CHỐT MÓN NÀY (THÊM VÀO PHIẾU) ✦</span>
           </button>
           <button
             id="btnSpinAgainModal"
@@ -374,7 +374,7 @@
             class="w-full py-2.5 px-4 rounded-lg bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#2C1E16] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer border border-[#D8CBB8]"
           >
             <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-[#C5A059]"></i>
-            <span>Quay láº¡i mÃ³n khÃ¡c</span>
+            <span>Quay lại món khác</span>
           </button>
         </div>
       </div>
@@ -393,15 +393,15 @@
           <div>
             <div class="flex items-center gap-2">
               <h2 class="font-serif-bistro text-base sm:text-lg font-bold text-[#2C1E16]">
-                HÃ nh TrÃ¬nh Giao MÃ³n Cá»§a QuÃ½ KhÃ¡ch
+                Hành Trình Giao Món Của Quý Khách
               </h2>
               <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
-                <span>Trá»±c Tiáº¿p</span>
+                <span>Trực Tiếp</span>
               </span>
             </div>
             <p class="text-xs text-[#7A6E65] font-serif">
-              Tráº¡ng thÃ¡i Ä‘Æ¡n hÃ ng tá»± Ä‘á»™ng cáº­p nháº­t ngay khi nhÃ  hÃ ng vÃ  tÃ i xáº¿ thay Ä‘á»•i
+              Trạng thái đơn hàng tự động cập nhật ngay khi nhà hàng và tài xế thay đổi
             </p>
           </div>
         </div>
@@ -409,12 +409,12 @@
         <!-- Order Selector for Current Customer + Controls -->
         <div class="flex items-center gap-2">
           <select id="activeOrderSelect" class="bg-[#FFFDF9] border border-[#D8CBB8] text-[#2C1E16] text-xs font-semibold rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#A63A2B] max-w-[240px]">
-            <option value="">ChÆ°a cÃ³ Ä‘Æ¡n hÃ ng nÃ o</option>
+            <option value="">Chưa có đơn hàng nào</option>
           </select>
-          <button id="btnRefreshTracker" class="p-2 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] transition" title="LÃ m má»›i tráº¡ng thÃ¡i">
+          <button id="btnRefreshTracker" class="p-2 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] transition" title="Làm mới trạng thái">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
           </button>
-          <button id="btnToggleTrackerBody" class="p-2 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] transition" title="Thu gá»n / Má»Ÿ rá»™ng">
+          <button id="btnToggleTrackerBody" class="p-2 rounded-md bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8] transition" title="Thu gọn / Mở rộng">
             <i data-lucide="chevron-up" class="w-4 h-4"></i>
           </button>
         </div>
@@ -427,8 +427,8 @@
           <div class="w-14 h-14 rounded-lg bg-[#FAF6EE] text-[#7A6E65] border border-[#D8CBB8] flex items-center justify-center mx-auto mb-3">
             <i data-lucide="shopping-basket" class="w-7 h-7"></i>
           </div>
-          <p class="text-sm font-bold text-[#2C1E16] font-serif">QuÃ½ khÃ¡ch chÆ°a cÃ³ Ä‘Æ¡n hÃ ng nÃ o Ä‘ang diá»…n ra</p>
-          <p class="text-xs text-[#7A6E65] mt-1 font-serif">KÃ­nh má»i quÃ½ khÃ¡ch chá»n mÃ³n ngon bÃªn dÆ°á»›i thá»±c Ä‘Æ¡n Ä‘á»ƒ thÆ°á»Ÿng thá»©c ngay!</p>
+          <p class="text-sm font-bold text-[#2C1E16] font-serif">Quý khách chưa có đơn hàng nào đang diễn ra</p>
+          <p class="text-xs text-[#7A6E65] mt-1 font-serif">Kính mời quý khách chọn món ngon bên dưới thực đơn để thưởng thức ngay!</p>
         </div>
 
         <!-- Active Order Content -->
@@ -438,7 +438,7 @@
             <div class="flex flex-wrap items-center gap-2.5">
               <span id="trackedOrderCode" class="font-mono-code font-bold text-sm px-3 py-1 rounded bg-[#2C1E16] text-[#FFFDF9]">#ORD---</span>
               <span id="trackedStatusBadge" class="stamp-badge stamp-pending">
-                Chá» xÃ¡c nháº­n
+                Chờ xác nhận
               </span>
               <span id="trackedOrderTime" class="text-xs text-[#7A6E65] flex items-center gap-1 font-mono-code">
                 <i data-lucide="clock" class="w-3.5 h-3.5"></i>
@@ -447,11 +447,11 @@
             </div>
             <div class="flex items-center gap-4 text-xs">
               <div class="text-[#7A6E65]">
-                Giao Ä‘áº¿n: <strong id="trackedOrderAddress" class="text-[#2C1E16] font-bold">---</strong>
+                Giao đến: <strong id="trackedOrderAddress" class="text-[#2C1E16] font-bold">---</strong>
               </div>
               <div class="text-right">
-                <span class="text-[#7A6E65]">Tá»•ng thanh toÃ¡n:</span>
-                <strong id="trackedOrderTotal" class="text-lg font-bold text-[#A63A2B] ml-1.5 font-mono-code">0 â‚«</strong>
+                <span class="text-[#7A6E65]">Tổng thanh toán:</span>
+                <strong id="trackedOrderTotal" class="text-lg font-bold text-[#A63A2B] ml-1.5 font-mono-code">0 ₫</strong>
               </div>
             </div>
           </div>
@@ -462,8 +462,8 @@
               <i data-lucide="x-circle" class="w-6 h-6"></i>
             </div>
             <div>
-              <h4 class="text-sm font-bold text-[#991B1B]">ÄÆ¡n hÃ ng nÃ y Ä‘Ã£ Ä‘Æ°á»£c há»§y</h4>
-              <p id="trackerCancelledReason" class="text-xs text-[#B91C1C] mt-0.5">Sá»‘ lÆ°á»£ng mÃ³n Äƒn Ä‘Ã£ Ä‘Æ°á»£c hoÃ n vá» thá»±c Ä‘Æ¡n cá»§a nhÃ  hÃ ng.</p>
+              <h4 class="text-sm font-bold text-[#991B1B]">Đơn hàng này đã được hủy</h4>
+              <p id="trackerCancelledReason" class="text-xs text-[#B91C1C] mt-0.5">Số lượng món ăn đã được hoàn về thực đơn của nhà hàng.</p>
             </div>
           </div>
 
@@ -489,14 +489,14 @@
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="text-xs sm:text-sm font-bold text-[#2C1E16] font-serif uppercase tracking-wider">Háº£i Äá»“ Giao HÃ ng Trá»±c Tiáº¿p (Live GPS)</span>
+                    <span class="text-xs sm:text-sm font-bold text-[#2C1E16] font-serif uppercase tracking-wider">Hải Đồ Giao Hàng Trực Tiếp (Live GPS)</span>
                     <span id="mapLiveBadge" class="px-2 py-0.5 text-[10px] font-bold rounded bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] flex items-center gap-1">
                       <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
-                      <span id="mapLiveStatusText">GPS Hoáº¡t Ä‘á»™ng</span>
+                      <span id="mapLiveStatusText">GPS Hoạt động</span>
                     </span>
                   </div>
                   <p id="mapStatusSubtitle" class="text-xs text-[#7A6E65] font-serif mt-0.5">
-                    TÃ i xáº¿ Ä‘ang nháº­n Ä‘Æ¡n vÃ  chuáº©n bá»‹ di chuyá»ƒn tá»›i Ä‘á»‹a chá»‰ cá»§a báº¡n
+                    Tài xế đang nhận đơn và chuẩn bị di chuyển tới địa chỉ của bạn
                   </p>
                 </div>
               </div>
@@ -504,15 +504,15 @@
               <!-- Shipper Quick Contact Card -->
               <div class="flex items-center gap-3 bg-[#FFFDF9] border border-[#D8CBB8] rounded-lg px-3.5 py-1.5 text-xs shadow-2xs">
                 <div class="w-7 h-7 rounded-full bg-[#2C1E16] text-[#FFFDF9] flex items-center justify-center font-bold text-xs">
-                  ðŸ›µ
+                  🛵
                 </div>
                 <div>
-                  <div class="font-bold text-[#2C1E16] text-xs">LÃª HoÃ ng Giao Nhanh</div>
-                  <div class="text-[10px] text-[#7A6E65]">Xe AirBlade â€¢ <span class="text-[#A63A2B] font-mono-code font-bold">29-X1 888.88</span></div>
+                  <div class="font-bold text-[#2C1E16] text-xs">Lê Hoàng Giao Nhanh</div>
+                  <div class="text-[10px] text-[#7A6E65]">Xe AirBlade • <span class="text-[#A63A2B] font-mono-code font-bold">29-X1 888.88</span></div>
                 </div>
                 <button type="button" id="btnCallShipper" class="px-2.5 py-1 rounded bg-[#FAF6EE] hover:bg-[#F2EBD9] text-[#2C1E16] border border-[#D8CBB8] text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer">
                   <i data-lucide="phone-call" class="w-3.5 h-3.5 text-[#A63A2B]"></i>
-                  <span>Gá»i tÃ i xáº¿</span>
+                  <span>Gọi tài xế</span>
                 </button>
               </div>
             </div>
@@ -545,7 +545,7 @@
                   <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#4A7C59] rounded-full border border-[#FFFDF9]"></span>
                 </div>
                 <span class="mt-1 px-2 py-0.5 rounded bg-[#FFFDF9] text-[#2C1E16] border border-[#D8CBB8] text-[9.5px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs font-serif">
-                  ðŸª Báº¿p JaLongFood
+                  🏪 Bếp JaLongFood
                 </span>
               </div>
 
@@ -556,18 +556,18 @@
                   <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#C5A059] rounded-full border border-[#FFFDF9]"></span>
                 </div>
                 <span id="mapCustomerAddressLabel" class="mt-1 px-2 py-0.5 rounded bg-[#FFFDF9] text-[#2C1E16] border border-[#D8CBB8] text-[9.5px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs max-w-[170px] truncate font-serif">
-                  ðŸ  Vá»‹ trÃ­ cá»§a báº¡n
+                  🏠 Vị trí của bạn
                 </span>
               </div>
 
               <!-- Moving Shipper Marker -->
               <div id="mapShipperMarker" class="absolute z-20 flex flex-col items-center transition-all duration-1000 ease-in-out" style="left: 18%; top: 32%;">
                 <div class="relative w-10 h-10 rounded-lg bg-[#2C1E16] text-[#FFFDF9] flex items-center justify-center font-bold shadow-lg border-2 border-[#D8CBB8]">
-                  <span class="text-lg">ðŸ›µ</span>
+                  <span class="text-lg">🛵</span>
                 </div>
                 <div id="mapShipperTooltip" class="mt-1 px-2 py-0.5 rounded bg-[#FFFDF9] text-[#2C1E16] border border-[#D8CBB8] text-[9.5px] font-bold whitespace-nowrap shadow-xs flex items-center gap-1">
                   <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
-                  <span id="mapShipperTooltipText">TÃ i xáº¿ Ä‘ang nháº­n Ä‘Æ¡n â€¢ 0 km/h</span>
+                  <span id="mapShipperTooltipText">Tài xế đang nhận đơn • 0 km/h</span>
                 </div>
               </div>
 
@@ -575,17 +575,17 @@
               <div class="absolute bottom-3 left-3 bg-[#FFFDF9]/95 border border-[#D8CBB8] rounded-md px-3 py-1.5 text-[11px] font-mono-code text-[#2C1E16] flex items-center gap-3 shadow-2xs">
                 <div class="flex items-center gap-1.5">
                   <i data-lucide="gauge" class="w-3.5 h-3.5 text-[#A63A2B]"></i>
-                  <span id="mapSpeedText" class="font-bold">Váº­n tá»‘c: 0 km/h</span>
+                  <span id="mapSpeedText" class="font-bold">Vận tốc: 0 km/h</span>
                 </div>
                 <span class="text-[#D8CBB8]">|</span>
                 <div class="flex items-center gap-1.5">
                   <i data-lucide="milestone" class="w-3.5 h-3.5 text-[#C5A059]"></i>
-                  <span id="mapDistanceText">CÃ¡ch báº¡n: ~850m</span>
+                  <span id="mapDistanceText">Cách bạn: ~850m</span>
                 </div>
                 <span class="text-[#D8CBB8] hidden sm:inline">|</span>
                 <div class="hidden sm:flex items-center gap-1.5">
                   <i data-lucide="timer" class="w-3.5 h-3.5 text-[#4A7C59]"></i>
-                  <span id="mapEtaText">Dá»± kiáº¿n: 6-8 phÃºt</span>
+                  <span id="mapEtaText">Dự kiến: 6-8 phút</span>
                 </div>
               </div>
             </div>
@@ -596,8 +596,8 @@
             <!-- Ordered Items List -->
             <div class="lg:col-span-5 bg-[#FAF6EE] rounded-lg p-4 border border-[#D8CBB8]">
               <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6E65] font-serif mb-3 flex items-center justify-between">
-                <span>MÃ³n Äƒn trong Ä‘Æ¡n</span>
-                <span id="trackedItemsCount" class="text-[#A63A2B] font-bold font-mono-code">0 mÃ³n</span>
+                <span>Món ăn trong đơn</span>
+                <span id="trackedItemsCount" class="text-[#A63A2B] font-bold font-mono-code">0 món</span>
               </h3>
               <div id="trackedItemsList" class="space-y-2 max-h-56 overflow-y-auto ledger-scrollbar pr-1">
                 <!-- Populated dynamically via JS -->
@@ -609,11 +609,11 @@
               <div class="flex items-center justify-between gap-2 mb-3">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-[#2C1E16] font-serif flex items-center gap-1.5">
                   <i data-lucide="navigation" class="w-4 h-4 text-[#A63A2B]"></i>
-                  <span>Lá»‹ch trÃ¬nh Giao nháº­n ÄÆ¡n hÃ ng</span>
+                  <span>Lịch trình Giao nhận Đơn hàng</span>
                 </h3>
                 <span class="text-[11px] font-bold text-[#7A6E65] flex items-center gap-1 font-serif">
                   <span class="w-2 h-2 rounded-full bg-[#4A7C59]"></span>
-                  <span>Cáº­p nháº­t tá»©c thÃ¬</span>
+                  <span>Cập nhật tức thì</span>
                 </span>
               </div>
               <ol id="trackedHistoryTimeline" class="relative border-l-2 border-[#D8CBB8] ml-2.5 space-y-3 max-h-56 overflow-y-auto ledger-scrollbar pl-4 pr-1">
@@ -637,11 +637,11 @@
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div>
               <div class="flex items-center gap-2">
-                <h2 class="font-serif-bistro text-xl font-bold text-[#2C1E16] tracking-tight">Thá»±c ÄÆ¡n TÆ°Æ¡i Má»›i HÃ´m Nay</h2>
-                <span id="liveMenuCountBadge" class="px-2.5 py-0.5 text-xs font-bold rounded bg-[#FAF6EE] text-[#A63A2B] border border-[#D8CBB8] font-mono-code">0 mÃ³n</span>
+                <h2 class="font-serif-bistro text-xl font-bold text-[#2C1E16] tracking-tight">Thực Đơn Tươi Mới Hôm Nay</h2>
+                <span id="liveMenuCountBadge" class="px-2.5 py-0.5 text-xs font-bold rounded bg-[#FAF6EE] text-[#A63A2B] border border-[#D8CBB8] font-mono-code">0 món</span>
               </div>
               <p class="text-xs text-[#7A6E65] font-serif italic mt-0.5">
-                Cháº¿ biáº¿n nÃ³ng há»•i ngay khi nháº­n Ä‘Æ¡n â€¢ NguyÃªn liá»‡u nháº­p tÆ°Æ¡i tuyá»ƒn chá»n má»—i sá»›m
+                Chế biến nóng hổi ngay khi nhận đơn • Nguyên liệu nhập tươi tuyển chọn mỗi sớm
               </p>
             </div>
 
@@ -652,7 +652,7 @@
                 <input
                   id="menuSearchInput"
                   type="text"
-                  placeholder="TÃ¬m mÃ³n phá»Ÿ, cÆ¡m, bÃ­t táº¿t..."
+                  placeholder="Tìm món phở, cơm, bít tết..."
                   class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-[#FAF6EE] border border-[#D8CBB8] rounded-lg text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] focus:border-[#A63A2B] transition"
                 />
                 <button id="btnClearSearch" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-[#7A6E65] hover:text-[#2C1E16]">
@@ -662,12 +662,12 @@
 
               <label class="inline-flex items-center gap-2 text-xs font-bold text-[#2C1E16] bg-[#FAF6EE] border border-[#D8CBB8] px-3 py-2 rounded-lg cursor-pointer select-none shrink-0 hover:bg-[#F2EBD9] transition font-serif">
                 <input id="chkOnlyAvailable" type="checkbox" class="rounded text-[#A63A2B] focus:ring-[#A63A2B] bg-[#FFFDF9] border-[#D8CBB8]" />
-                <span>Chá»‰ mÃ³n cÃ²n</span>
+                <span>Chỉ món còn</span>
               </label>
             </div>
           </div>
 
-          <!-- Category Filter Pills (Tháº» tab giáº¥y thá»±c Ä‘Æ¡n) -->
+          <!-- Category Filter Pills (Thẻ tab giấy thực đơn) -->
           <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
             <!-- Populated dynamically via JS -->
           </div>
@@ -707,15 +707,15 @@
             </div>
             <div>
               <h2 class="font-serif-bistro text-sm font-extrabold uppercase tracking-wider text-[#2C1E16]">
-                GUEST CHECK â€¢ JALONGFOOD
+                GUEST CHECK • JALONGFOOD
               </h2>
-              <p class="text-[10px] text-[#7A6E65] font-mono-code">TABLE: 01 â€¢ SERVER: BISTRO â€¢ DATE: TODAY</p>
+              <p class="text-[10px] text-[#7A6E65] font-mono-code">TABLE: 01 • SERVER: BISTRO • DATE: TODAY</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
             <span id="cartCountBadge" class="px-2 py-0.5 text-xs font-bold rounded bg-[#A63A2B] text-[#FFFDF9] font-mono-code">0</span>
             <button id="btnClearCart" class="hidden text-xs font-bold text-[#A63A2B] hover:underline font-serif">
-              XÃ³a háº¿t
+              Xóa hết
             </button>
           </div>
         </div>
@@ -727,8 +727,8 @@
             <div class="w-14 h-14 rounded-lg bg-[#FAF6EE] border border-[#D8CBB8] text-[#7A6E65] flex items-center justify-center mx-auto mb-3">
               <i data-lucide="utensils-crossed" class="w-7 h-7"></i>
             </div>
-            <p class="text-xs font-bold text-[#2C1E16] font-serif">Phiáº¿u tÃ­nh tiá»n Ä‘ang trá»‘ng</p>
-            <p class="text-[11px] text-[#7A6E65] mt-1 font-serif italic">Báº¥m nÃºt "Chá»n mÃ³n" trÃªn thá»±c Ä‘Æ¡n Ä‘á»ƒ ghi vÃ o phiáº¿u!</p>
+            <p class="text-xs font-bold text-[#2C1E16] font-serif">Phiếu tính tiền đang trống</p>
+            <p class="text-[11px] text-[#7A6E65] mt-1 font-serif italic">Bấm nút "Chọn món" trên thực đơn để ghi vào phiếu!</p>
           </div>
 
           <!-- Items Container -->
@@ -740,7 +740,7 @@
           <form id="checkoutForm" class="space-y-3.5 pt-4 border-t-2 border-dashed border-[#D8CBB8]">
             <div>
               <label for="customerNameInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 flex items-center justify-between font-serif">
-                <span>Há» vÃ  tÃªn ngÆ°á»i nháº­n <span class="text-[#A63A2B]">*</span></span>
+                <span>Họ và tên người nhận <span class="text-[#A63A2B]">*</span></span>
                 <span class="text-[10px] text-[#7A6E65] font-sans">NAME</span>
               </label>
               <div class="relative">
@@ -749,7 +749,7 @@
                   id="customerNameInput"
                   type="text"
                   required
-                  placeholder="Nháº­p tÃªn cá»§a báº¡n (VD: HoÃ ng Long, Tuáº¥n Kiá»‡t...)"
+                  placeholder="Nhập tên của bạn (VD: Gia Long, Tuấn Kiệt...)"
                   class="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] transition"
                 />
               </div>
@@ -759,7 +759,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label for="customerPhoneInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif flex items-center justify-between">
-                  <span>Sá»‘ Ä‘iá»‡n thoáº¡i <span class="text-[#A63A2B]">*</span></span>
+                  <span>Số điện thoại <span class="text-[#A63A2B]">*</span></span>
                   <span class="text-[10px] text-[#7A6E65] font-sans">TEL</span>
                 </label>
                 <div class="relative">
@@ -794,7 +794,7 @@
 
             <div>
               <label for="deliveryAddressInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 flex items-center justify-between font-serif">
-                <span>Äá»‹a chá»‰ nháº­n mÃ³n <span class="text-[#A63A2B]">*</span></span>
+                <span>Địa chỉ nhận món <span class="text-[#A63A2B]">*</span></span>
                 <span class="text-[10px] text-[#7A6E65] font-sans">ADDRESS</span>
               </label>
               <div class="relative">
@@ -803,7 +803,7 @@
                   id="deliveryAddressInput"
                   type="text"
                   required
-                  placeholder="Nháº­p sá»‘ nhÃ , tÃªn Ä‘Æ°á»ng, tÃ²a nhÃ ..."
+                  placeholder="Nhập số nhà, tên đường, tòa nhà..."
                   class="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] transition"
                 />
               </div>
@@ -811,12 +811,12 @@
 
             <div>
               <label for="orderNoteInput" class="block text-xs font-bold text-[#2C1E16] mb-1.5 font-serif">
-                Ghi chÃº cho nhÃ  báº¿p / tÃ i xáº¿
+                Ghi chú cho nhà bếp / tài xế
               </label>
               <input
                 id="orderNoteInput"
                 type="text"
-                placeholder="VD: KhÃ´ng láº¥y hÃ nh, Ã­t cay, gá»i trÆ°á»›c khi Ä‘áº¿n..."
+                placeholder="VD: Không lấy hành, ít cay, gọi trước khi đến..."
                 class="w-full px-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#A63A2B] transition"
               />
             </div>
@@ -827,36 +827,36 @@
               <div id="cartDiscountBanner" class="hidden px-3 py-2 rounded bg-[#FFF5F4] border-2 border-dashed border-[#A63A2B] text-[#A63A2B] text-xs font-bold flex items-center justify-between gap-2 shadow-2xs font-serif">
                 <div class="flex items-center gap-1.5">
                   <i data-lucide="sparkles" class="w-4 h-4 text-[#A63A2B]"></i>
-                  <span>Má»™c Tri Ã‚n KhÃ¡ch Quen: <strong>Giáº£m 10%</strong></span>
+                  <span>Mộc Tri Ân Khách Quen: <strong>Giảm 10%</strong></span>
                 </div>
                 <span class="px-2 py-0.5 rounded bg-[#A63A2B] text-[#FFFDF9] font-black text-[10px] font-mono-code">-10%</span>
               </div>
 
               <div class="flex items-center justify-between text-xs text-[#5C4332] font-serif">
-                <span>Sá»‘ lÆ°á»£ng mÃ³n</span>
-                <span id="cartTotalPortions" class="font-bold text-[#2C1E16] font-mono-code">0 pháº§n</span>
+                <span>Số lượng món</span>
+                <span id="cartTotalPortions" class="font-bold text-[#2C1E16] font-mono-code">0 phần</span>
               </div>
               <div id="cartSubtotalRow" class="hidden flex items-center justify-between text-xs text-[#5C4332] font-serif">
-                <span>Táº¡m tÃ­nh</span>
-                <span id="cartSubtotalPrice" class="font-bold text-[#2C1E16] font-mono-code">0 â‚«</span>
+                <span>Tạm tính</span>
+                <span id="cartSubtotalPrice" class="font-bold text-[#2C1E16] font-mono-code">0 ₫</span>
               </div>
               <div id="cartDiscountRow" class="hidden flex items-center justify-between text-xs text-[#A63A2B] font-serif">
                 <span class="flex items-center gap-1">
                   <i data-lucide="tag" class="w-3.5 h-3.5"></i>
-                  <span>Æ¯u Ä‘Ã£i khÃ¡ch quen (-10%)</span>
+                  <span>Ưu đãi khách quen (-10%)</span>
                 </span>
-                <span id="cartDiscountAmount" class="font-bold font-mono-code">-0 â‚«</span>
+                <span id="cartDiscountAmount" class="font-bold font-mono-code">-0 ₫</span>
               </div>
               <div class="flex items-center justify-between text-xs text-[#5C4332] font-serif">
-                <span>PhÃ­ giao hÃ ng</span>
+                <span>Phí giao hàng</span>
                 <span class="font-bold text-[#4A7C59] flex items-center gap-1 font-mono-code">
                   <i data-lucide="gift" class="w-3.5 h-3.5"></i>
-                  <span>Miá»…n phÃ­ (Æ¯u Ä‘Ã£i)</span>
+                  <span>Miễn phí (Ưu đãi)</span>
                 </span>
               </div>
               <div class="flex items-center justify-between pt-2 border-t border-[#D8CBB8]">
-                <span class="text-xs font-bold text-[#2C1E16] font-serif uppercase">Tá»•ng thanh toÃ¡n</span>
-                <span id="cartTotalPrice" class="text-xl font-bold text-[#A63A2B] font-mono-code">0 â‚«</span>
+                <span class="text-xs font-bold text-[#2C1E16] font-serif uppercase">Tổng thanh toán</span>
+                <span id="cartTotalPrice" class="text-xl font-bold text-[#A63A2B] font-mono-code">0 ₫</span>
               </div>
             </div>
 
@@ -868,7 +868,7 @@
               class="w-full py-3.5 px-4 rounded-md bg-[#A63A2B] hover:bg-[#8C2D19] disabled:bg-[#D8CBB8] disabled:text-[#8C7E72] disabled:cursor-not-allowed text-[#FFFDF9] font-serif-bistro font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition cursor-pointer border border-[#8C2D19]"
             >
               <i data-lucide="check-check" class="w-4 h-4 text-[#D4AF37]"></i>
-              <span id="btnSubmitOrderLabel">XÃC NHáº¬N Äáº¶T MÃ“N (GUEST CHECK) âœ¦</span>
+              <span id="btnSubmitOrderLabel">XÁC NHẬN ĐẶT MÓN (GUEST CHECK) ✦</span>
             </button>
           </form>
         </div>
@@ -888,12 +888,12 @@
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2">
         <span class="font-serif-bistro font-bold text-[#2C1E16]">JaLong<span class="text-[#A63A2B]">Food</span></span>
-        <span>â€¢ Parisian Classic Kitchen â€¢ Giao Ä‘á»“ Äƒn táº­n nÆ¡i 15 phÃºt</span>
+        <span>• Parisian Classic Kitchen • Giao đồ ăn tận nơi 15 phút</span>
       </div>
       <div class="flex items-center gap-4 text-[#7A6E65]">
-        <a href="/inspector.html" target="_blank" class="hover:text-[#A63A2B] transition">DB Live Inspector (Giáº£ng viÃªn)</a>
-        <span>â€¢</span>
-        <a href="/demo-split.html" class="hover:text-[#A63A2B] transition">TrÃ¬nh chiáº¿u Chia Ä‘Ã´i MÃ n hÃ¬nh</a>
+        <a href="/inspector.html" target="_blank" class="hover:text-[#A63A2B] transition">DB Live Inspector (Giảng viên)</a>
+        <span>•</span>
+        <a href="/demo-split.html" class="hover:text-[#A63A2B] transition">Trình chiếu Chia đôi Màn hình</a>
       </div>
     </div>
   </footer>
@@ -904,4 +904,3 @@
   <script type="module" src="/js/customer-app.js?v=20261116_vintage_bistro"></script>
 </body>
 </html>
-

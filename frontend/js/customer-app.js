@@ -1,5 +1,5 @@
-﻿/**
- * JaLongFood â€¢ Parisian Classic Kitchen
+/**
+ * JaLongFood • Parisian Classic Kitchen
  * Customer Ordering & Real-time Live Experience
  * Classic Parisian Bistro / Vintage Paper Menu & Guest Check
  */
@@ -29,49 +29,49 @@ import { createRealtimeClient } from './realtime-client.js?v=20261107_v7';
 const ORDER_STEPS = [
   {
     key: 'Pending',
-    viTitle: 'ÄÃ£ nháº­n Ä‘Æ¡n',
-    viDesc: 'NhÃ  hÃ ng Ä‘Ã£ xÃ¡c nháº­n Ä‘Æ¡n cá»§a báº¡n',
+    viTitle: 'Đã nhận đơn',
+    viDesc: 'Nhà hàng đã xác nhận đơn của bạn',
     icon: 'clipboard-check',
   },
   {
     key: 'Preparing',
-    viTitle: 'Báº¿p Ä‘ang náº¥u',
-    viDesc: 'Äáº§u báº¿p Ä‘ang cháº¿ biáº¿n nÃ³ng há»•i',
+    viTitle: 'Bếp đang nấu',
+    viDesc: 'Đầu bếp đang chế biến nóng hổi',
     icon: 'flame',
   },
   {
     key: 'Delivering',
-    viTitle: 'TÃ i xáº¿ Ä‘ang giao',
-    viDesc: 'Äang trÃªn Ä‘Æ°á»ng di chuyá»ƒn tá»›i báº¡n',
+    viTitle: 'Tài xế đang giao',
+    viDesc: 'Đang trên đường di chuyển tới bạn',
     icon: 'bike',
   },
   {
     key: 'Completed',
-    viTitle: 'Giao thÃ nh cÃ´ng',
-    viDesc: 'ChÃºc báº¡n dÃ¹ng bá»¯a ngon miá»‡ng!',
+    viTitle: 'Giao thành công',
+    viDesc: 'Chúc bạn dùng bữa ngon miệng!',
     icon: 'check-circle-2',
   },
 ];
 
 const STATUS_META = {
   Pending: {
-    label: 'Chá» xÃ¡c nháº­n',
+    label: 'Chờ xác nhận',
     badgeClass: 'stamp-badge stamp-pending',
   },
   Preparing: {
-    label: 'Báº¿p Ä‘ang náº¥u',
+    label: 'Bếp đang nấu',
     badgeClass: 'stamp-badge stamp-preparing',
   },
   Delivering: {
-    label: 'TÃ i xáº¿ Ä‘ang giao',
+    label: 'Tài xế đang giao',
     badgeClass: 'stamp-badge stamp-delivering',
   },
   Completed: {
-    label: 'ÄÃ£ giao thÃ nh cÃ´ng',
+    label: 'Đã giao thành công',
     badgeClass: 'stamp-badge stamp-completed',
   },
   Cancelled: {
-    label: 'ÄÃ£ há»§y Ä‘Æ¡n',
+    label: 'Đã hủy đơn',
     badgeClass: 'stamp-badge stamp-cancelled',
   },
 };
@@ -515,7 +515,7 @@ function applyDbStatusUI({ connected, latencyMs, lastError, code }) {
         'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#EAEFEA] border border-[#8BA89B] text-[#2D4A3E] text-xs font-bold shadow-2xs';
     }
     if (dom.dbStatusDot) dom.dbStatusDot.className = 'w-2 h-2 rounded-full bg-[#4A7C59] pulse-moss';
-    if (dom.dbStatusText) dom.dbStatusText.textContent = 'MÃ¡y chá»§ Trá»±c tuyáº¿n';
+    if (dom.dbStatusText) dom.dbStatusText.textContent = 'Máy chủ Trực tuyến';
     if (dom.dbLatencyBadge) {
       dom.dbLatencyBadge.className =
         'font-mono-code text-[10px] px-1.5 py-0.5 rounded bg-[#D3E0D6] text-[#2D4A3E] font-bold';
@@ -525,8 +525,8 @@ function applyDbStatusUI({ connected, latencyMs, lastError, code }) {
 
     if (!wasOnline) {
       showToast(
-        'Há»‡ thá»‘ng Ä‘Ã£ káº¿t ná»‘i trá»Ÿ láº¡i!',
-        'QuÃ½ khÃ¡ch cÃ³ thá»ƒ tiáº¿p tá»¥c chá»n mÃ³n vÃ  theo dÃµi Ä‘Æ¡n hÃ ng bÃ¬nh thÆ°á»ng.',
+        'Hệ thống đã kết nối trở lại!',
+        'Quý khách có thể tiếp tục chọn món và theo dõi đơn hàng bình thường.',
         'success'
       );
       loadAllInitialData({ silent: true });
@@ -535,16 +535,16 @@ function applyDbStatusUI({ connected, latencyMs, lastError, code }) {
     if (dom.dbEmergencyBanner) dom.dbEmergencyBanner.classList.remove('hidden');
     if (dom.dbEmergencyMessage) {
       dom.dbEmergencyMessage.textContent =
-        'Há»‡ thá»‘ng Ä‘ang Ä‘á»“ng bá»™ dá»¯ liá»‡u vá»›i mÃ¡y chá»§. Má»i thao tÃ¡c sáº½ tiáº¿p tá»¥c trong giÃ¢y lÃ¡t...';
+        'Hệ thống đang đồng bộ dữ liệu với máy chủ. Mọi thao tác sẽ tiếp tục trong giây lát...';
     }
-    if (dom.dbEmergencyCode) dom.dbEmergencyCode.textContent = 'Äang Ä‘á»“ng bá»™';
+    if (dom.dbEmergencyCode) dom.dbEmergencyCode.textContent = 'Đang đồng bộ';
 
     if (dom.dbStatusBadge) {
       dom.dbStatusBadge.className =
         'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#FEE2E2] border border-[#DC2626] text-[#991B1B] text-xs font-bold';
     }
     if (dom.dbStatusDot) dom.dbStatusDot.className = 'w-2 h-2 rounded-full bg-[#DC2626] pulse-crimson';
-    if (dom.dbStatusText) dom.dbStatusText.textContent = 'Äang káº¿t ná»‘i láº¡i';
+    if (dom.dbStatusText) dom.dbStatusText.textContent = 'Đang kết nối lại';
     if (dom.dbLatencyBadge) {
       dom.dbLatencyBadge.className =
         'font-mono-code text-[10px] px-1.5 py-0.5 rounded bg-[#FCA5A5] text-[#7F1D1D] font-bold';
@@ -553,8 +553,8 @@ function applyDbStatusUI({ connected, latencyMs, lastError, code }) {
 
     if (wasOnline) {
       showToast(
-        'Äang Ä‘á»“ng bá»™ káº¿t ná»‘i mÃ¡y chá»§',
-        'Vui lÃ²ng chá» trong giÃ¢y lÃ¡t trong khi há»‡ thá»‘ng thá»­ láº¡i káº¿t ná»‘i.',
+        'Đang đồng bộ kết nối máy chủ',
+        'Vui lòng chờ trong giây lát trong khi hệ thống thử lại kết nối.',
         'warning'
       );
     }
@@ -600,7 +600,7 @@ function slugifyName(name) {
 }
 
 function syncCustomerNameUI() {
-  const savedName = localStorage.getItem(CUSTOMER_NAME_KEY) || 'HoÃ ng Long';
+  const savedName = localStorage.getItem(CUSTOMER_NAME_KEY) || 'Gia Long';
   const savedPhone = localStorage.getItem(CUSTOMER_PHONE_KEY) || '0988123456';
   const savedEmail = localStorage.getItem(CUSTOMER_EMAIL_KEY) || 'hoanglong@gmail.com';
 
@@ -614,8 +614,8 @@ function syncCustomerNameUI() {
     dom.customerEmailInput.value = savedEmail;
   }
   if (dom.headerCustomerNameDisplay) {
-    const curVal = (dom.customerNameInput?.value || savedName).trim() || 'KhÃ¡ch vÃ£ng lai';
-    dom.headerCustomerNameDisplay.textContent = curVal + ' (Báº¡n)';
+    const curVal = (dom.customerNameInput?.value || savedName).trim() || 'Khách vãng lai';
+    dom.headerCustomerNameDisplay.textContent = curVal + ' (Bạn)';
   }
   triggerCustomerCheck();
 }
@@ -641,8 +641,8 @@ function triggerCustomerCheck() {
         if (!state.isReturningCustomer) {
           playSuccessChord();
           showToast(
-            'ðŸŽ‰ KÃ­ch hoáº¡t Æ¯u Ä‘Ã£i KhÃ¡ch cÅ© -10%!',
-            `ChÃ o má»«ng ${res.user?.full_name || name} quay láº¡i! Báº¡n Ä‘Æ°á»£c giáº£m 10% trÃªn toÃ n bá»™ Ä‘Æ¡n hÃ ng.`,
+            '🎉 Kích hoạt Ưu đãi Khách cũ -10%!',
+            `Chào mừng ${res.user?.full_name || name} quay lại! Bạn được giảm 10% trên toàn bộ đơn hàng.`,
             'success'
           );
         }
@@ -694,71 +694,71 @@ function applySelectedUserAddress(force = false) {
   const user = getUserById(state.selectedUserId);
   if (!user) return;
   if (force || !state.addressTouched || !dom.deliveryAddressInput.value.trim()) {
-    dom.deliveryAddressInput.value = user.default_address || 'Sá»‘ 12 Phá»‘ Cá»•, HÃ  Ná»™i';
+    dom.deliveryAddressInput.value = user.default_address || 'Số 12 Phố Cổ, Hà Nội';
     state.addressTouched = false;
   }
   syncCustomerNameUI();
 }
 
 /* ==========================================================================
-   CS:GO STYLE FOOD ROULETTE ("HÃ”M NAY Ä‚N GÃŒ ?")
+   CS:GO STYLE FOOD ROULETTE ("HÔM NAY ĂN GÌ ?")
    ========================================================================== */
 
 const CSGO_RARITIES = {
   milspec: {
     key: 'milspec',
-    name: 'Háº¡t dáº»',
+    name: 'Hạt dẻ',
     color: '#2D4A3E',
     badgeClass: 'bg-[#FAF6EE] text-[#2C1E16] border border-[#D8CBB8]',
     barColor: '#52886B',
     glowColor: 'rgba(82, 136, 107, 0.4)',
     cardBg: '#FFFDF9',
     borderColor: '#D8CBB8',
-    title: 'Háº T Dáºº (BÃŒNH DÃ‚N)',
+    title: 'HẠT DẺ (BÌNH DÂN)',
   },
   restricted: {
     key: 'restricted',
-    name: 'Chuáº©n vá»‹',
+    name: 'Chuẩn vị',
     color: '#1E3A8A',
     badgeClass: 'bg-[#FAF6EE] text-[#1E3A8A] border border-[#93C5FD]',
     barColor: '#3B82F6',
     glowColor: 'rgba(59, 130, 246, 0.4)',
     cardBg: '#FFFDF9',
     borderColor: '#93C5FD',
-    title: 'CHUáº¨N Vá»Š (GIA TRUYá»€N)',
+    title: 'CHUẨN VỊ (GIA TRUYỀN)',
   },
   classified: {
     key: 'classified',
-    name: 'No nÃª',
+    name: 'No nê',
     color: '#6B21A8',
     badgeClass: 'bg-[#FAF6EE] text-[#6B21A8] border border-[#D8B4FE]',
     barColor: '#9333EA',
     glowColor: 'rgba(147, 51, 234, 0.4)',
     cardBg: '#FFFDF9',
     borderColor: '#D8B4FE',
-    title: 'NO NÃŠ (THá»ŠNH SOáº N)',
+    title: 'NO NÊ (THỊNH SOẠN)',
   },
   covert: {
     key: 'covert',
-    name: 'ThÆ°á»£ng háº¡ng',
+    name: 'Thượng hạng',
     color: '#A63A2B',
     badgeClass: 'bg-[#FAF6EE] text-[#A63A2B] border border-[#FCA5A5]',
     barColor: '#A63A2B',
     glowColor: 'rgba(166, 58, 43, 0.4)',
     cardBg: '#FFFDF9',
     borderColor: '#FCA5A5',
-    title: 'THÆ¯á»¢NG Háº NG (Äáº¶C Sáº¢N)',
+    title: 'THƯỢNG HẠNG (ĐẶC SẢN)',
   },
   special_rare: {
     key: 'special_rare',
-    name: 'â˜… MÃ³n Báº¿p TrÆ°á»Ÿng VIP â˜…',
+    name: '★ Món Bếp Trưởng VIP ★',
     color: '#8C6200',
     badgeClass: 'bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] font-bold',
     barColor: '#D4AF37',
     glowColor: 'rgba(212, 175, 55, 0.6)',
     cardBg: '#FAF6EE',
     borderColor: '#C5A059',
-    title: 'â˜… MÃ“N Báº¾P TRÆ¯á»žNG VIP â˜…',
+    title: '★ MÓN BẾP TRƯỞNG VIP ★',
   },
 };
 
@@ -792,7 +792,7 @@ async function loadRouletteCandidates(budget = 'all') {
     }
 
     if (dom.rouletteStatusBadge) {
-      dom.rouletteStatusBadge.textContent = `Sáºµn sÃ ng quay mÃ³n (${state.roulette.candidates.length} mÃ³n)`;
+      dom.rouletteStatusBadge.textContent = `Sẵn sàng quay món (${state.roulette.candidates.length} món)`;
     }
 
     buildRouletteStrip();
@@ -810,7 +810,7 @@ function buildRouletteStrip(designatedWinner = null) {
   if (!candidates || candidates.length === 0) {
     dom.rouletteStrip.innerHTML = `
       <div class="p-8 text-center text-xs text-slate-400 w-full">
-        KhÃ´ng cÃ³ mÃ³n nÃ o trong táº§m giÃ¡ nÃ y. HÃ£y chá»n má»‘c tÃ i chÃ­nh khÃ¡c!
+        Không có món nào trong tầm giá này. Hãy chọn mốc tài chính khác!
       </div>
     `;
     return;
@@ -869,7 +869,7 @@ function buildRouletteStrip(designatedWinner = null) {
 
           <div class="px-2 pb-2 bg-[#FAF6EE] border-t border-[#D8CBB8]">
             <span class="text-[9px] text-[#7A6E65] font-bold truncate block uppercase tracking-wider font-serif">
-              ${escapeHtml(food.category_name || 'MÃ³n ngon')}
+              ${escapeHtml(food.category_name || 'Món ngon')}
             </span>
             <h5 class="text-[11px] font-bold text-[#2C1E16] truncate leading-tight mt-0.5 font-serif" title="${escapeHtml(food.name)}">
               ${escapeHtml(food.name)}
@@ -888,7 +888,7 @@ let rouletteAnimFrame = null;
 function spinRoulette() {
   if (state.roulette.isSpinning) return;
   if (!state.roulette.candidates || state.roulette.candidates.length === 0) {
-    showToast('ChÆ°a cÃ³ mÃ³n Äƒn', 'KhÃ´ng cÃ³ mÃ³n Äƒn kháº£ dá»¥ng Ä‘á»ƒ quay.', 'warning');
+    showToast('Chưa có món ăn', 'Không có món ăn khả dụng để quay.', 'warning');
     return;
   }
 
@@ -900,12 +900,12 @@ function spinRoulette() {
     dom.btnSpinRoulette.classList.add('opacity-50', 'cursor-not-allowed');
     dom.btnSpinRoulette.innerHTML = `
       <i data-lucide="loader" class="w-4 h-4 animate-spin text-amber-300"></i>
-      <span>ÄANG QUAY MÃ“N...</span>
+      <span>ĐANG QUAY MÓN...</span>
     `;
     refreshIcons();
   }
   if (dom.rouletteStatusBadge) {
-    dom.rouletteStatusBadge.textContent = 'âš¡ Äang quay mÃ³n... HÃ£y nÃ­n thá»Ÿ!';
+    dom.rouletteStatusBadge.textContent = '⚡ Đang quay món... Hãy nín thở!';
   }
 
   const candidates = state.roulette.candidates;
@@ -966,7 +966,7 @@ function spinRoulette() {
     triggerNeonConfetti();
 
     if (dom.rouletteStatusBadge) {
-      dom.rouletteStatusBadge.textContent = `ðŸŽ‰ ÄÃƒ QUAY TRÃšNG: ${winner.name}!`;
+      dom.rouletteStatusBadge.textContent = `🎉 ĐÃ QUAY TRÚNG: ${winner.name}!`;
     }
 
     setTimeout(() => {
@@ -977,7 +977,7 @@ function spinRoulette() {
         dom.btnSpinRoulette.classList.remove('opacity-50', 'cursor-not-allowed');
         dom.btnSpinRoulette.innerHTML = `
           <i data-lucide="sparkles" class="w-4 h-4 text-[#D4AF37]"></i>
-          <span>QUAY MÃ“N NGAY âœ¦</span>
+          <span>QUAY MÓN NGAY ✦</span>
         `;
         refreshIcons();
       }
@@ -1006,13 +1006,13 @@ function openRouletteWinnerModal(winner) {
     };
   }
   if (dom.winnerCategoryName) {
-    dom.winnerCategoryName.textContent = winner.category_name || 'MÃ³n ngon';
+    dom.winnerCategoryName.textContent = winner.category_name || 'Món ngon';
   }
   if (dom.winnerFoodName) {
     dom.winnerFoodName.textContent = winner.name;
   }
   if (dom.winnerFoodDesc) {
-    dom.winnerFoodDesc.textContent = winner.description || 'HÆ°Æ¡ng vá»‹ thÆ¡m ngon, cháº¿ biáº¿n tÆ°Æ¡i má»›i tá»« nguyÃªn liá»‡u háº£o háº¡ng!';
+    dom.winnerFoodDesc.textContent = winner.description || 'Hương vị thơm ngon, chế biến tươi mới từ nguyên liệu hảo hạng!';
   }
   if (dom.winnerFoodPrice) {
     dom.winnerFoodPrice.textContent = formatVND(winner.price);
@@ -1049,8 +1049,8 @@ function addRouletteWinnerToCart() {
   addToCart(winner.id, 1);
   closeRouletteWinnerModal();
   showToast(
-    'ðŸŽ‰ ÄÃ£ Chá»‘t MÃ³n Äá»‹nh Má»‡nh!',
-    `"${winner.name}" Ä‘Ã£ Ä‘Æ°á»£c Ä‘Æ°a vÃ o giá» hÃ ng. Báº¡n cÃ³ thá»ƒ chá»‘t Ä‘Æ¡n ngay!`,
+    '🎉 Đã Chốt Món Định Mệnh!',
+    `"${winner.name}" đã được đưa vào giỏ hàng. Bạn có thể chốt đơn ngay!`,
     'success'
   );
 }
@@ -1112,7 +1112,7 @@ function bindRouletteEvents() {
 
 function getCategoryName(categoryId) {
   const cat = state.categories.find((c) => Number(c.id) === Number(categoryId));
-  return cat ? cat.name : `Danh má»¥c #${categoryId}`;
+  return cat ? cat.name : `Danh mục #${categoryId}`;
 }
 
 function isFoodOrderable(food) {
@@ -1144,7 +1144,7 @@ function renderCategoriesPills() {
   const pills = [
     {
       id: 'all',
-      name: 'Táº¥t cáº£ mÃ³n',
+      name: 'Tất cả món',
       count: totalCount,
     },
     ...state.categories.map((cat) => ({
@@ -1187,7 +1187,7 @@ function renderCategoriesPills() {
 
 function renderFoodsGrid(highlightFoodId = null) {
   const filtered = getFilteredFoods();
-  dom.liveMenuCountBadge.textContent = `${filtered.length} mÃ³n`;
+  dom.liveMenuCountBadge.textContent = `${filtered.length} món`;
 
   if (!filtered.length) {
     dom.foodsGrid.innerHTML = `
@@ -1195,8 +1195,8 @@ function renderFoodsGrid(highlightFoodId = null) {
         <div class="w-14 h-14 rounded-lg bg-[#FAF6EE] text-[#7A6E65] border border-[#D8CBB8] flex items-center justify-center mx-auto mb-3">
           <i data-lucide="search-x" class="w-7 h-7"></i>
         </div>
-        <p class="text-sm font-bold text-[#2C1E16] font-serif">KhÃ´ng tÃ¬m tháº¥y mÃ³n Äƒn phÃ¹ há»£p</p>
-        <p class="text-xs text-[#7A6E65] mt-1 font-serif italic">Thá»­ Ä‘á»•i tá»« khÃ³a tÃ¬m kiáº¿m hoáº·c chá»n danh má»¥c khÃ¡c nhÃ©.</p>
+        <p class="text-sm font-bold text-[#2C1E16] font-serif">Không tìm thấy món ăn phù hợp</p>
+        <p class="text-xs text-[#7A6E65] mt-1 font-serif italic">Thử đổi từ khóa tìm kiếm hoặc chọn danh mục khác nhé.</p>
       </div>
     `;
     refreshIcons();
@@ -1240,26 +1240,26 @@ function renderFoodsGrid(highlightFoodId = null) {
                 ${!orderable
           ? `
                       <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FEF2F2] text-[#991B1B] border border-[#DC2626]">
-                        Háº¿t mÃ³n
+                        Hết món
                       </span>
                     `
           : isHot
             ? `
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#A63A2B] text-white shadow-2xs flex items-center gap-1 font-serif">
                           <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                          <span>BÃN CHáº Y</span>
+                          <span>BÁN CHẠY</span>
                         </span>
                       `
             : stock <= 5
               ? `
                           <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] shadow-2xs flex items-center gap-1 font-serif">
-                            <span>Sáº¯p háº¿t</span>
+                            <span>Sắp hết</span>
                           </span>
                         `
               : `
                           <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] shadow-2xs flex items-center gap-1 font-serif">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#4A7C59]"></span>
-                            <span>CÃ²n ${stock} pháº§n</span>
+                            <span>Còn ${stock} phần</span>
                           </span>
                         `
         }
@@ -1272,7 +1272,7 @@ function renderFoodsGrid(highlightFoodId = null) {
                 ${escapeHtml(food.name)}
               </h3>
               <p class="text-xs text-[#5C4332] font-serif italic mt-1.5 line-clamp-2 leading-relaxed min-h-[34px]">
-                ${escapeHtml(food.description || 'MÃ³n Äƒn cháº¿ biáº¿n nÃ³ng há»•i chuáº©n vá»‹ PhÃ¡p tá»« nguyÃªn liá»‡u tuyá»ƒn chá»n trong ngÃ y.')}
+                ${escapeHtml(food.description || 'Món ăn chế biến nóng hổi chuẩn vị Pháp từ nguyên liệu tuyển chọn trong ngày.')}
               </p>
             </div>
           </div>
@@ -1280,20 +1280,20 @@ function renderFoodsGrid(highlightFoodId = null) {
           <!-- Price & Action Footer -->
           <div class="px-4 sm:px-4.5 pb-4 pt-3 border-t border-[#D8CBB8] flex items-center justify-between gap-2 bg-[#FAF6EE]/50">
             <div>
-              <span class="text-[9.5px] uppercase font-bold text-[#7A6E65] block tracking-wider font-serif">ÄÆ¡n giÃ¡</span>
+              <span class="text-[9.5px] uppercase font-bold text-[#7A6E65] block tracking-wider font-serif">Đơn giá</span>
               <span class="text-base sm:text-lg font-bold text-[#A63A2B] font-mono-code">${formatVND(food.price)}</span>
             </div>
 
             ${!orderable
           ? `
                   <button type="button" disabled class="px-3 py-1.5 rounded bg-[#FAF6EE] border border-[#D8CBB8] text-[#8C7E72] text-xs font-bold font-serif cursor-not-allowed">
-                    Táº¡m háº¿t mÃ³n
+                    Tạm hết món
                   </button>
                 `
           : inCartQty > 0
             ? `
                     <div class="flex items-center gap-1 bg-[#FAF6EE] border border-[#D8CBB8] rounded p-0.5 shadow-2xs">
-                      <button type="button" data-food-dec="${food.id}" class="w-6 h-6 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] font-bold text-sm flex items-center justify-center transition border border-[#D8CBB8]">âˆ’</button>
+                      <button type="button" data-food-dec="${food.id}" class="w-6 h-6 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] font-bold text-sm flex items-center justify-center transition border border-[#D8CBB8]">−</button>
                       <span class="w-5 text-center text-xs font-bold text-[#2C1E16] font-mono-code">${inCartQty}</span>
                       <button type="button" data-food-inc="${food.id}" class="w-6 h-6 rounded bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] font-bold text-sm flex items-center justify-center shadow-2xs transition">+</button>
                     </div>
@@ -1305,7 +1305,7 @@ function renderFoodsGrid(highlightFoodId = null) {
                       class="px-3.5 py-2 rounded-md bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] text-xs font-bold font-serif flex items-center gap-1.5 shadow-2xs transition duration-200 cursor-pointer border border-[#8C2D19]"
                     >
                       <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                      <span>Chá»n mÃ³n</span>
+                      <span>Chọn món</span>
                     </button>
                   `
         }
@@ -1405,7 +1405,7 @@ function reconcileCartWithLiveMenu() {
 function addToCart(foodId, delta = 1) {
   const food = state.foods.find((f) => Number(f.id) === Number(foodId));
   if (!food || !isFoodOrderable(food)) {
-    showToast('MÃ³n Äƒn táº¡m háº¿t', 'MÃ³n nÃ y vá»«a háº¿t hÃ ng hoáº·c ngá»«ng phá»¥c vá»¥.', 'warning');
+    showToast('Món ăn tạm hết', 'Món này vừa hết hàng hoặc ngừng phục vụ.', 'warning');
     return;
   }
 
@@ -1415,8 +1415,8 @@ function addToCart(foodId, delta = 1) {
 
   if (nextQty > Number(food.stock_quantity)) {
     showToast(
-      'ÄÃ£ Ä‘áº¡t giá»›i háº¡n cÃ³ sáºµn',
-      `MÃ³n "${food.name}" hiá»‡n chá»‰ cÃ²n ${food.stock_quantity} pháº§n trong ngÃ y.`,
+      'Đã đạt giới hạn có sẵn',
+      `Món "${food.name}" hiện chỉ còn ${food.stock_quantity} phần trong ngày.`,
       'warning'
     );
     return;
@@ -1430,7 +1430,7 @@ function addToCart(foodId, delta = 1) {
       quantity: delta,
       note: '',
     });
-    showToast('ÄÃ£ thÃªm vÃ o giá» hÃ ng!', `"${food.name}" Ä‘Ã£ Ä‘Æ°á»£c thÃªm vÃ o giá» cá»§a báº¡n.`, 'success');
+    showToast('Đã thêm vào giỏ hàng!', `"${food.name}" đã được thêm vào giỏ của bạn.`, 'success');
   }
 
   saveCartToStorage();
@@ -1448,7 +1448,7 @@ function changeCartQty(foodId, delta) {
   } else {
     const food = state.foods.find((f) => Number(f.id) === Number(foodId));
     if (food && nextQty > Number(food.stock_quantity)) {
-      showToast('ÄÃ£ Ä‘áº¡t giá»›i háº¡n tá»“n kho', `Chá»‰ cÃ²n ${food.stock_quantity} pháº§n.`, 'warning');
+      showToast('Đã đạt giới hạn tồn kho', `Chỉ còn ${food.stock_quantity} phần.`, 'warning');
       return;
     }
     target.quantity = nextQty;
@@ -1481,7 +1481,7 @@ function renderCart() {
     dom.cartItemsContainer.classList.add('hidden');
   }
 
-  dom.cartTotalPortions.textContent = `${totalItems} pháº§n`;
+  dom.cartTotalPortions.textContent = `${totalItems} phần`;
 
   let subtotal = 0;
   let finalTotal = 0;
@@ -1505,7 +1505,7 @@ function renderCart() {
             <div class="min-w-0">
               <div class="flex items-center gap-1.5">
                 <h4 class="font-bold text-xs text-[#2C1E16] truncate font-serif">${escapeHtml(food.name)}</h4>
-                ${item.isFlashSale ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-[#A63A2B] text-white shrink-0">âš¡ 1K</span>' : (isDiscounted ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] shrink-0 font-serif">ðŸŽ -10%</span>' : '')}
+                ${item.isFlashSale ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-[#A63A2B] text-white shrink-0">⚡ 1K</span>' : (isDiscounted ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] shrink-0 font-serif">🎁 -10%</span>' : '')}
               </div>
               <span class="text-[11px] text-[#A63A2B] font-bold font-mono-code">
                 ${formatVND(effectiveUnitPrice)}
@@ -1516,10 +1516,10 @@ function renderCart() {
             <!-- Qty Counter -->
             <div class="flex items-center gap-1 bg-[#FAF6EE] border border-[#D8CBB8] rounded p-0.5">
               ${item.isFlashSale
-          ? `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#A63A2B] hover:text-white text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]" title="XÃ³a mÃ³n 1K">âœ•</button>
+          ? `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#A63A2B] hover:text-white text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]" title="Xóa món 1K">✕</button>
              <span class="w-5 text-center text-xs font-bold text-[#A63A2B] font-mono-code">1</span>
-             <button type="button" disabled class="w-5 h-5 rounded bg-[#FAF6EE] text-[#D8CBB8] text-xs font-bold flex items-center justify-center cursor-not-allowed" title="Má»—i mÃ³n 1K tá»‘i Ä‘a 1 suáº¥t">+</button>`
-          : `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]">âˆ’</button>
+             <button type="button" disabled class="w-5 h-5 rounded bg-[#FAF6EE] text-[#D8CBB8] text-xs font-bold flex items-center justify-center cursor-not-allowed" title="Mỗi món 1K tối đa 1 suất">+</button>`
+          : `<button type="button" data-cart-dec="${food.id}" class="w-5 h-5 rounded bg-[#FFFDF9] hover:bg-[#FAF6EE] text-[#2C1E16] text-xs font-bold flex items-center justify-center transition border border-[#D8CBB8]">−</button>
              <span class="w-5 text-center text-xs font-bold text-[#2C1E16] font-mono-code">${item.quantity}</span>
              <button type="button" data-cart-inc="${food.id}" class="w-5 h-5 rounded bg-[#A63A2B] hover:bg-[#8C2D19] text-[#FFFDF9] text-xs font-bold flex items-center justify-center shadow-2xs transition">+</button>`
         }
@@ -1531,7 +1531,7 @@ function renderCart() {
               type="text"
               data-cart-note="${food.id}"
               value="${escapeHtml(item.note || '')}"
-              placeholder="Ghi chÃº vá»‹ (Ã­t Ä‘Ã¡, cay...)"
+              placeholder="Ghi chú vị (ít đá, cay...)"
               class="flex-1 bg-transparent text-[11px] text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none font-serif italic"
             />
             <span class="font-bold text-[#A63A2B] font-mono-code">${formatVND(lineTotal)}</span>
@@ -1590,7 +1590,7 @@ async function handleCheckoutSubmit(evt) {
   evt.preventDefault();
   if (!state.cart.length || !state.dbOnline) return;
 
-  const customerName = (dom.customerNameInput?.value || '').trim() || 'KhÃ¡ch vÃ£ng lai';
+  const customerName = (dom.customerNameInput?.value || '').trim() || 'Khách vãng lai';
   const customerPhone = (dom.customerPhoneInput?.value || '').trim() || '0988123456';
   const customerEmail = (dom.customerEmailInput?.value || '').trim() || `${slugifyName(customerName)}@gmail.com`;
 
@@ -1601,14 +1601,14 @@ async function handleCheckoutSubmit(evt) {
 
   const address = dom.deliveryAddressInput.value.trim();
   if (!address) {
-    showToast('Thiáº¿u Ä‘á»‹a chá»‰ nháº­n mÃ³n', 'Vui lÃ²ng nháº­p Ä‘á»‹a chá»‰ Ä‘á»ƒ tÃ i xáº¿ giao tá»›i báº¡n.', 'warning');
+    showToast('Thiếu địa chỉ nhận món', 'Vui lòng nhập địa chỉ để tài xế giao tới bạn.', 'warning');
     dom.deliveryAddressInput.focus();
     return;
   }
 
   const prevLabel = dom.btnSubmitOrderLabel.textContent;
   dom.btnSubmitOrder.disabled = true;
-  dom.btnSubmitOrderLabel.textContent = 'Äang xá»­ lÃ½ Ä‘Æ¡n mÃ³n...';
+  dom.btnSubmitOrderLabel.textContent = 'Đang xử lý đơn món...';
 
   try {
     const created = await createOrder({
@@ -1639,8 +1639,8 @@ async function handleCheckoutSubmit(evt) {
     triggerNeonConfetti();
 
     showToast(
-      `ðŸŽ‰ Äáº·t mÃ³n thÃ nh cÃ´ng${newOrderId ? ` (#ORD-${newOrderId})` : ''}!`,
-      'NhÃ  báº¿p Ä‘Ã£ nháº­n Ä‘Æ¡n vÃ  báº¯t Ä‘áº§u cháº¿ biáº¿n nÃ³ng sá»‘t cho báº¡n!',
+      `🎉 Đặt món thành công${newOrderId ? ` (#ORD-${newOrderId})` : ''}!`,
+      'Nhà bếp đã nhận đơn và bắt đầu chế biến nóng sốt cho bạn!',
       'success'
     );
 
@@ -1654,7 +1654,7 @@ async function handleCheckoutSubmit(evt) {
         localStorage.setItem(USER_STORAGE_KEY, String(orderUserId));
       }
 
-      // HIá»†N NGAY Báº¢NG THEO DÃ•I HÃ€NH TRÃŒNH ÄÆ N HÃ€NG!
+      // HIỆN NGAY BẢNG THEO DÕI HÀNH TRÌNH ĐƠN HÀNG!
       if (dom.orderTrackerSection) {
         dom.orderTrackerSection.classList.remove('hidden');
       }
@@ -1665,7 +1665,7 @@ async function handleCheckoutSubmit(evt) {
         dom.trackerActiveContent.classList.remove('hidden');
       }
 
-      // Hiá»ƒn thá»‹ ngay chi tiáº¿t Ä‘Æ¡n vÃ  Map GPS cho Ä‘Æ¡n vá»«a Ä‘áº·t
+      // Hiển thị ngay chi tiết đơn và Map GPS cho đơn vừa đặt
       await loadActiveOrderDetail(newOrderId);
       await Promise.all([refreshFoodsOnly(), loadOrdersForSelectedUser(newOrderId)]);
 
@@ -1685,8 +1685,8 @@ async function handleCheckoutSubmit(evt) {
       });
     } else {
       showToast(
-        'KhÃ´ng thá»ƒ hoÃ n táº¥t Ä‘áº·t mÃ³n',
-        err?.message || 'CÃ³ lá»—i xáº£y ra trong quÃ¡ trÃ¬nh Ä‘áº·t Ä‘Æ¡n. Vui lÃ²ng thá»­ láº¡i sau giÃ¢y lÃ¡t.',
+        'Không thể hoàn tất đặt món',
+        err?.message || 'Có lỗi xảy ra trong quá trình đặt đơn. Vui lòng thử lại sau giây lát.',
         'error'
       );
       await refreshFoodsOnly();
@@ -1721,13 +1721,13 @@ async function loadOrdersForSelectedUser(preferredOrderId = null) {
     if (!ordersToShow.length) {
       if (preferredOrderId) {
         state.activeOrderId = Number(preferredOrderId);
-        dom.activeOrderSelect.innerHTML = `<option value="${preferredOrderId}">#ORD-${preferredOrderId} (ÄÆ¡n vá»«a Ä‘áº·t)</option>`;
+        dom.activeOrderSelect.innerHTML = `<option value="${preferredOrderId}">#ORD-${preferredOrderId} (Đơn vừa đặt)</option>`;
         await loadActiveOrderDetail(preferredOrderId);
         return;
       }
       state.activeOrderId = null;
       state.activeOrderDetail = null;
-      dom.activeOrderSelect.innerHTML = `<option value="">ChÆ°a cÃ³ Ä‘Æ¡n hÃ ng nÃ o</option>`;
+      dom.activeOrderSelect.innerHTML = `<option value="">Chưa có đơn hàng nào</option>`;
       renderOrderTracker();
       return;
     }
@@ -1745,7 +1745,7 @@ async function loadOrdersForSelectedUser(preferredOrderId = null) {
       .map((o) => {
         const sel = Number(o.id) === Number(state.activeOrderId) ? 'selected' : '';
         const meta = STATUS_META[o.status] || { label: o.status };
-        return `<option value="${o.id}" ${sel}>#ORD-${o.id} â€¢ ${meta.label} â€¢ ${formatVND(o.total_amount)}</option>`;
+        return `<option value="${o.id}" ${sel}>#ORD-${o.id} • ${meta.label} • ${formatVND(o.total_amount)}</option>`;
       })
       .join('');
 
@@ -1801,9 +1801,9 @@ async function loadActiveOrderDetail(orderId) {
 function renderDeliveryMap(status, order) {
   if (!dom.simulatedMapContainer) return;
 
-  const address = order.delivery_address || 'Äá»‹a chá»‰ cá»§a báº¡n';
+  const address = order.delivery_address || 'Địa chỉ của bạn';
   if (dom.mapCustomerAddressLabel) {
-    dom.mapCustomerAddressLabel.textContent = `ðŸ  ${address}`;
+    dom.mapCustomerAddressLabel.textContent = `🏠 ${address}`;
     dom.mapCustomerAddressLabel.title = address;
   }
 
@@ -1812,61 +1812,61 @@ function renderDeliveryMap(status, order) {
       dom.mapShipperMarker.style.left = '12%';
       dom.mapShipperMarker.style.top = '24%';
     }
-    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Chá» Ä‘iá»u xe';
+    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Chờ điều xe';
     if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059] flex items-center gap-1 font-serif';
-    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'NhÃ  hÃ ng Ä‘Ã£ xÃ¡c nháº­n mÃ³n Äƒn. Há»‡ thá»‘ng Ä‘ang káº¿t ná»‘i tÃ i xáº¿ gáº§n quÃ¡n nháº¥t...';
-    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Äang nháº­n Ä‘Æ¡n â€¢ 0 km/h';
-    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Váº­n tá»‘c: 0 km/h';
-    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'CÃ¡ch báº¡n: ~1.2 km';
-    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Dá»± kiáº¿n: 12-15 phÃºt';
+    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Nhà hàng đã xác nhận món ăn. Hệ thống đang kết nối tài xế gần quán nhất...';
+    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đang nhận đơn • 0 km/h';
+    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
+    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'Cách bạn: ~1.2 km';
+    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Dự kiến: 12-15 phút';
   } else if (status === 'Preparing') {
     if (dom.mapShipperMarker) {
       dom.mapShipperMarker.style.left = '22%';
       dom.mapShipperMarker.style.top = '28%';
     }
-    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'TÃ i xáº¿ Ä‘Ã£ tá»›i quÃ¡n';
+    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Tài xế đã tới quán';
     if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#EFF6FF] text-[#1E3A8A] border border-[#93C5FD] flex items-center gap-1 font-serif';
-    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'TÃ i xáº¿ Ä‘Ã£ cÃ³ máº·t táº¡i báº¿p, Ä‘ang chá» Ä‘áº§u báº¿p hoÃ n táº¥t Ä‘Ã³ng há»™p mÃ³n Äƒn nÃ³ng há»•i...';
-    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Chá» láº¥y mÃ³n â€¢ 0 km/h';
-    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Váº­n tá»‘c: 0 km/h';
-    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'CÃ¡ch báº¡n: ~1.2 km';
-    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Dá»± kiáº¿n: 8-10 phÃºt';
+    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Tài xế đã có mặt tại bếp, đang chờ đầu bếp hoàn tất đóng hộp món ăn nóng hổi...';
+    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Chờ lấy món • 0 km/h';
+    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
+    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'Cách bạn: ~1.2 km';
+    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Dự kiến: 8-10 phút';
   } else if (status === 'Delivering') {
     if (dom.mapShipperMarker) {
       dom.mapShipperMarker.style.left = '52%';
       dom.mapShipperMarker.style.top = '44%';
     }
-    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'TÃ i xáº¿ Ä‘ang giao tá»›i báº¡n';
+    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Tài xế đang giao tới bạn';
     if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#EAEFEA] text-[#2D4A3E] border border-[#8BA89B] flex items-center gap-1 font-serif';
-    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'TÃ i xáº¿ Ä‘ang cháº¡y xe trÃªn Ä‘Æ°á»ng giao mÃ³n. QuÃ½ khÃ¡ch chÃº Ã½ Ä‘iá»‡n thoáº¡i nhÃ©!';
-    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Äang giao hÃ ng â€¢ 35 km/h';
-    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Váº­n tá»‘c: 35 km/h';
-    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'CÃ¡ch báº¡n: ~450m';
-    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Dá»± kiáº¿n: 3-5 phÃºt';
+    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Tài xế đang chạy xe trên đường giao món. Quý khách chú ý điện thoại nhé!';
+    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đang giao hàng • 35 km/h';
+    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 35 km/h';
+    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'Cách bạn: ~450m';
+    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Dự kiến: 3-5 phút';
   } else if (status === 'Completed') {
     if (dom.mapShipperMarker) {
       dom.mapShipperMarker.style.left = '80%';
       dom.mapShipperMarker.style.top = '62%';
     }
-    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'ÄÃ£ giao thÃ nh cÃ´ng';
+    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Đã giao thành công';
     if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#FDF2F2] text-[#A63A2B] border border-[#A63A2B] flex items-center gap-1 font-serif';
-    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'MÃ³n Äƒn Ä‘Ã£ Ä‘Æ°á»£c giao táº­n tay quÃ½ khÃ¡ch. KÃ­nh chÃºc quÃ½ khÃ¡ch dÃ¹ng bá»¯a tháº­t ngon miá»‡ng!';
-    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'ÄÃ£ giao tá»›i nÆ¡i ðŸŽ‰';
-    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Váº­n tá»‘c: 0 km/h';
-    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'CÃ¡ch báº¡n: 0m';
-    if (dom.mapEtaText) dom.mapEtaText.textContent = 'ÄÃ£ hoÃ n táº¥t';
+    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Món ăn đã được giao tận tay quý khách. Kính chúc quý khách dùng bữa thật ngon miệng!';
+    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đã giao tới nơi 🎉';
+    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
+    if (dom.mapDistanceText) dom.mapDistanceText.textContent = 'Cách bạn: 0m';
+    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Đã hoàn tất';
   } else if (status === 'Cancelled') {
     if (dom.mapShipperMarker) {
       dom.mapShipperMarker.style.left = '12%';
       dom.mapShipperMarker.style.top = '24%';
     }
-    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'ÄÆ¡n Ä‘Ã£ há»§y';
+    if (dom.mapLiveStatusText) dom.mapLiveStatusText.textContent = 'Đơn đã hủy';
     if (dom.mapLiveBadge) dom.mapLiveBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded bg-[#FEF2F2] text-[#991B1B] border border-[#DC2626] flex items-center gap-1 font-serif';
-    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'ÄÆ¡n hÃ ng nÃ y Ä‘Ã£ káº¿t thÃºc lá»™ trÃ¬nh giao.';
-    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'ÄÃ£ há»§y chuyáº¿n';
-    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Váº­n tá»‘c: 0 km/h';
+    if (dom.mapStatusSubtitle) dom.mapStatusSubtitle.textContent = 'Đơn hàng này đã kết thúc lộ trình giao.';
+    if (dom.mapShipperTooltipText) dom.mapShipperTooltipText.textContent = 'Đã hủy chuyến';
+    if (dom.mapSpeedText) dom.mapSpeedText.textContent = 'Vận tốc: 0 km/h';
     if (dom.mapDistanceText) dom.mapDistanceText.textContent = '---';
-    if (dom.mapEtaText) dom.mapEtaText.textContent = 'ÄÃ£ há»§y';
+    if (dom.mapEtaText) dom.mapEtaText.textContent = 'Đã hủy';
   }
 }
 
@@ -1907,8 +1907,8 @@ function renderOrderTracker(animateStep = false) {
     dom.trackerCancelledAlert.classList.remove('hidden');
     const cancelEntry = [...historyList].reverse().find((h) => h.new_status === 'Cancelled');
     dom.trackerCancelledReason.textContent = cancelEntry?.note
-      ? `LÃ½ do: "${cancelEntry.note}". ÄÆ¡n hÃ ng Ä‘Ã£ Ä‘Æ°á»£c hoÃ n táº¥t thá»§ tá»¥c há»§y.`
-      : 'ÄÆ¡n hÃ ng nÃ y Ä‘Ã£ Ä‘Æ°á»£c há»§y theo yÃªu cáº§u.';
+      ? `Lý do: "${cancelEntry.note}". Đơn hàng đã được hoàn tất thủ tục hủy.`
+      : 'Đơn hàng này đã được hủy theo yêu cầu.';
   } else {
     dom.trackerCancelledAlert.classList.add('hidden');
   }
@@ -1954,13 +1954,13 @@ function renderOrderTracker(animateStep = false) {
 
   // Render Ordered Items
   const totalPortions = items.reduce((s, i) => s + Number(i.quantity || 0), 0);
-  dom.trackedItemsCount.textContent = `${items.length} mÃ³n (${totalPortions} pháº§n)`;
+  dom.trackedItemsCount.textContent = `${items.length} món (${totalPortions} phần)`;
 
   dom.trackedItemsList.innerHTML = items.length
     ? items
       .map((it) => {
         const foodFallback = state.foods.find((f) => Number(f.id) === Number(it.food_id));
-        const foodName = it.food_name || it.name || foodFallback?.name || `MÃ³n #${it.food_id}`;
+        const foodName = it.food_name || it.name || foodFallback?.name || `Món #${it.food_id}`;
         const lineTotal = Number(it.quantity) * Number(it.unit_price);
         return `
             <div class="bg-[#FFFDF9] rounded-md p-2.5 border border-[#D8CBB8] flex items-start justify-between gap-2 text-xs shadow-2xs">
@@ -1969,8 +1969,8 @@ function renderOrderTracker(animateStep = false) {
                   <span class="text-[#A63A2B] font-bold mr-1 font-mono-code">${it.quantity}x</span>${escapeHtml(foodName)}
                 </div>
                 <div class="text-[11px] text-[#7A6E65] mt-0.5 font-mono-code">
-                  ÄÆ¡n giÃ¡: ${formatVND(it.unit_price)}
-                  ${it.item_note ? ` â€¢ <span class="text-[#8C6200] font-serif italic">${escapeHtml(it.item_note)}</span>` : ''}
+                  Đơn giá: ${formatVND(it.unit_price)}
+                  ${it.item_note ? ` • <span class="text-[#8C6200] font-serif italic">${escapeHtml(it.item_note)}</span>` : ''}
                 </div>
               </div>
               <span class="font-bold text-[#A63A2B] shrink-0 font-mono-code">${formatVND(lineTotal)}</span>
@@ -1978,7 +1978,7 @@ function renderOrderTracker(animateStep = false) {
           `;
       })
       .join('')
-    : `<p class="text-xs text-[#7A6E65] py-4 text-center font-serif">ChÆ°a cÃ³ mÃ³n Äƒn nÃ o.</p>`;
+    : `<p class="text-xs text-[#7A6E65] py-4 text-center font-serif">Chưa có món ăn nào.</p>`;
 
   // Render Delivery Journey Timeline (Pure Customer Friendly)
   const timelineDesc = [...historyList].reverse();
@@ -1986,13 +1986,13 @@ function renderOrderTracker(animateStep = false) {
     ? timelineDesc
       .map((h, i) => {
         const statusTextMap = {
-          Pending: 'NhÃ  hÃ ng Ä‘Ã£ xÃ¡c nháº­n Ä‘Æ¡n hÃ ng',
-          Preparing: 'Báº¿p Ä‘Ã£ tiáº¿p nháº­n vÃ  Ä‘ang náº¥u mÃ³n',
-          Delivering: 'TÃ i xáº¿ Ä‘Ã£ nháº­n mÃ³n vÃ  Ä‘ang giao tá»›i báº¡n',
-          Completed: 'ÄÃ£ giao thÃ nh cÃ´ng táº­n tay khÃ¡ch hÃ ng',
-          Cancelled: 'ÄÆ¡n hÃ ng Ä‘Ã£ Ä‘Æ°á»£c há»§y',
+          Pending: 'Nhà hàng đã xác nhận đơn hàng',
+          Preparing: 'Bếp đã tiếp nhận và đang nấu món',
+          Delivering: 'Tài xế đã nhận món và đang giao tới bạn',
+          Completed: 'Đã giao thành công tận tay khách hàng',
+          Cancelled: 'Đơn hàng đã được hủy',
         };
-        const friendlyMessage = statusTextMap[h.new_status] || `ÄÆ¡n hÃ ng chuyá»ƒn sang: ${h.new_status}`;
+        const friendlyMessage = statusTextMap[h.new_status] || `Đơn hàng chuyển sang: ${h.new_status}`;
 
         return `
             <li class="relative ${i === 0 ? 'bg-[#FFFDF9] p-3 rounded-lg border border-[#D8CBB8] shadow-2xs' : 'py-1'}">
@@ -2009,7 +2009,7 @@ function renderOrderTracker(animateStep = false) {
           `;
       })
       .join('')
-    : `<li class="text-xs text-[#7A6E65] py-3 font-serif">Äang cáº­p nháº­t hÃ nh trÃ¬nh Ä‘Æ¡n...</li>`;
+    : `<li class="text-xs text-[#7A6E65] py-3 font-serif">Đang cập nhật hành trình đơn...</li>`;
 
   refreshIcons();
 }
@@ -2086,7 +2086,7 @@ async function loadAllInitialData({ silent = false } = {}) {
     renderCart();
     await loadRouletteCandidates('all');
 
-    // Giá»¯ mÃ n hÃ¬nh thoÃ¡ng Ä‘á»ƒ khÃ¡ch chá»n mÃ³n ngay; chá»‰ hiá»‡n hÃ nh trÃ¬nh khi khÃ¡ch vá»«a Ä‘áº·t mÃ³n xong hoáº·c chá»§ Ä‘á»™ng má»Ÿ
+    // Giữ màn hình thoáng để khách chọn món ngay; chỉ hiện hành trình khi khách vừa đặt món xong hoặc chủ động mở
     const sessionOrderId = sessionStorage.getItem('last_placed_order_id');
     if (sessionOrderId && dom.orderTrackerSection) {
       dom.orderTrackerSection.classList.remove('hidden');
@@ -2115,13 +2115,13 @@ function scheduleRealtimeFoodSync(foodId, toastLabel) {
   foodSyncTimer = setTimeout(async () => {
     await refreshFoodsOnly(foodId);
     if (toastLabel) {
-      showToast('Thá»±c Ä‘Æ¡n vá»«a cáº­p nháº­t!', toastLabel, 'info');
+      showToast('Thực đơn vừa cập nhật!', toastLabel, 'info');
     }
   }, 180);
 }
 
 function scheduleRealtimeOrderSync(orderId, newStatus) {
-  // Chá»‰ Ä‘á»“ng bá»™ khi khÃ¡ch hÃ ng Ä‘Ã£ báº¥m Ä‘áº·t mÃ³n vÃ  Ä‘ang chá»§ Ä‘á»™ng theo dÃµi Ä‘Æ¡n hÃ ng nÃ y
+  // Chỉ đồng bộ khi khách hàng đã bấm đặt món và đang chủ động theo dõi đơn hàng này
   if (!state.activeOrderId) return;
   if (orderId && Number(orderId) !== Number(state.activeOrderId)) return;
 
@@ -2153,8 +2153,8 @@ function scheduleRealtimeOrderSync(orderId, newStatus) {
       if (newStatus) {
         const meta = STATUS_META[newStatus];
         showToast(
-          `ÄÆ¡n hÃ ng #${orderId} vá»«a cáº­p nháº­t!`,
-          meta ? meta.label : `Tráº¡ng thÃ¡i má»›i: ${newStatus}`,
+          `Đơn hàng #${orderId} vừa cập nhật!`,
+          meta ? meta.label : `Trạng thái mới: ${newStatus}`,
           newStatus === 'Cancelled' ? 'error' : 'success'
         );
       }
@@ -2177,13 +2177,13 @@ function setupRealtimeSubscription() {
     const payload = envelope?.data || envelope || {};
     const record = payload.data || payload.food || payload;
     const foodId = record?.id ?? payload?.record_id ?? null;
-    const foodName = record?.name ? `"${record.name}"` : foodId ? `MÃ³n #${foodId}` : 'Thá»±c Ä‘Æ¡n';
+    const foodName = record?.name ? `"${record.name}"` : foodId ? `Món #${foodId}` : 'Thực đơn';
 
-    let actionDesc = `${foodName} vá»«a Ä‘Æ°á»£c cáº­p nháº­t sá»‘ lÆ°á»£ng!`;
+    let actionDesc = `${foodName} vừa được cập nhật số lượng!`;
     if (envelope?.type === 'food:created') {
-      actionDesc = `MÃ³n má»›i ${foodName} vá»«a Ä‘Æ°á»£c thÃªm vÃ o thá»±c Ä‘Æ¡n!`;
+      actionDesc = `Món mới ${foodName} vừa được thêm vào thực đơn!`;
     } else if (envelope?.type === 'food:deleted') {
-      actionDesc = `${foodName} vá»«a táº¡m ngá»«ng phá»¥c vá»¥.`;
+      actionDesc = `${foodName} vừa tạm ngừng phục vụ.`;
     }
 
     scheduleRealtimeFoodSync(foodId, actionDesc);
@@ -2203,8 +2203,8 @@ function setupRealtimeSubscription() {
     if (envelope?.type === 'order:deleted') {
       if (state.orders.some((o) => Number(o.id) === Number(orderId))) {
         showToast(
-          `ÄÆ¡n hÃ ng #${orderId} Ä‘Ã£ Ä‘Æ°á»£c dá»n sáº¡ch`,
-          'ÄÆ¡n hÃ ng khÃ´ng cÃ²n trong danh sÃ¡ch.',
+          `Đơn hàng #${orderId} đã được dọn sạch`,
+          'Đơn hàng không còn trong danh sách.',
           'info'
         );
         loadOrdersForSelectedUser();
@@ -2227,7 +2227,7 @@ function setupRealtimeSubscription() {
       applyDbStatusUI({
         connected: false,
         latencyMs: null,
-        lastError: 'Há»‡ thá»‘ng Ä‘ang Ä‘á»“ng bá»™ káº¿t ná»‘i...',
+        lastError: 'Hệ thống đang đồng bộ kết nối...',
         code: 'DB_BUSY',
       });
     } else {
@@ -2278,7 +2278,7 @@ function bindUiEvents() {
 
   if (dom.customerNameInput) {
     dom.customerNameInput.addEventListener('input', () => {
-      const name = dom.customerNameInput.value.trim() || 'KhÃ¡ch vÃ£ng lai';
+      const name = dom.customerNameInput.value.trim() || 'Khách vãng lai';
       localStorage.setItem(CUSTOMER_NAME_KEY, name);
       if (dom.customerEmailInput && (!dom.customerEmailInput.value || dom.customerEmailInput.dataset.autoFilled === 'true')) {
         const slug = slugifyName(name);
@@ -2286,7 +2286,7 @@ function bindUiEvents() {
         dom.customerEmailInput.dataset.autoFilled = 'true';
       }
       if (dom.headerCustomerNameDisplay) {
-        dom.headerCustomerNameDisplay.textContent = name + ' (Báº¡n)';
+        dom.headerCustomerNameDisplay.textContent = name + ' (Bạn)';
       }
       triggerCustomerCheck();
     });
@@ -2311,8 +2311,8 @@ function bindUiEvents() {
     dom.btnCallShipper.addEventListener('click', () => {
       playChimeSound(750, 1100);
       showToast(
-        'ðŸ“ž Äang káº¿t ná»‘i tÃ i xáº¿',
-        'Gá»i tá»›i tÃ i xáº¿ LÃª HoÃ ng Giao Nhanh: 0908.123.456 (Xe AirBlade 29-X1 888.88)',
+        '📞 Đang kết nối tài xế',
+        'Gọi tới tài xế Lê Hoàng Giao Nhanh: 0908.123.456 (Xe AirBlade 29-X1 888.88)',
         'info'
       );
     });
@@ -2368,4 +2368,3 @@ async function initCustomerApp() {
 }
 
 initCustomerApp();
-
