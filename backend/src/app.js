@@ -11,6 +11,7 @@ const dbRoutes = require('./routes/db.routes');
 const metaRoutes = require('./routes/meta.routes');
 const flashSaleRoutes = require('./routes/flashSale.routes');
 const authRoutes = require('./routes/auth.routes');
+const inspectorRoutes = require('./routes/inspector.routes');
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use('/api/foods', foodsRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/db', dbRoutes);
 app.use('/api/flash-sale', flashSaleRoutes);
+app.use('/api/inspector', inspectorRoutes);
 app.use('/api', metaRoutes);
 
 // Catch-all JSON 404 for unknown /api/* endpoints

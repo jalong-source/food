@@ -510,6 +510,236 @@
       </div>
     </section>
 
+  
+    <!-- ==================================================================
+         PANEL 5: USER-DEFINED FUNCTIONS (`FUNCTION`) LAB • BÁO CÁO DOANH THU & PHÂN HẠNG KHÁCH HÀNG
+         ================================================================== -->
+    <section id="panel5UdfLab" class="vintage-panel p-5 space-y-5">
+      <!-- Panel Header -->
+      <div class="flex flex-wrap items-center justify-between gap-3 vintage-panel-header">
+        <div class="flex items-center gap-2.5">
+          <span class="vintage-panel-tag" style="background:#A63A2B; color:#FFFDF9;">PANEL 5</span>
+          <div>
+            <h2 class="text-base font-bold font-playfair text-[#2C1E16]">
+              USER-DEFINED FUNCTIONS (<code class="font-mono-code text-[#A63A2B]">FUNCTION</code>) LAB • BÁO CÁO DOANH THU & PHÂN HẠNG KHÁCH HÀNG
+            </h2>
+            <p class="text-xs text-[#5C493E] mt-0.5">
+              Kiểm định và chạy thử 3 hàm CSDL nghiệp vụ PL/pgSQL: Báo cáo doanh thu thời gian thực, Tính toán tổng tiền chuẩn 3NF & Phân hạng hội viên VIP.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] font-mono-code text-[#3B5249] bg-[#E8EFEA] border border-[#A2C2B2] px-3 py-1 rounded-full font-bold flex items-center gap-1.5 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-[#3B5249] animate-pulse"></span>
+            PostgreSQL 16 PL/pgSQL Functions
+          </span>
+        </div>
+      </div>
+
+      <!-- Khu vực 2 & 3: Thử nghiệm Tính Tổng Tiền & Phân Hạng (Grid 2 Cột) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <!-- KHU VỰC 2: Test Tính Tổng Tiền Đơn Hàng (fn_calculate_order_total) -->
+        <div class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-xl p-4.5 shadow-sm flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between border-b border-[#EAE2D5] pb-2.5 mb-3">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-[#FAF3E0] border border-[#DFC27D] text-[#8C6200] flex items-center justify-center text-xs font-bold shadow-inner">
+                  <i data-lucide="calculator" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold font-playfair text-[#2C1E16]">Khu vực 2: Tính Tổng Tiền Đơn Hàng</h3>
+                  <code class="text-[11px] font-mono-code text-[#A63A2B] font-bold">fn_calculate_order_total(p_order_id)</code>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono-code text-[#8C6D46] bg-[#F6F1E7] px-2 py-0.5 rounded border border-[#D8CBB8]">RETURNS NUMERIC</span>
+            </div>
+
+            <p class="text-xs text-[#5C493E] leading-relaxed mb-3">
+              Tính tổng hóa đơn chuẩn 3NF theo thời gian thực bằng cách lặp và nhân số lượng với đơn giá lịch sử trong bảng <code class="font-mono-code text-[#2C1E16] bg-[#F6F1E7] px-1 py-0.5 rounded border border-[#D8CBB8]">order_items</code>, đảm bảo tính bất biến của hóa đơn kế toán.
+            </p>
+
+            <!-- Input Controls -->
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <div class="flex-1 min-w-[140px]">
+                <label class="block text-[11px] font-bold font-playfair text-[#2C1E16] mb-1">Mã đơn hàng (Order ID)</label>
+                <input
+                  id="udfOrderIdInput"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value="1"
+                  placeholder="VD: 1"
+                  class="w-full bg-[#FFFDF9] border border-[#D8CBB8] rounded-xl px-3 py-2 text-xs font-mono-code font-bold text-[#2C1E16] placeholder-[#8C6D46] focus:outline-none focus:ring-2 focus:ring-[#A63A2B] shadow-inner"
+                />
+              </div>
+
+              <div class="pt-5">
+                <button
+                  id="btnRunOrderTotal"
+                  type="button"
+                  class="px-4 py-2 rounded-xl bg-[#A63A2B] hover:bg-[#8C2E21] text-[#FFFDF9] font-bold text-xs flex items-center gap-1.5 shadow cursor-pointer transition border border-[#8C2E21]"
+                >
+                  <i data-lucide="zap" class="w-3.5 h-3.5 text-[#FFD4C2]"></i>
+                  <span>⚡ Chạy fn_calculate_order_total(id)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result Card -->
+          <div id="udfOrderTotalResultBox" class="bg-[#FDFBF7] border border-[#D8CBB8] rounded-xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-[#8C6D46] font-medium">Kết quả tính toán:</span>
+              <span id="udfOrderTotalBadge" class="text-[10px] font-mono-code text-[#3B5249] bg-[#E8EFEA] border border-[#A2C2B2] px-2 py-0.5 rounded font-bold">Sẵn sàng chạy</span>
+            </div>
+            <div class="flex items-baseline justify-between pt-1">
+              <div id="udfOrderTotalValue" class="text-2xl font-extrabold font-mono-code text-[#2C1E16]">223.000 ₫</div>
+              <div id="udfOrderDiscountNote" class="text-xs font-medium text-[#A63A2B] bg-[#FBEBE8] border border-[#F1C2B8] px-2.5 py-1 rounded-lg">
+                Đơn hàng #1 • Tính theo đơn giá chi tiết
+              </div>
+            </div>
+            <div class="text-[11px] font-mono-code text-[#8C6D46] pt-1 border-t border-[#EAE2D5] flex items-center justify-between">
+              <span>SQL: <code class="text-[#2C1E16]">SELECT fn_calculate_order_total(1::int);</code></span>
+              <span class="text-[#3B5249]">Chuẩn 3NF</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KHU VỰC 3: Test Phân Hạng Khách Hàng Thân Thiết (fn_get_customer_tier) -->
+        <div class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-xl p-4.5 shadow-sm flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between border-b border-[#EAE2D5] pb-2.5 mb-3">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-[#E8EFEA] border border-[#A2C2B2] text-[#3B5249] flex items-center justify-center text-xs font-bold shadow-inner">
+                  <i data-lucide="award" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold font-playfair text-[#2C1E16]">Khu vực 3: Phân Hạng Khách Hàng Thân Thiết</h3>
+                  <code class="text-[11px] font-mono-code text-[#3B5249] font-bold">fn_get_customer_tier(p_user_id)</code>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono-code text-[#8C6D46] bg-[#F6F1E7] px-2 py-0.5 rounded border border-[#D8CBB8]">RETURNS VARCHAR</span>
+            </div>
+
+            <p class="text-xs text-[#5C493E] leading-relaxed mb-3">
+              Kiểm tra lịch sử giao dịch hoàn tất của khách hàng để xếp hạng: Khách Mới (0% ưu đãi) hoặc Khách Quen VIP (Giảm 10% tự động trên từng món).
+            </p>
+
+            <!-- Input Controls -->
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <div class="flex-1 min-w-[140px]">
+                <label class="block text-[11px] font-bold font-playfair text-[#2C1E16] mb-1">Mã khách hàng (User ID)</label>
+                <input
+                  id="udfUserIdInput"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value="4"
+                  placeholder="VD: 4 (Gia Long)"
+                  class="w-full bg-[#FFFDF9] border border-[#D8CBB8] rounded-xl px-3 py-2 text-xs font-mono-code font-bold text-[#2C1E16] placeholder-[#8C6D46] focus:outline-none focus:ring-2 focus:ring-[#3B5249] shadow-inner"
+                />
+              </div>
+
+              <div class="pt-5">
+                <button
+                  id="btnRunCustomerTier"
+                  type="button"
+                  class="px-4 py-2 rounded-xl bg-[#3B5249] hover:bg-[#2D4039] text-[#FFFDF9] font-bold text-xs flex items-center gap-1.5 shadow cursor-pointer transition border border-[#2D4039]"
+                >
+                  <i data-lucide="zap" class="w-3.5 h-3.5 text-[#A2C2B2]"></i>
+                  <span>⚡ Chạy fn_get_customer_tier(id)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result Card (Parisian Bistro Wax Seal / Stamp Badge) -->
+          <div id="udfCustomerTierResultBox" class="bg-[#FDFBF7] border border-[#D8CBB8] rounded-xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-[#8C6D46] font-medium">Huy hiệu phân hạng hội viên:</span>
+              <span id="udfCustomerTierStatusBadge" class="text-[10px] font-mono-code text-[#3B5249] bg-[#E8EFEA] border border-[#A2C2B2] px-2 py-0.5 rounded font-bold">Đã kích hoạt</span>
+            </div>
+            <div class="flex items-center gap-3 pt-1">
+              <div class="w-10 h-10 rounded-full bg-[#3B5249] text-[#E0C788] flex items-center justify-center shrink-0 shadow border border-[#E0C788]/60">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div id="udfCustomerTierBadge" class="text-base font-extrabold font-playfair text-[#A63A2B] tracking-wide">
+                  Khách Quen VIP (Giảm 10%)
+                </div>
+                <div id="udfCustomerTierSub" class="text-xs text-[#5C493E]">
+                  Áp dụng chiết khấu 10% tự động khi đặt đơn hàng tiếp theo
+                </div>
+              </div>
+            </div>
+            <div class="text-[11px] font-mono-code text-[#8C6D46] pt-1 border-t border-[#EAE2D5] flex items-center justify-between">
+              <span>SQL: <code class="text-[#2C1E16]">SELECT fn_get_customer_tier(4::int);</code></span>
+              <span class="text-[#3B5249]">Tri ân khách hàng</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- KHU VỰC 1: Báo Cáo Doanh Thu Từng Món Ăn (fn_get_food_revenue_report) -->
+      <div class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-xl p-4.5 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#EAE2D5] pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-[#FBEBE8] border border-[#F1C2B8] text-[#A63A2B] flex items-center justify-center text-sm font-bold shadow-inner">
+              <i data-lucide="trending-up" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold font-playfair text-[#2C1E16]">Khu vực 1: Báo Cáo Doanh Thu Từng Món Ăn</h3>
+              <p class="text-xs text-[#5C493E]">Hàm bảng <code class="font-mono-code text-[#A63A2B] font-bold">fn_get_food_revenue_report()</code> tổng hợp số lượng bán và tổng tiền từng món từ dữ liệu giao dịch</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Stat Pill: Tổng doanh thu -->
+            <div class="px-3 py-1.5 rounded-xl bg-[#FAF3E0] border border-[#DFC27D] text-[#8C6200] text-xs font-mono-code font-bold flex items-center gap-1.5 shadow-inner">
+              <i data-lucide="coins" class="w-3.5 h-3.5"></i>
+              <span>Tổng doanh thu: </span>
+              <span id="udfTotalRevenueSum" class="text-[#2C1E16] font-extrabold">0 ₫</span>
+            </div>
+
+            <!-- Reload Button -->
+            <button
+              id="btnLoadRevenueReport"
+              type="button"
+              class="px-4 py-2 rounded-xl bg-[#A63A2B] hover:bg-[#8C2E21] text-[#FFFDF9] font-bold text-xs flex items-center gap-1.5 shadow cursor-pointer transition border border-[#8C2E21]"
+            >
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#FFD4C2]"></i>
+              <span>⚡ Tải Báo Cáo Doanh Thu (fn_get_food_revenue_report())</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="vintage-ledger-container overflow-x-auto ledger-scrollbar">
+          <table class="vintage-ledger-table w-full text-left">
+            <thead>
+              <tr>
+                <th class="py-3 px-3 font-bold text-[#2C1E16]">Mã món</th>
+                <th class="py-3 px-3 font-bold text-[#2C1E16]">Tên món ăn</th>
+                <th class="py-3 px-3 font-bold text-[#2C1E16]">Danh mục</th>
+                <th class="py-3 px-3 font-bold text-center text-[#2C1E16]">Số lượng đã bán</th>
+                <th class="py-3 px-3 font-bold text-right text-[#2C1E16]">Tổng doanh thu (VND)</th>
+              </tr>
+            </thead>
+            <tbody id="udfRevenueTableBody">
+              <tr>
+                <td colspan="5" class="py-8 text-center text-[#8C6D46] italic">
+                  Đang sẵn sàng. Bấm nút "⚡ Tải Báo Cáo Doanh Thu" ở trên để truy vấn CSDL PostgreSQL...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- ==================================================================

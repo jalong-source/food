@@ -22,6 +22,9 @@ import {
   updateDbConfig,
   simulateDb,
   getTableData,
+  getFoodRevenueReport,
+  calculateOrderTotal,
+  getCustomerTier,
   formatVND,
   formatDateTime,
   formatTimeShort,
@@ -257,6 +260,23 @@ const dom = {
   fkModalDetail: document.getElementById('fkModalDetail'),
 
   toastContainer: document.getElementById('toastContainer'),
+
+  // Panel 5: User-Defined Functions Lab
+  udfOrderIdInput: document.getElementById('udfOrderIdInput'),
+  btnRunOrderTotal: document.getElementById('btnRunOrderTotal'),
+  udfOrderTotalValue: document.getElementById('udfOrderTotalValue'),
+  udfOrderDiscountNote: document.getElementById('udfOrderDiscountNote'),
+  udfOrderTotalBadge: document.getElementById('udfOrderTotalBadge'),
+
+  udfUserIdInput: document.getElementById('udfUserIdInput'),
+  btnRunCustomerTier: document.getElementById('btnRunCustomerTier'),
+  udfCustomerTierBadge: document.getElementById('udfCustomerTierBadge'),
+  udfCustomerTierSub: document.getElementById('udfCustomerTierSub'),
+  udfCustomerTierStatusBadge: document.getElementById('udfCustomerTierStatusBadge'),
+
+  udfTotalRevenueSum: document.getElementById('udfTotalRevenueSum'),
+  btnLoadRevenueReport: document.getElementById('btnLoadRevenueReport'),
+  udfRevenueTableBody: document.getElementById('udfRevenueTableBody'),
 };
 
 /* ==========================================================================
@@ -1468,6 +1488,9 @@ async function loadAllBusinessPanels() {
       loadFoodsData(),
       loadOrdersAndAuditData(),
       loadExplorerTable(),
+      handleLoadRevenueReport().catch(() => {}),
+      handleRunOrderTotal().catch(() => {}),
+      handleRunCustomerTier().catch(() => {}),
     ]);
   } catch (_err) {
     // Individual panels handle offline states gracefully
@@ -1574,6 +1597,189 @@ function initRealtimeInspectorStream() {
 /* ==========================================================================
    BIND UI EVENTS & STARTUP
    ========================================================================== */
+
+
+/* ==========================================================================
+   PANEL 5: USER-DEFINED FUNCTIONS (`FUNCTION`) LAB HANDLERS
+   ========================================================================== */
+
+async function handleRunOrderTotal() {
+  const input = dom.udfOrderIdInput;
+  const rawId = input ? input.value.trim() : '1';
+  const orderId = parseInt(rawId, 10);
+  if (!Number.isInteger(orderId) || orderId <= 0) {
+    showToast('Lỗi nhập liệu', 'Vui lòng nhập Mã đơn hàng hợp lệ (> 0).', 'warning');
+    return;
+  }
+
+  if (dom.btnRunOrderTotal) {
+    dom.btnRunOrderTotal.disabled = true;
+    dom.btnRunOrderTotal.classList.add('opacity-70');
+  }
+
+  try {
+    const data = await calculateOrderTotal(orderId);
+    const total = Number(data.order_total || 0);
+
+    if (dom.udfOrderTotalValue) {
+      dom.udfOrderTotalValue.textContent = formatVND(total);
+    }
+    if (dom.udfOrderDiscountNote) {
+      dom.udfOrderDiscountNote.textContent = `Đơn hàng #${orderId} • Tính từ order_items (Chuẩn 3NF)`;
+    }
+    if (dom.udfOrderTotalBadge) {
+      dom.udfOrderTotalBadge.textContent = 'Thành công (200 OK)';
+      dom.udfOrderTotalBadge.className = 'text-[10px] font-mono-code text-[#3B5249] bg-[#E8EFEA] border border-[#A2C2B2] px-2 py-0.5 rounded font-bold';
+    }
+
+    showToast('Tính tổng tiền đơn', `Đơn #${orderId}: ${formatVND(total)} (fn_calculate_order_total)`, 'success');
+  } catch (err) {
+    if (dom.udfOrderTotalBadge) {
+      dom.udfOrderTotalBadge.textContent = 'Lỗi truy vấn';
+      dom.udfOrderTotalBadge.className = 'text-[10px] font-mono-code text-[#A63A2B] bg-[#FBEBE8] border border-[#F1C2B8] px-2 py-0.5 rounded font-bold';
+    }
+    showToast('Lỗi tính tổng đơn', err.message, 'error');
+  } finally {
+    if (dom.btnRunOrderTotal) {
+      dom.btnRunOrderTotal.disabled = false;
+      dom.btnRunOrderTotal.classList.remove('opacity-70');
+    }
+  }
+}
+
+async function handleRunCustomerTier() {
+  const input = dom.udfUserIdInput;
+  const rawId = input ? input.value.trim() : '4';
+  const userId = parseInt(rawId, 10);
+  if (!Number.isInteger(userId) || userId <= 0) {
+    showToast('Lỗi nhập liệu', 'Vui lòng nhập Mã khách hàng hợp lệ (> 0).', 'warning');
+    return;
+  }
+
+  if (dom.btnRunCustomerTier) {
+    dom.btnRunCustomerTier.disabled = true;
+    dom.btnRunCustomerTier.classList.add('opacity-70');
+  }
+
+  try {
+    const data = await getCustomerTier(userId);
+    const tier = data.tier || 'Khách Mới (0% ưu đãi)';
+
+    if (dom.udfCustomerTierBadge) {
+      dom.udfCustomerTierBadge.textContent = tier;
+    }
+    if (dom.udfCustomerTierSub) {
+      if (tier.includes('VIP') || tier.includes('10%')) {
+        dom.udfCustomerTierSub.textContent = 'Đã có đơn hàng hoàn tất • Áp dụng chiết khấu 10% tri ân khách cũ';
+        dom.udfCustomerTierBadge.className = 'text-base font-extrabold font-playfair text-[#A63A2B] tracking-wide';
+      } else {
+        dom.udfCustomerTierSub.textContent = 'Chưa có đơn hàng hoàn tất • Chưa áp dụng chiết khấu 10%';
+        dom.udfCustomerTierBadge.className = 'text-base font-extrabold font-playfair text-[#8C6D46] tracking-wide';
+      }
+    }
+    if (dom.udfCustomerTierStatusBadge) {
+      dom.udfCustomerTierStatusBadge.textContent = 'Thành công (200 OK)';
+    }
+
+    showToast('Phân hạng khách hàng', `User #${userId}: ${tier} (fn_get_customer_tier)`, 'success');
+  } catch (err) {
+    if (dom.udfCustomerTierStatusBadge) {
+      dom.udfCustomerTierStatusBadge.textContent = 'Lỗi truy vấn';
+    }
+    showToast('Lỗi lấy phân hạng', err.message, 'error');
+  } finally {
+    if (dom.btnRunCustomerTier) {
+      dom.btnRunCustomerTier.disabled = false;
+      dom.btnRunCustomerTier.classList.remove('opacity-70');
+    }
+  }
+}
+
+async function handleLoadRevenueReport() {
+  if (dom.btnLoadRevenueReport) {
+    dom.btnLoadRevenueReport.disabled = true;
+    dom.btnLoadRevenueReport.classList.add('opacity-70');
+  }
+
+  if (dom.udfRevenueTableBody) {
+    dom.udfRevenueTableBody.innerHTML = `
+      <tr>
+        <td colspan="5" class="py-8 text-center text-[#8C6D46] italic">
+          Đang nạp báo cáo doanh thu từ hàm fn_get_food_revenue_report()...
+        </td>
+      </tr>
+    `;
+  }
+
+  try {
+    const rows = await getFoodRevenueReport();
+    if (!rows || rows.length === 0) {
+      if (dom.udfRevenueTableBody) {
+        dom.udfRevenueTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="py-8 text-center text-[#8C6D46] italic">
+              Chưa có dữ liệu giao dịch để thống kê doanh thu món ăn.
+            </td>
+          </tr>
+        `;
+      }
+      if (dom.udfTotalRevenueSum) dom.udfTotalRevenueSum.textContent = '0 ₫';
+      return;
+    }
+
+    let totalSum = 0;
+    const html = rows
+      .map((row) => {
+        const rev = Number(row.total_revenue || 0);
+        totalSum += rev;
+        const sold = Number(row.total_sold || 0);
+        return `
+          <tr class="hover:bg-[#F6F1E7]/70 transition-colors border-b border-[#EAE2D5]">
+            <td class="py-2.5 px-3 font-mono-code text-xs font-bold text-[#8C6D46]">#${row.food_id}</td>
+            <td class="py-2.5 px-3 font-semibold text-xs text-[#2C1E16] font-playfair">${escapeHtml(row.food_name)}</td>
+            <td class="py-2.5 px-3 text-xs text-[#5C493E]">
+              <span class="bg-[#F6F1E7] border border-[#D8CBB8] px-2 py-0.5 rounded text-[11px] font-medium text-[#2C1E16]">
+                ${escapeHtml(row.category_name || '--')}
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-center font-mono-code font-bold text-xs text-[#3B5249]">
+              ${sold.toLocaleString('vi-VN')}
+            </td>
+            <td class="py-2.5 px-3 text-right font-mono-code font-bold text-xs text-[#A63A2B]">
+              ${formatVND(rev)}
+            </td>
+          </tr>
+        `;
+      })
+      .join('');
+
+    if (dom.udfRevenueTableBody) {
+      dom.udfRevenueTableBody.innerHTML = html;
+      refreshIcons();
+    }
+    if (dom.udfTotalRevenueSum) {
+      dom.udfTotalRevenueSum.textContent = formatVND(totalSum);
+    }
+
+    showToast('Báo cáo doanh thu', `Đã nạp ${rows.length} món ăn từ fn_get_food_revenue_report()`, 'success');
+  } catch (err) {
+    if (dom.udfRevenueTableBody) {
+      dom.udfRevenueTableBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="py-6 text-center text-[#A63A2B] font-medium">
+            Lỗi tải báo cáo: ${escapeHtml(err.message)}
+          </td>
+        </tr>
+      `;
+    }
+    showToast('Lỗi tải báo cáo', err.message, 'error');
+  } finally {
+    if (dom.btnLoadRevenueReport) {
+      dom.btnLoadRevenueReport.disabled = false;
+      dom.btnLoadRevenueReport.classList.remove('opacity-70');
+    }
+  }
+}
 
 function bindInspectorEvents() {
   dom.btnRefreshAll.addEventListener('click', async () => {

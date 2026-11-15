@@ -47,6 +47,21 @@ async function ensureMigration() {
 // Kích hoạt migration tự động khi load module
 ensureMigration();
 
+// Lấy phân hạng khách hàng thân thiết từ hàm CSDL fn_get_customer_tier
+async function getCustomerTier(userId) {
+  try {
+    const tierRes = await query(
+      'SELECT fn_get_customer_tier($1::int) AS tier;',
+      [userId],
+      { source: 'auth.customer_tier', silent: true }
+    );
+    return tierRes.rows[0]?.tier || 'Khách Mới (0% ưu đãi)';
+  } catch (err) {
+    return 'Khách Mới (0% ưu đãi)';
+  }
+}
+
+
 /**
  * POST /api/auth/register
  * Nhận: { full_name, phone, password, default_address, email }
@@ -99,6 +114,7 @@ router.post('/register', async (req, res, next) => {
       );
 
       const newUser = insertRes.rows[0];
+      const tier = await getCustomerTier(newUser.id);
 
       return res.status(201).json({
         success: true,
@@ -113,6 +129,7 @@ router.post('/register', async (req, res, next) => {
           created_at: newUser.created_at,
           is_loyal: false,
           completed_orders: 0,
+          tier,
         },
       });
     } catch (dbErr) {
@@ -225,6 +242,7 @@ router.post('/login', async (req, res, next) => {
 
     const completed_orders = Number(loyaltyRes.rows[0]?.completed_orders || 0);
     const is_loyal = completed_orders > 0;
+    const tier = await getCustomerTier(user.id);
 
     return res.json({
       success: true,
@@ -238,6 +256,7 @@ router.post('/login', async (req, res, next) => {
         role: user.role,
         is_loyal,
         completed_orders,
+        tier,
       },
     });
   } catch (err) {
@@ -304,6 +323,7 @@ router.get('/me', async (req, res, next) => {
 
     const completed_orders = Number(loyaltyRes.rows[0]?.completed_orders || 0);
     const is_loyal = completed_orders > 0;
+    const tier = await getCustomerTier(user.id);
 
     return res.json({
       success: true,
@@ -316,6 +336,7 @@ router.get('/me', async (req, res, next) => {
         role: user.role,
         is_loyal,
         completed_orders,
+        tier,
       },
     });
   } catch (err) {

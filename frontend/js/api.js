@@ -502,6 +502,22 @@ export async function simulateDb({ offline, artificialDelayMs }) {
   return unwrapObject(res);
 }
 
+
+export async function getFoodRevenueReport() {
+  const res = await apiRequest('/api/inspector/food-revenue');
+  return unwrapArray(res, ['data', 'rows']);
+}
+
+export async function calculateOrderTotal(orderId) {
+  const res = await apiRequest(/api/inspector/order-total/);
+  return unwrapObject(res);
+}
+
+export async function getCustomerTier(userId) {
+  const res = await apiRequest(/api/inspector/customer-tier/);
+  return unwrapObject(res);
+}
+
 export async function getTableData(tableName, params = { limit: 50 }) {
   const res = await apiRequest(
     `/api/db/tables/${encodeURIComponent(tableName)}${toQueryString(params)}`
@@ -604,6 +620,9 @@ export default {
   updateDbConfig,
   simulateDb,
   getTableData,
+  getFoodRevenueReport,
+  calculateOrderTotal,
+  getCustomerTier,
   formatVND,
   formatDateTime,
   formatTimeShort,

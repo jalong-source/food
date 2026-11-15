@@ -9,6 +9,7 @@
   - Triggers & Stored Procedures: [`database/02_triggers_and_procs.sql`](../database/02_triggers_and_procs.sql)
   - Dữ liệu khởi tạo (Seed Data): [`database/03_seed_data.sql`](../database/03_seed_data.sql)
   - Kịch bản đo lường hiệu năng: [`database/04_explain_analyze_demo.sql`](../database/04_explain_analyze_demo.sql)
+  - Hệ thống Hàm UDF & Báo cáo: [`database/05_functions.sql`](../database/05_functions.sql)
 
 ---
 
@@ -617,6 +618,199 @@ EXECUTE FUNCTION fn_order_status_audit();
 #### Luận giải kiến trúc sự kiện thời gian thực (Transactional Event Architecture):
 - **Cơ chế truyền ngữ cảnh phiên (`Session Settings`):** Hàm `set_config('app.changed_by', ..., true)` với tham số thứ ba là `is_local = true` chỉ có hiệu lực trong phạm vi giao dịch hiện tại, ngăn ngừa rò rỉ ID nhân viên giữa các Connection Pool.
 - **Tính chất Transactional của `pg_notify`:** Trong PostgreSQL, thông điệp `pg_notify` chỉ thực sự được phát ra ngoài socket khi và chỉ khi Transaction chứa nó thực hiện `COMMIT` thành công. Nếu câu lệnh bị `ROLLBACK` (do lỗi thiếu hàng, vi phạm ràng buộc...), thông điệp sẽ bị hủy tự động, **ngăn chặn hoàn toàn hiện tượng báo động giả (Phantom Events)** lên giao diện Web Frontend!
+
+---
+
+### 3.5. Hệ thống Hàm Tự định nghĩa trong PostgreSQL (User-Defined Functions - UDF)
+
+Trong hệ quản trị cơ sở dữ liệu quan hệ PostgreSQL 16, **User-Defined Functions (UDF)** đóng vai trò trụ cột trong việc đóng gói các thuật toán tính toán nghiệp vụ, chuyển đổi dữ liệu và xuất báo cáo thống kê phức tạp. UDF cho phép tái sử dụng logic tính toán ngay tại tầng dữ liệu, giảm thiểu độ trễ mạng (Network Round-Trip Time) và bảo toàn tính toàn vẹn của Dạng chuẩn 3 (3NF).
+
+Hệ thống **JaLongFood** đã xây dựng và chuẩn hóa 3 hàm nghiệp vụ quan trọng trong tập tin [`database/05_functions.sql`](../database/05_functions.sql):
+
+#### 1. Hàm vô hướng `fn_calculate_order_total(p_order_id INT) RETURNS NUMERIC(12,2)`
+- **Phân loại:** Scalar Function (Hàm vô hướng trả về một giá trị đơn).
+- **Tính chất tối ưu hóa:** `STABLE` (Trong cùng một snapshot giao dịch, với cùng tham số `p_order_id` và cùng dữ liệu bảng, hàm luôn trả về cùng một kết quả, cho phép Query Optimizer lập kế hoạch tối ưu).
+- **Ý nghĩa nghiệp vụ & Chuẩn hóa 3NF:**
+  - Trong cấu trúc 3NF, bảng `orders` tuyệt đối không lưu cột tổng tiền `total_amount` để triệt tiêu phụ thuộc hàm bắc cầu $order\_id \rightarrow order\_items \rightarrow total\_amount$.
+  - Hàm `fn_calculate_order_total` đóng vai trò là "công thức tính động" (Dynamic Computed Expression):
+    $$\text{RawTotal} = \sum (\text{quantity} \times \text{unit\_price})$$
+  - **Cơ chế Chiết khấu Khách quen tự động:** Hàm tự động kiểm tra xem khách hàng sở hữu đơn đã từng có ít nhất 1 đơn hàng đạt trạng thái `Completed` trước đó (hoặc đơn hàng có ghi nhận từ khóa tri ân/giảm giá). Nếu thỏa điều kiện, hàm tự động áp dụng chiết khấu **10%** ($\text{RawTotal} \times 0.90$).
+  - **Tích hợp vào View `vw_orders_summary`:** Cung cấp tổng tiền đã trừ chiết khấu cho toàn bộ hệ thống API, Dashboard Giảng viên và Guest Check của khách hàng mà không làm vi phạm cấu trúc 3NF.
+
+**Mã nguồn PL/pgSQL triển khai:**
+```sql
+CREATE OR REPLACE FUNCTION fn_calculate_order_total(p_order_id INT)
+RETURNS NUMERIC(12,2)
+LANGUAGE plpgsql
+STABLE
+AS $$
+DECLARE
+    v_user_id               INT;
+    v_raw_total             NUMERIC(12,2);
+    v_is_discounted         BOOLEAN := FALSE;
+    v_completed_other_count INT := 0;
+    v_final_total           NUMERIC(12,2);
+BEGIN
+    -- 1. Xác định user_id sở hữu đơn hàng
+    SELECT user_id INTO v_user_id
+    FROM orders
+    WHERE id = p_order_id;
+
+    IF NOT FOUND THEN
+        RETURN 0.00;
+    END IF;
+
+    -- 2. Tính tổng tiền thô từ chi tiết order_items
+    SELECT COALESCE(SUM(quantity * unit_price), 0.00)::NUMERIC(12,2)
+    INTO v_raw_total
+    FROM order_items
+    WHERE order_id = p_order_id;
+
+    IF v_raw_total IS NULL OR v_raw_total = 0.00 THEN
+        RETURN 0.00;
+    END IF;
+
+    -- 3. Kiểm tra lịch sử đơn hàng hoàn tất của khách (Khách quen >= 1 đơn Completed)
+    SELECT COUNT(*)
+    INTO v_completed_other_count
+    FROM orders
+    WHERE user_id = v_user_id
+      AND status = 'Completed'
+      AND id <> p_order_id;
+
+    IF v_completed_other_count > 0 THEN
+        v_is_discounted := TRUE;
+    ELSE
+        SELECT EXISTS (
+            SELECT 1 FROM orders
+            WHERE id = p_order_id
+              AND (customer_note ILIKE '%giảm%' OR customer_note ILIKE '%discount%' OR customer_note ILIKE '%khách quen%')
+            UNION ALL
+            SELECT 1 FROM order_items
+            WHERE order_id = p_order_id
+              AND (item_note ILIKE '%giảm%' OR item_note ILIKE '%discount%' OR item_note ILIKE '%chiết khấu%')
+        ) INTO v_is_discounted;
+    END IF;
+
+    -- 4. Áp dụng mức giảm 10% nếu đủ điều kiện
+    IF v_is_discounted THEN
+        v_final_total := ROUND(v_raw_total * 0.90, 2);
+    ELSE
+        v_final_total := ROUND(v_raw_total, 2);
+    END IF;
+
+    RETURN v_final_total;
+END;
+$$;
+```
+
+---
+
+#### 2. Hàm vô hướng `fn_get_customer_tier(p_user_id INT) RETURNS VARCHAR`
+- **Phân loại:** Scalar Function (Trả về chuỗi ký tự phân hạng).
+- **Tính chất:** `STABLE`.
+- **Ý nghĩa nghiệp vụ:**
+  - Hệ thống cần xác định cấp bậc hội viên tức thì phục vụ hiển thị Huy hiệu (Badge) trên Header và Phiếu tính tiền (Guest Check), cũng như hỗ trợ API `/api/auth/login` và `/api/auth/register` gửi kèm thuộc tính `user.tier`.
+  - Phân loại 3 cấp độ khách hàng dựa trên số lượng đơn hàng hoàn tất (`status = 'Completed'`):
+    - **0 đơn hoàn tất:** `'Khách Mới (0% ưu đãi)'`
+    - **Từ 1 đến 4 đơn hoàn tất:** `'Khách Quen VIP (Giảm 10%)'`
+    - **Từ 5 đơn hoàn tất trở lên:** `'Khách Kim Cương (Giảm 10% + Ưu tiên)'`
+
+**Mã nguồn PL/pgSQL triển khai:**
+```sql
+CREATE OR REPLACE FUNCTION fn_get_customer_tier(p_user_id INT)
+RETURNS VARCHAR
+LANGUAGE plpgsql
+STABLE
+AS $$
+DECLARE
+    v_completed_count INT := 0;
+    v_tier            VARCHAR(100);
+BEGIN
+    -- 1. Đếm số đơn hàng hoàn tất (Completed) của khách hàng
+    SELECT COUNT(*)
+    INTO v_completed_count
+    FROM orders
+    WHERE user_id = p_user_id
+      AND status = 'Completed';
+
+    -- 2. Phân hạng hội viên
+    IF v_completed_count = 0 THEN
+        v_tier := 'Khách Mới (0% ưu đãi)';
+    ELSIF v_completed_count >= 1 AND v_completed_count <= 4 THEN
+        v_tier := 'Khách Quen VIP (Giảm 10%)';
+    ELSE
+        v_tier := 'Khách Kim Cương (Giảm 10% + Ưu tiên)';
+    END IF;
+
+    RETURN v_tier;
+END;
+$$;
+```
+
+---
+
+#### 3. Hàm bảng `fn_get_food_revenue_report() RETURNS TABLE(...)`
+- **Phân loại:** Set-Returning Function (SRF) / Table-Valued Function (Hàm trả về bảng quan hệ).
+- **Tính chất:** `STABLE`.
+- **Ý nghĩa nghiệp vụ:**
+  - Cung cấp báo cáo phân tích kinh doanh (Business Intelligence / OLAP) ngay trong CSDL: thống kê tổng số lượng bán (`total_sold`) và tổng doanh thu tích lũy (`total_revenue`) của từng món ăn.
+  - Phép kết hợp ngoài `LEFT JOIN` nhiều tầng (`foods` $\rightarrow$ `categories` $\rightarrow$ `order_items` $\rightarrow$ `orders`) đảm bảo mọi món ăn đều xuất hiện trong báo cáo kể cả khi chưa có lượt mua nào (`COALESCE` xử lý giá trị `NULL` thành `0`).
+  - Lọc bỏ triệt để các đơn hàng bị hủy (`o.status <> 'Cancelled'`) nhằm bảo đảm số liệu doanh thu thực thu chính xác tuyệt đối.
+  - Được triển khai bằng ngôn ngữ SQL thuần (`LANGUAGE sql`), cho phép PostgreSQL tối ưu hóa Query Inlining (lồng thẳng cây truy vấn vào câu lệnh gọi phía ngoài để tăng tốc độ thực thi).
+
+**Mã nguồn SQL triển khai:**
+```sql
+CREATE OR REPLACE FUNCTION fn_get_food_revenue_report()
+RETURNS TABLE(
+    food_id       INT,
+    food_name     VARCHAR,
+    category_name VARCHAR,
+    total_sold    BIGINT,
+    total_revenue NUMERIC
+)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT
+        f.id                                                             AS food_id,
+        f.name::VARCHAR                                                  AS food_name,
+        COALESCE(c.name, 'Chưa phân loại')::VARCHAR                      AS category_name,
+        COALESCE(SUM(oi.quantity), 0)::BIGINT                            AS total_sold,
+        COALESCE(SUM(oi.quantity * oi.unit_price), 0.00)::NUMERIC(12,2)   AS total_revenue
+    FROM foods f
+    LEFT JOIN categories c
+        ON c.id = f.category_id
+    LEFT JOIN order_items oi
+        ON oi.food_id = f.id
+    LEFT JOIN orders o
+        ON o.id = oi.order_id
+       AND o.status <> 'Cancelled'
+    GROUP BY
+        f.id,
+        f.name,
+        c.name
+    ORDER BY
+        total_revenue DESC,
+        total_sold DESC,
+        f.id ASC;
+$$;
+```
+
+---
+
+#### 4. Bảng so sánh học thuật chuyên sâu: `FUNCTION` vs `STORED PROCEDURE` trong PostgreSQL
+
+Từ phiên bản **PostgreSQL 11**, cộng đồng phát triển PostgreSQL đã chính thức phân tách rõ rệt giữa hai đối tượng lập trình phía máy chủ: **Hàm (`FUNCTION`)** và **Thủ tục lưu trữ (`STORED PROCEDURE`)** theo đúng chuẩn ANSI/ISO SQL. Bảng so sánh học thuật dưới đây phân tích các điểm khác biệt bản chất về mặt kiến trúc, quản lý giao dịch và khả năng tối ưu hóa của Query Planner:
+
+| Tiêu chí So sánh | `FUNCTION` (Hàm người dùng định nghĩa) | `STORED PROCEDURE` (Thủ tục lưu trữ) |
+| :--- | :--- | :--- |
+| **Cú pháp thực thi** | Sử dụng câu lệnh truy vấn dữ liệu **`SELECT`**:<br>`SELECT fn_calculate_order_total(101);`<br>`SELECT * FROM fn_get_food_revenue_report();` | Sử dụng lệnh điều khiển thực thi **`CALL`**:<br>`CALL sp_create_order(...);`<br>`CALL sp_update_order_status(...);` |
+| **Giá trị trả về (Return Value)** | **Bắt buộc phải trả về một giá trị** xác định thông qua mệnh đề `RETURNS`:<br>- Trả về kiểu vô hướng (`RETURNS NUMERIC`, `RETURNS VARCHAR`)<br>- Trả về một tập/bảng (`RETURNS TABLE(...)`, `RETURNS SETOF ...`)<br>- Hoặc `RETURNS VOID` (nếu chỉ thực thi tác vụ phụ). | **Không bắt buộc trả về giá trị**.<br>Nếu cần trả về dữ liệu, thủ tục sử dụng các tham số ngõ ra kiểu **`INOUT`** hoặc **`OUT`** trong danh sách tham số (Parameters List). |
+| **Quản lý Giao dịch (`Transaction Control`)** | **KHÔNG ĐƯỢC PHÉP** quản lý transaction bên trong thân hàm.<br>Không thể gọi lệnh `COMMIT` hoặc `ROLLBACK`. Hàm luôn chạy kế thừa trong ngữ cảnh giao dịch hiện hữu của câu lệnh gọi nó. | **HỖ TRỢ ĐẦY ĐỦ** quyền kiểm soát giao dịch chủ động.<br>Có thể thực hiện `COMMIT;` hoặc `ROLLBACK;` trực tiếp nhiều lần bên trong thân thủ tục (Batch processing, phân đoạn giao dịch dài). |
+| **Khả năng lồng vào `VIEW` / `SELECT` / `JOIN` / `WHERE`** | **HOÀN TOÀN CÓ THỂ**.<br>Được xem như một biểu thức tính toán (Computed Expression). Có thể nhúng trực tiếp vào mệnh đề `SELECT`, điều kiện `WHERE`, phép `JOIN`, hoặc nhúng vào định nghĩa của `VIEW` (`vw_orders_summary`). | **TUYỆT ĐỐI KHÔNG THỂ**.<br>Thủ tục lưu trữ không thể xuất hiện bên trong các câu lệnh DML/DQL (`SELECT`, `INSERT`, `UPDATE`, `DELETE`, `JOIN`). Chỉ có thể kích hoạt bằng lệnh độc lập `CALL`. |
+| **Phân loại Tối ưu hóa (`Volatility Category`)** | Được gắn nhãn rõ ràng để bộ tối ưu hóa truy vấn (**Query Planner**) lập kế hoạch thực thi:<br>- **`IMMUTABLE`**: Không thay đổi kết quả với cùng tham số, không đọc CSDL.<br>- **`STABLE`**: Không thay đổi kết quả trong cùng 1 snapshot truy vấn/giao dịch.<br>- **`VOLATILE`**: Kết quả thay đổi liên tục, có thể sửa đổi dữ liệu. | **Luôn mang tính chất thực thi động (`VOLATILE`)** theo tiến trình. Bộ lập kế hoạch truy vấn không thể thực hiện các kỹ thuật tối ưu như Constant Folding hay Function Inlining đối với Procedure. |
+| **Ứng dụng trong hệ thống JaLongFood** | - Tính tổng tiền đơn hàng động: `fn_calculate_order_total`<br>- Lấy hạng khách hàng realtime: `fn_get_customer_tier`<br>- Báo cáo doanh thu món ăn dạng bảng: `fn_get_food_revenue_report`<br>- Trigger functions cập nhật dấu vết: `fn_set_updated_at`, `fn_order_status_audit` | - Đặt hàng bảo đảm tính cô lập ACID và khóa hàng: `sp_create_order` (`SELECT ... FOR UPDATE`)<br>- Kiểm soát chuyển trạng thái đơn hàng FSM: `sp_update_order_status`<br>- Thêm mới/cập nhật món ăn an toàn: `sp_upsert_food` |
 
 ---
 

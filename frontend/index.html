@@ -662,7 +662,33 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- Left 8 Cols: Food Menu -->
-      <section class="lg:col-span-8 space-y-5">
+      <section id="menuSectionContainer" class="lg:col-span-12 space-y-5">
+        <!-- Guest Welcome & Auth Callout Banner (Parisian Vintage) -->
+        <div id="guestMenuBanner" class="bg-[#FAF6EE] border-2 border-dashed border-[#D8CBB8] rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-2xs">
+          <div class="flex flex-col sm:flex-row items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-[#2C1E16] text-[#D4A373] border border-[#D8CBB8] flex items-center justify-center shrink-0 shadow-xs">
+              <i data-lucide="key-round" class="w-5 h-5 text-[#D4AF37]"></i>
+            </div>
+            <div>
+              <div class="flex items-center justify-center sm:justify-start gap-2">
+                <span class="text-xs font-serif-bistro font-bold uppercase tracking-wider text-[#A63A2B]">⚜ MAISON DE JALONGFOOD ⚜</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059]">GUEST CHECK</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#2C1E16] font-serif mt-0.5 leading-snug">
+                Kính chào quý khách! Xin vui lòng đăng nhập để mở <strong>Phiếu tính tiền (Guest Check)</strong>, chọn món và nhận ưu đãi <strong>Khách quen 10%</strong>.
+              </p>
+            </div>
+          </div>
+          <button
+            id="btnBannerOpenAuth"
+            type="button"
+            class="shrink-0 px-4 py-2.5 rounded-lg bg-[#2C1E16] hover:bg-[#3B2C24] text-[#F6F1E7] border border-[#D8CBB8] text-xs font-serif font-bold tracking-wide flex items-center gap-2 shadow-xs transition hover:scale-[1.02] cursor-pointer"
+          >
+            <i data-lucide="log-in" class="w-4 h-4 text-[#D4AF37]"></i>
+            <span>Đăng nhập / Đăng ký để đặt món</span>
+          </button>
+        </div>
+
         <!-- Menu Search & Category Filter Controls -->
         <div class="bg-[#FFFDF9] rounded-xl p-5 border border-[#D8CBB8] shadow-2xs space-y-4">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -705,7 +731,7 @@
         </div>
 
         <!-- Food Cards Grid -->
-        <div id="foodsGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+        <div id="foodsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
           <!-- Skeleton placeholders before API resolves -->
           <div class="bg-[#FFFDF9] border border-[#D8CBB8] rounded-lg p-4 space-y-3">
             <div class="h-40 rounded bg-[#FAF6EE] animate-pulse"></div>
@@ -729,7 +755,7 @@
       </section>
 
       <!-- Right 4 Cols: Shopping Cart (AUTHENTIC GUEST CHECK BILL) -->
-      <aside id="cartSidebar" class="lg:col-span-4 lg:sticky lg:top-20 guest-check-container rounded-t-lg shadow-md">
+      <aside id="cartSidebar" class="hidden lg:col-span-4 lg:sticky lg:top-20 guest-check-container rounded-t-lg shadow-md">
         <!-- Guest Check Top Header -->
         <div class="px-5 py-4 guest-check-header flex items-center justify-between">
           <div class="flex items-center gap-2.5">
@@ -737,9 +763,12 @@
               <i data-lucide="receipt" class="w-4 h-4 text-[#D4A373]"></i>
             </div>
             <div>
-              <h2 class="font-serif-bistro text-sm font-extrabold uppercase tracking-wider text-[#2C1E16]">
-                GUEST CHECK • JALONGFOOD
-              </h2>
+              <div class="flex items-center gap-2">
+                <h2 class="font-serif-bistro text-sm font-extrabold uppercase tracking-wider text-[#2C1E16]">
+                  GUEST CHECK • JALONGFOOD
+                </h2>
+                <span id="cartCustomerTierBadge" class="hidden text-[10px] px-2 py-0.5 rounded font-bold font-serif bg-[#FAF3E0] text-[#8C6200] border border-[#C5A059]">...</span>
+              </div>
               <p class="text-[10px] text-[#7A6E65] font-mono-code">TABLE: 01 • SERVER: BISTRO • DATE: TODAY</p>
             </div>
           </div>
@@ -816,7 +845,7 @@
                     id="customerEmailInput"
                     type="email"
                     required
-                    placeholder="hoanglong@gmail.com"
+                    placeholder="gialong@gmail.com"
                     class="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF6EE] border border-[#D8CBB8] rounded-md text-[#2C1E16] placeholder-[#8C7E72] focus:outline-none focus:ring-1 focus:ring-[#C5A059] transition"
                   />
                 </div>

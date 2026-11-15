@@ -473,6 +473,13 @@ const dom = {
   btnSubmitOrder: document.getElementById('btnSubmitOrder'),
   btnSubmitOrderLabel: document.getElementById('btnSubmitOrderLabel'),
 
+  // Auth-gated and Layout DOM references
+  cartSidebar: document.getElementById('cartSidebar'),
+  cartCustomerTierBadge: document.getElementById('cartCustomerTierBadge'),
+  menuSectionContainer: document.getElementById('menuSectionContainer'),
+  guestMenuBanner: document.getElementById('guestMenuBanner'),
+  btnBannerOpenAuth: document.getElementById('btnBannerOpenAuth'),
+
   toastContainer: document.getElementById('toastContainer'),
 };
 
@@ -673,6 +680,7 @@ function switchAuthTab(tab) {
 
 function applyAuthUserUI(user) {
   if (!user) {
+    // Header Auth state
     if (dom.btnOpenAuthModal) dom.btnOpenAuthModal.classList.remove('hidden');
     if (dom.headerUserLoggedIn) {
       dom.headerUserLoggedIn.classList.add('hidden');
@@ -680,11 +688,41 @@ function applyAuthUserUI(user) {
     }
     if (dom.headerUserNameDisplay) dom.headerUserNameDisplay.textContent = '';
     if (dom.headerCustomerNameDisplay) dom.headerCustomerNameDisplay.textContent = 'Khách vãng lai (Bạn)';
-    if (dom.headerLoyaltyBadge) dom.headerLoyaltyBadge.classList.add('hidden');
+    if (dom.headerLoyaltyBadge) {
+      dom.headerLoyaltyBadge.classList.add('hidden');
+      dom.headerLoyaltyBadge.classList.remove('inline-flex');
+    }
+
+    // Auth-gated: Ẩn cột giỏ hàng Guest Check và vùng hành trình đơn hàng
+    if (dom.cartSidebar) dom.cartSidebar.classList.add('hidden');
+    if (dom.orderTrackerSection) dom.orderTrackerSection.classList.add('hidden');
+
+    // Hiển thị Banner mời đăng nhập phong cách Parisian Vintage
+    if (dom.guestMenuBanner) dom.guestMenuBanner.classList.remove('hidden');
+
+    // Mở rộng thực đơn món ăn toàn chiều ngang: đổi thành lg:col-span-12
+    if (dom.menuSectionContainer) {
+      dom.menuSectionContainer.classList.remove('lg:col-span-8');
+      dom.menuSectionContainer.classList.add('lg:col-span-12');
+    }
+
+    // Cập nhật lưới món thành 4 cột trên màn hình rộng
+    if (dom.foodsGrid) {
+      dom.foodsGrid.classList.remove('xl:grid-cols-3');
+      dom.foodsGrid.classList.add('lg:grid-cols-3', 'xl:grid-cols-4');
+    }
+
+    // Ẩn badge hạng khách hàng
+    if (dom.cartCustomerTierBadge) {
+      dom.cartCustomerTierBadge.classList.add('hidden');
+      dom.cartCustomerTierBadge.textContent = '';
+    }
+
     state.selectedUserId = null;
     state.isReturningCustomer = false;
     state.discountPercent = 0;
     renderCart();
+    refreshIcons();
     return;
   }
 
@@ -692,6 +730,7 @@ function applyAuthUserUI(user) {
   state.selectedUserId = userId;
   localStorage.setItem(USER_STORAGE_KEY, String(userId));
 
+  // Header Auth state
   if (dom.btnOpenAuthModal) dom.btnOpenAuthModal.classList.add('hidden');
   if (dom.headerUserLoggedIn) {
     dom.headerUserLoggedIn.classList.remove('hidden');
@@ -706,18 +745,56 @@ function applyAuthUserUI(user) {
     dom.headerCustomerNameDisplay.textContent = displayName + ' (Bạn)';
   }
 
-  const isLoyal = Boolean(user.is_loyal ?? user.isLoyal ?? false);
-  if (dom.headerLoyaltyBadge) {
-    if (isLoyal) {
+  // Auth-gated: Hiển thị cột giỏ hàng Guest Check và vùng theo dõi đơn hàng
+  if (dom.cartSidebar) dom.cartSidebar.classList.remove('hidden');
+  if (dom.orderTrackerSection) dom.orderTrackerSection.classList.remove('hidden');
+
+  // Ẩn Banner mời đăng nhập
+  if (dom.guestMenuBanner) dom.guestMenuBanner.classList.add('hidden');
+
+  // Thu hẹp thực đơn món ăn lại 8 cột: đổi thành lg:col-span-8
+  if (dom.menuSectionContainer) {
+    dom.menuSectionContainer.classList.remove('lg:col-span-12');
+    dom.menuSectionContainer.classList.add('lg:col-span-8');
+  }
+
+  // Cập nhật lưới món về 3 cột: grid-cols-1 sm:grid-cols-2 xl:grid-cols-3
+  if (dom.foodsGrid) {
+    dom.foodsGrid.classList.remove('lg:grid-cols-3', 'xl:grid-cols-4');
+    dom.foodsGrid.classList.add('xl:grid-cols-3');
+  }
+
+  // Xử lý Hạng khách hàng (user.tier từ UDF PostgreSQL fn_get_customer_tier)
+  const isLoyalFlag = Boolean(user.is_loyal ?? user.isLoyal ?? false);
+  const tierString = user.tier || (isLoyalFlag ? 'Khách quen (-10%)' : null);
+
+  if (tierString) {
+    if (dom.headerLoyaltyBadge) {
       dom.headerLoyaltyBadge.classList.remove('hidden');
       dom.headerLoyaltyBadge.classList.add('inline-flex');
-    } else {
+      const badgeText = dom.headerLoyaltyBadge.querySelector('span');
+      if (badgeText) {
+        badgeText.textContent = tierString;
+      } else {
+        dom.headerLoyaltyBadge.textContent = tierString;
+      }
+    }
+    if (dom.cartCustomerTierBadge) {
+      dom.cartCustomerTierBadge.classList.remove('hidden');
+      dom.cartCustomerTierBadge.textContent = tierString;
+    }
+  } else {
+    if (dom.headerLoyaltyBadge) {
       dom.headerLoyaltyBadge.classList.add('hidden');
       dom.headerLoyaltyBadge.classList.remove('inline-flex');
     }
+    if (dom.cartCustomerTierBadge) {
+      dom.cartCustomerTierBadge.classList.add('hidden');
+      dom.cartCustomerTierBadge.textContent = '';
+    }
   }
 
-  // Tự động điền form Guest Check thanh toán: Họ tên (customerName), SĐT (customerPhone), Địa chỉ (customerAddress)
+  // Tự động điền form Guest Check thanh toán: Họ tên (customerName), SĐT (customerPhone), Email (customerEmail), Địa chỉ (deliveryAddress)
   if (dom.customerNameInput) {
     dom.customerNameInput.value = displayName;
     localStorage.setItem(CUSTOMER_NAME_KEY, displayName);
@@ -731,13 +808,14 @@ function applyAuthUserUI(user) {
     dom.customerEmailInput.value = emailVal;
     localStorage.setItem(CUSTOMER_EMAIL_KEY, emailVal);
   }
-  if (dom.deliveryAddressInput && user.default_address) {
-    dom.deliveryAddressInput.value = user.default_address;
+  if (dom.deliveryAddressInput && (user.default_address || user.address)) {
+    dom.deliveryAddressInput.value = user.default_address || user.address;
     state.addressTouched = false;
   }
 
-  state.isReturningCustomer = isLoyal;
-  state.discountPercent = isLoyal ? 10 : 0;
+  const isEligibleDiscount = isLoyalFlag || (tierString && (tierString.includes('10%') || tierString.includes('VIP')));
+  state.isReturningCustomer = Boolean(isEligibleDiscount);
+  state.discountPercent = isEligibleDiscount ? 10 : 0;
   renderCart();
   refreshIcons();
 }
@@ -1761,6 +1839,14 @@ function reconcileCartWithLiveMenu() {
 }
 
 function addToCart(foodId, delta = 1) {
+  // Chặn chọn món khi chưa đăng nhập
+  const user = getAuthUser();
+  if (!user) {
+    openAuthModal('login');
+    showToast('Vui lòng đăng nhập', 'Vui lòng đăng nhập để mở phiếu đặt món (Guest Check)', 'info');
+    return;
+  }
+
   const food = state.foods.find((f) => Number(f.id) === Number(foodId));
   if (!food || !isFoodOrderable(food)) {
     showToast('Món ăn tạm hết', 'Món này vừa hết hàng hoặc ngừng phục vụ.', 'warning');
@@ -2456,13 +2542,17 @@ async function loadAllInitialData({ silent = false } = {}) {
     renderCart();
     await loadRouletteCandidates('all');
 
-    // Giữ màn hình thoáng để khách chọn món ngay; chỉ hiện hành trình khi khách vừa đặt món xong hoặc chủ động mở
-    const sessionOrderId = sessionStorage.getItem('last_placed_order_id');
-    if (sessionOrderId && dom.orderTrackerSection) {
-      dom.orderTrackerSection.classList.remove('hidden');
-      await loadOrdersForSelectedUser(Number(sessionOrderId));
-    } else if (dom.orderTrackerSection) {
-      dom.orderTrackerSection.classList.add('hidden');
+    // Quản lý hiển thị Order Tracker theo trạng thái đăng nhập
+    if (authUser) {
+      if (dom.orderTrackerSection) {
+        dom.orderTrackerSection.classList.remove('hidden');
+      }
+      const sessionOrderId = sessionStorage.getItem('last_placed_order_id');
+      await loadOrdersForSelectedUser(sessionOrderId ? Number(sessionOrderId) : undefined);
+    } else {
+      if (dom.orderTrackerSection) {
+        dom.orderTrackerSection.classList.add('hidden');
+      }
     }
   } catch (err) {
     console.error('[CustomerApp] loadAllInitialData error:', err);
@@ -2626,6 +2716,9 @@ function bindUiEvents() {
   // Auth Modal & Session Events
   if (dom.btnOpenAuthModal) {
     dom.btnOpenAuthModal.addEventListener('click', () => openAuthModal('login'));
+  }
+  if (dom.btnBannerOpenAuth) {
+    dom.btnBannerOpenAuth.addEventListener('click', () => openAuthModal('login'));
   }
   if (dom.btnCloseAuthModal) {
     dom.btnCloseAuthModal.addEventListener('click', closeAuthModal);

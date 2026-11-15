@@ -247,21 +247,22 @@ CREATE INDEX idx_order_status_history_changed_by ON order_status_history(changed
 -- ============================================================================
 -- VIEW TỔNG HỢP `vw_orders_summary`
 -- Giải quyết bài toán đọc dữ liệu tổng hợp mà không phá vỡ chuẩn 3NF:
---   - Tự động tính `total_amount` = SUM(quantity * unit_price) kiểu NUMERIC(12,2)
---   - Tự động tính `item_count`   = SUM(quantity) kiểu INT (tránh BIGINT trả chuỗi trên JS)
+--   - Cột `total_amount` được tính động qua hàm UDF `fn_calculate_order_total(o.id)`
+--     (tự động tính tổng tiền và khấu trừ chiết khấu cho khách hàng thân thiết).
+--   - Tự động tính `item_count` = SUM(quantity) kiểu INT (tránh BIGINT trả chuỗi trên JS)
 -- ============================================================================
 CREATE OR REPLACE VIEW vw_orders_summary AS
 SELECT
     o.id,
     o.user_id,
-    u.full_name                                                     AS customer_name,
-    u.phone                                                         AS customer_phone,
-    u.email                                                         AS customer_email,
+    u.full_name                                     AS customer_name,
+    u.phone                                         AS customer_phone,
+    u.email                                         AS customer_email,
     o.delivery_address,
     o.customer_note,
     o.status,
-    COALESCE(SUM(oi.quantity * oi.unit_price), 0.00)::NUMERIC(12,2) AS total_amount,
-    COALESCE(SUM(oi.quantity), 0)::INT                              AS item_count,
+    fn_calculate_order_total(o.id)::NUMERIC(12,2)   AS total_amount,
+    COALESCE(SUM(oi.quantity), 0)::INT              AS item_count,
     o.created_at,
     o.updated_at
 FROM orders o
@@ -281,4 +282,4 @@ GROUP BY
     o.created_at,
     o.updated_at;
 
-COMMENT ON VIEW vw_orders_summary IS 'View tổng hợp thông tin đơn hàng kèm thông tin khách hàng, tổng số lượng món (item_count) và tổng thành tiền (total_amount) tính động theo chuẩn 3NF.';
+COMMENT ON VIEW vw_orders_summary IS 'View tổng hợp thông tin đơn hàng kèm thông tin khách hàng, tổng số lượng món (item_count) và tổng thành tiền (total_amount) tính động qua fn_calculate_order_total(o.id) chuẩn 3NF.';
